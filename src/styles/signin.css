@@ -1,0 +1,62 @@
+.login-initializer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--clr-grey-10);
+  color: var(--clr-grey-1);
+}
+
+.login-initializer .form {
+  background: white;
+  margin: 0 auto;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  width: 30rem;
+  height: auto;
+}
+
+.login-initializer .form input {
+  background: var(--clr-grey-10);
+  border-color: transparent;
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+}
+
+.login-initializer .form-control {
+  margin: 0.5rem 0;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+}
+
+.login-initializer .form button {
+  display: inline-block;
+  background: var(--clr-black);
+  color: var(--clr-white);
+  border-color: transparent;
+  margin-top: 1rem;
+  letter-spacing: var(--spacing);
+  padding: 0.5rem 1.5rem;
+
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.login-initializer .form button:hover {
+  background: rgb(0, 0, 0);
+  color: rgb(224, 224, 224)
+}
+
+.bg {
+  /* Full height */
+  background: url(../images/zena.jpg) no-repeat fixed center;
+  height: 100vh;
+  width: 100vw;
+  /* Center and scale the image nicely */
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

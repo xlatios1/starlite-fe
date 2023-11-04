@@ -1,0 +1,102 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #31acbd;
+    padding: 10px 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1)
+}
+
+.nav .user-detail {
+    list-style: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.nav .nav-container{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav .nav-container #navLinks {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav .nav-container #navLinks li {
+    list-style: none;
+    padding: 0 20px;
+    position: relative;
+}
+
+.nav .nav-container #navLinks li a {
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #0000007a;
+    transition: 0.3s ease-in-out;
+}
+
+.nav .nav-container #navLinks li a:hover,
+.nav .nav-container #navLinks li a.active {
+    color: #ffffff;
+}
+
+.nav .nav-container #navLinks li a:hover::after,
+.nav .nav-container #navLinks li a.active::after {
+    content: "";
+    width: 30%;
+    height: 3px;
+    background: #ffffff;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
+
+.nav .navDropdown {
+    cursor: pointer;
+    color: #ffffff;
+    display: none;
+}
+
+@media screen and (max-width:822px) {
+    .nav .nav-container #navLinks{
+        display:flex;
+        flex-direction:column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        position: fixed;
+        top: 50px;
+        width: 150px;
+        right: -300px;
+        background: #2a3239;
+        box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+        padding: 20px 0 0 10px;
+        transition: 0.3s ease-in-out;
+    }
+
+    .nav .nav-container #navLinks.active{
+        background: rgba(0, 0, 0, 0.8);
+        z-index:9999;
+        right: 0px;
+        border-bottom-left-radius: 10%;
+    }
+    
+    .nav .nav-container #navLinks li {
+        margin-bottom: 25px;
+    }
+
+    .nav .nav-container .navDropdown {
+        cursor: pointer;
+        color: #ffffff;
+        display: block;
+    }
+
+    .nav .nav-container .navDropdown .i{
+        cursor: pointer;
+        font-size: 24px;
+    }
+}

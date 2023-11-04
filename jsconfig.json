@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"baseUrl": "src",
+		"paths": {
+			"@components/*": ["components/*"],
+			"@customhooks/*": ["customhooks/*"],
+			"@pages/*": ["pages/*"],
+			"@styles/*": ["styles/*"],
+			"@images/*": ["images/*"],
+			"@hooks/*": ["hooks/*"],
+			"@utils/*": ["utils/*"],
+			"@root/*": ["*"]
+		},
+		"allowImportingTsExtensions": true
+	}
+}

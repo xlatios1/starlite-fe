@@ -33,13 +33,14 @@ export default function Signin() {
 		}
 		setErrorMessages(Array.from(new Set(errMsg)))
 		console.log(errMsg)
-		if (errMsg.length == 0) {
-			try {
-				await signIn(login.email, login.password)
+		if (errMsg.length === 0) {
+			const isSignIn = await signIn(login.email, login.password)
+
+			if (isSignIn === true) {
 				Notification('success', 'Login successful!', 2000)
 				navigate('/home')
-			} catch (e) {
-				Notification('error', e.message.split('Firebase: ')[1], 3000)
+			} else {
+				Notification('error', isSignIn.message.split(': ')[1], 3000)
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect } from 'react'
 import { auth, db } from '@root/firebase'
+import apiRequest from '@components/apihandler/apiRequest'
 
 import {
 	createUserWithEmailAndPassword,
@@ -13,14 +14,56 @@ import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
 const UserContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-	const createUser = (email, password) => {
-		console.log('Create user CLICKED')
-		return createUserWithEmailAndPassword(auth, email, password)
+	const authWrapper = async (authFunction, email, password) => {
+		try {
+			const idToken = await authFunction(auth, email, password).then((user) => {
+				console.log('USER', user)
+				setData(user.user)
+				return user._tokenResponse.idToken
+			})
+			const [response_status, response_data] = await apiRequest(
+				'http://localhost:5000/login',
+				{
+					access_token: idToken,
+					username: email.split('@')[0],
+					password: password,
+				}
+			)
+			if (!response_status || !response_data) {
+				return {
+					message: 'Error: Unknown error, unsuccessful on login, do re-login.',
+				}
+			} else {
+				return true
+			}
+		} catch (error) {
+			return error
+		}
+	}
+
+	const createUser = async (email, password) => {
+		try {
+			console.log('Create user CLICKED')
+			const [response_status, response_data] = await apiRequest(
+				'http://localhost:5000/validate',
+				{
+					username: email.split('@')[0],
+					password: password,
+				}
+			)
+			if (response_status && response_data) {
+				return authWrapper(createUserWithEmailAndPassword, email, password)
+			} else {
+				return { message: 'Error: NTU Account is invalid' }
+			}
+		} catch (e) {
+			return { message: 'Error: API request set user is unsuccessful' }
+		}
 	}
 
 	const signIn = (email, password) => {
 		console.log('Sign in CLICKED')
-		return signInWithEmailAndPassword(auth, email, password)
+		return authWrapper(signInWithEmailAndPassword, email, password)
 	}
 
 	const logout = () => {
@@ -51,8 +94,9 @@ export const AuthContextProvider = ({ children }) => {
 				reader.readAsDataURL(file.data)
 			})
 		}
-		const updateData = {
-			name: user.providerData.displayName || '',
+		const updateData = {}
+		if (user.displayName) {
+			updateData.displayName = user.displayName
 		}
 
 		if (file) {
@@ -122,7 +166,14 @@ export const AuthContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		const login = onAuthStateChanged(auth, (currentUser) => {
-			localStorage.setItem('credentials', JSON.stringify(currentUser))
+			if (currentUser) {
+				localStorage.setItem(
+					'credentials',
+					JSON.stringify(currentUser) //{ displayname: currentUser.providerData.0.displayName, uid: currentUser.uid, accessToken: currentUser.stsTokenManager.accessToken }
+				)
+			} else {
+				localStorage.removeItem('credentials')
+			}
 		})
 		return () => {
 			login()

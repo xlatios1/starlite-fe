@@ -10,38 +10,42 @@ export default function Home() {
 	const [data, setData] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 
-	const handleSearch = async (
-		search,
-		username = null,
-		password = null,
-		topn = null
-	) => {
+	function popObject(obj) {
+		const keys = Object.keys(obj)
+		const lastKey = keys[keys.length - 1]
+		const popValue = obj[lastKey]
+		delete obj[lastKey]
+		return { [lastKey]: popValue }
+	}
+
+	const handleSearch = async (search, topn = null) => {
 		setIsLoading(true)
 		const API_URL = `http://localhost:5000/get_timetable_plan`
 		const bodyParam = {
 			course_lists: search,
-			fernet_key: 'admin',
-			...(username !== null ? { username } : {}),
-			...(password !== null ? { password } : {}),
 			...(topn !== null ? { topn } : {}),
+			debugged: true,
 		}
 		const [response_status, response_data] = await apiRequest(
 			API_URL,
 			bodyParam
 		)
-
+		console.log('response_data', response_data)
 		setTimeout(() => {
-			if (response_status === true && Object.keys(response_data).length > 0) {
-				Notification('success', 'Successful matched!', 2000)
-				setData((prev) => response_data)
-			} else if (
-				response_status === true &&
-				Object.keys(response_data).length === 0
-			) {
-				Notification('info', 'No course data found', 2000)
-				setData((prev) => null)
+			if (response_status) {
+				const notFound = popObject(response_data)
+				if (notFound['Not Found'].length !== 0) {
+					//TODO: handle not found, have a pop up.
+				}
+				if (Object.keys(response_data).length !== 0) {
+					Notification('success', 'Successful matched!', 2000)
+					setData((prev) => response_data)
+				} else {
+					Notification('info', 'No course data found', 2000)
+					setData((prev) => null)
+				}
 			} else {
-				Notification('error', 'Error!', 2000)
+				Notification('error', 'Error!', response_data, 2000)
 			}
 			setIsLoading(false)
 		}, 1000)
@@ -79,6 +83,7 @@ export default function Home() {
 								timetable_data={item['Timetable']}
 								missed_course={item['Conflict']}
 								info={item['Info']}
+								exam_schedule={item['Exam Schedule']}
 							/>
 						</div>
 					)

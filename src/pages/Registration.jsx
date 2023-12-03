@@ -4,6 +4,7 @@ import '@styles/signin.css'
 import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import Loading from '@components/loading/Loading.tsx'
 import { UserAuth } from '../authentications/AuthContext.js'
 import { handleEmailChanges } from '@root/components/emailhandler/handleEmailChanges.tsx'
 import { Link, useNavigate } from 'react-router-dom'
@@ -17,7 +18,7 @@ export default function Registration() {
 		newPassword: '',
 		retypePassword: '',
 	})
-
+	const [isLoading, setIsLoading] = useState(false)
 	const [errorMessages, setErrorMessages] = useState([])
 
 	const { createUser } = UserAuth()
@@ -41,14 +42,19 @@ export default function Registration() {
 			FocusTextBox({ ref: registerRetypePassword })
 		}
 		setErrorMessages(Array.from(new Set(errMsg)))
-		if (errMsg.length == 0) {
-			try {
-				await createUser(registration.newEmail, registration.newPassword)
+		if (errMsg.length === 0) {
+			setIsLoading(true)
+			const isCreated = await createUser(
+				registration.newEmail,
+				registration.newPassword
+			)
+			if (isCreated === true) {
 				Notification('success', 'Account creation successful!', 2000)
 				navigate('/home')
-			} catch (e) {
-				Notification('error', e.message.split('Firebase: ')[1], 3000)
+			} else {
+				Notification('error', isCreated.message.split(': ')[1], 3000)
 			}
+			setIsLoading(false)
 		}
 	}
 
@@ -72,6 +78,7 @@ export default function Registration() {
 
 	return (
 		<div className="login-initializer">
+			{isLoading && <Loading />}
 			<form className="form">
 				<h3>Sign up for a free account</h3>
 				<p>

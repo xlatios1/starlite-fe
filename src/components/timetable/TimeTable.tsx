@@ -12,6 +12,7 @@ export default function TimeTable({
 	timetable_data,
 	missed_course,
 	info,
+	exam_schedule,
 }: timetable) {
 	const randID = useId()
 	const [isClicked, setIsClicked] = useState(false)
@@ -72,11 +73,10 @@ export default function TimeTable({
 
 	return (
 		<div className="conic">
-			{missed_course.length !== 0 ? (
-				<p>The following courses clash: {missed_course.join(', ')}</p>
-			) : (
-				<></>
-			)}
+			<p>Exam schedules</p>
+			{exam_schedule.map((exam) => (
+				<p>{exam}</p>
+			))}
 			<table
 				onClick={handleClick}
 				className={isClicked ? 'table blurred' : 'table'}
@@ -103,6 +103,11 @@ export default function TimeTable({
 					})}
 				</tbody>
 			</table>
+			{missed_course.length !== 0 ? (
+				<p>The following courses clash: {missed_course.join(', ')}</p>
+			) : (
+				<></>
+			)}
 			{isClicked ? (
 				<div className="table-info" onClick={handleClick}>
 					<div className="table-wrapper">

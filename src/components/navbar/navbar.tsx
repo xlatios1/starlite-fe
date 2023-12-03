@@ -19,6 +19,7 @@ export default function Navbar({ user, active }: Navbar) {
 		try {
 			const API_URL = `http://localhost:5000/handle_clean_up`
 			const [response_status, response_data] = await apiRequest(API_URL)
+			console.log(response_status, response_data)
 			if (response_status === true && response_data) {
 				await logout()
 				Notification('success', 'Logout successful!', 3000)
@@ -37,7 +38,7 @@ export default function Navbar({ user, active }: Navbar) {
 
 	return (
 		<nav className="nav">
-			<div className="user-detail">Welcome, {user.split('@', 1)}! </div>
+			<div className="user-detail">Welcome, {user}! </div>
 			<div className="nav-container">
 				<ul
 					id="navLinks"

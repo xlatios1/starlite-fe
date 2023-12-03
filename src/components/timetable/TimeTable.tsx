@@ -6,6 +6,7 @@ type timetable = {
 	timetable_data: string[][] | number[][]
 	missed_course: string[][]
 	info: string[][]
+	exam_schedule: string[]
 }
 
 export default function TimeTable({

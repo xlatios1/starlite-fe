@@ -4,7 +4,11 @@
     justify-content: space-between;
     background: #31acbd;
     padding: 10px 40px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1)
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 1;
 }
 
 .nav .user-detail {
@@ -79,7 +83,8 @@
     }
 
     .nav .nav-container #navLinks.active{
-        background: rgba(0, 0, 0, 0.8);
+        background: #31acbd;
+        opacity: 0.7;
         z-index:9999;
         right: 0px;
         border-bottom-left-radius: 10%;

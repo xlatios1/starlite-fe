@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import logo from '@images/logo.png'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
 import apiRequest from '@components/apihandler/apiRequest'
 import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
+import Scrollbutton from '@components/scrollbutton/scrollbutton.tsx'
 
 export default function Home() {
 	const [data, setData] = useState(null)
@@ -51,6 +52,17 @@ export default function Home() {
 		}, 1000)
 	}
 
+	useEffect(() => {
+		// Scroll only when there is data
+		if (data) {
+			window.scrollTo({
+				left: 0,
+				top: 400,
+				behavior: 'smooth',
+			})
+		}
+	}, [data])
+
 	const onTestHandler = async () => {
 		setIsLoading(true)
 		const testdata = ['THIS IS TRUE']
@@ -74,6 +86,7 @@ export default function Home() {
 				<img className="logo" src={logo} />
 			</div>
 			<SearchBar handleSearch={handleSearch}></SearchBar>
+			<Scrollbutton />
 			{data ? (
 				Object.keys(data).map((key) => {
 					const item = data[key]

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useLayoutEffect, useState, useRef, useEffect } from 'react'
 
 import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
@@ -16,8 +16,15 @@ export default function Signin() {
 	})
 	const [errorMessages, setErrorMessages] = useState([])
 
-	const { signIn } = UserAuth()
+	const { signIn, fetchUserInCache } = UserAuth()
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (fetchUserInCache()) {
+			console.log('Active user cache present, directing...')
+			navigate('/home')
+		}
+	}, [])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()

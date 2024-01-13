@@ -9,8 +9,18 @@ const ProtectedRoute = ({ path }) => {
 	const { fetchUserInCache } = UserAuth()
 
 	const curUser = fetchUserInCache()
-	console.log('Path: ', path, 'Cache: ', curUser)
-	if (!curUser) {
+	console.log(
+		'Path: ',
+		path,
+		'Cache: ',
+		curUser,
+		'Account auth expiring: ',
+		new Date(curUser.stsTokenManager.expirationTime)
+	)
+	if (
+		!curUser &&
+		curUser.stsTokenManager.expirationTime > new Date().getTime()
+	) {
 		return <Navigate to="/" />
 	}
 	return (

@@ -1,13 +1,12 @@
 .search-bar-container .input-wrapper {
     background-color: white;
-    width: 100%;
     border-radius: 100px;
     height: 3rem;
     padding: 0 15px;
     box-shadow: 0px 0px 8px #ddd;
     display: flex;
     align-items: center;
-    max-width: 800px;
+    width: 1000px;
 }
 
 .search-bar-container input {
@@ -30,11 +29,12 @@
 .search-bar-wrapper{
     position: absolute;
     top: 65%;
+    min-width: 250px;
+    max-width: 300px;
 }
 
 .search-bar-wrapper .results-list {
     position: relative;
-    width: 100%;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -42,6 +42,8 @@
     border-radius: 10px;
     max-height: 300px;
     overflow-y: auto;
+    z-index: 900;
+    user-select:none;
 }
 
 .search-bar-wrapper .search-result{
@@ -52,4 +54,12 @@
 
 .search-bar-wrapper .search-result:hover{
     background-color: #efefef;
+}
+
+.options-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* width: 100%; */
+    width: 1000px;
 }

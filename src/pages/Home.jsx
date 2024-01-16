@@ -5,7 +5,9 @@ import TimeTable from '@components/timetable/TimeTable.tsx'
 import apiRequest from '@components/apihandler/apiRequest'
 import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
-import Scrollbutton from '@components/scrollbutton/scrollbutton.tsx'
+import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
+import FilterLists from '@components/filters/filterlists.tsx'
+import '@styles/home.css'
 
 export default function Home() {
 	const [data, setData] = useState(null)
@@ -82,25 +84,32 @@ export default function Home() {
 	return (
 		<div className="hp">
 			{isLoading && <Loading />}
-			<div className="logo-container">
-				<img className="logo" src={logo} />
+			<div className="upper-detail-wrapper">
+				<div className="logo-container">
+					<img className="logo" src={logo} />
+				</div>
+				<SearchBar handleSearch={handleSearch}></SearchBar>
 			</div>
-			<SearchBar handleSearch={handleSearch}></SearchBar>
-			<Scrollbutton />
 			{data ? (
-				Object.keys(data).map((key) => {
-					const item = data[key]
-					return (
-						<div key={key}>
-							<TimeTable
-								timetable_data={item['Timetable']}
-								missed_course={item['Conflict']}
-								info={item['Info']}
-								exam_schedule={item['Exam Schedule']}
-							/>
-						</div>
-					)
-				})
+				<div className="lower-detail-wrapper">
+					<FilterLists></FilterLists>
+					<div className="time-table-wrapper">
+						{Object.keys(data).map((key) => {
+							const item = data[key]
+							return (
+								<div className="time-table-container" key={key}>
+									<TimeTable
+										timetable_data={item['Timetable']}
+										missed_course={item['Conflict']}
+										info={item['Info']}
+										exam_schedule={item['Exam Schedule']}
+									/>
+								</div>
+							)
+						})}
+					</div>
+					<ScrollButton />
+				</div>
 			) : (
 				<p></p>
 			)}

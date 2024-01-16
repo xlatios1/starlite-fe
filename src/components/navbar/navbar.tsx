@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../../authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
 import apiRequest from '@components/apihandler/apiRequest'
@@ -14,6 +14,7 @@ type Navbar = {
 export default function Navbar({ user, active }: Navbar) {
 	const [isMenuClick, setIsMenuClick] = useState(true)
 	const { logout } = UserAuth()
+	const navigate = useNavigate()
 
 	const handleLogout = async () => {
 		try {
@@ -22,6 +23,7 @@ export default function Navbar({ user, active }: Navbar) {
 			console.log(response_status, response_data)
 			if (response_status === true && response_data) {
 				await logout()
+				navigate('/')
 				Notification('success', 'Logout successful!', 3000)
 			} else {
 				Notification(

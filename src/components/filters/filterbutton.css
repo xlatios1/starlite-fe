@@ -1,0 +1,125 @@
+.filter-button{
+    position: relative;
+    align-items: start;
+    justify-content: left;
+    display: inline-block;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 30px;
+    background-color: #0000000d;
+    color: #0e0e10;
+    padding: 0 15px 0 10px;
+    margin: 10px;
+}
+
+.filter-button:hover{
+    background-color: #0000001a;
+}
+
+.filter-fields-container{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    margin: 50px 0 0 auto;
+    background-color: white;
+    height: auto;
+    top: 0px;
+    z-index: 10;
+    /* box-shadow: 0px 0px 8px #ffffff; */
+}
+
+.filter-fields-container .filter-fields-options{
+    position: relative;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    box-sizing: content-box;
+    width: 100%;
+}
+
+.filter-fields-container .filter-fields-options::after{
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 1px;
+    background: #b8b8b8;
+    bottom: 5px;
+    left: 0px;
+}
+
+.filter-fields-container .filter-fields-options .filter-fields-option {
+    position: relative;
+    display: flex;
+    margin: 7px;
+    cursor: pointer;
+    color: #afafaf;
+    display: block;
+}
+
+.filter-fields-container .filter-fields-options .filter-fields-option a:hover,
+.filter-fields-container .filter-fields-options .filter-fields-option.active a{
+    color: #080808;
+}
+
+.filter-fields-container .filter-fields-options .filter-fields-option a:hover::after,
+.filter-fields-container .filter-fields-options .filter-fields-option.active a::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: #1ba7ca;
+    bottom: -1px;
+    left: 0px;
+} 
+
+.filter-fields-container .filter-fields-choices {
+    position: relative;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    box-sizing: content-box;
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* .filter-fields-container.active::after{
+    content: "";
+    box-sizing: content-box;
+    width: 100%;
+    height: 1px;
+    background: #d8d6d6;
+    position: absolute;
+    bottom: 0px;
+}
+
+.filter-fields-option-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-items: start;
+    justify-content: space-around;
+    min-width: 200px;
+    max-width: 800px;
+    opacity: 0;
+    max-height: 0;
+}
+
+.filter-fields-option-container.show{
+    opacity: 1;
+    max-height: 100%; 
+}
+
+.filter-fields-option-container.hidden{
+    opacity: 0;
+}*/

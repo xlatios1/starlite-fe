@@ -64,22 +64,6 @@ body {
   color: var(--clr-grey-1);
   line-height: 1.5;
   font-size: 0.875rem;
-  min-width: 724px;
+  min-width: 1000px;
   min-height: none;
 }
-
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 7.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .logo-container .logo {
-    width: 40rem;
-    font-family: 'Bookman Old Style';
-    font-size: 10rem;
-    color:#0011acad;
-    margin-top: 5rem;
-  }

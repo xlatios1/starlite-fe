@@ -15,13 +15,16 @@ export default function Signin() {
 		password: '',
 	})
 	const [errorMessages, setErrorMessages] = useState([])
-
 	const { signIn, fetchUserInCache } = UserAuth()
 	const navigate = useNavigate()
+	const curUser = fetchUserInCache()
 
 	useEffect(() => {
-		if (fetchUserInCache()) {
-			console.log('Active user cache present, directing...')
+		if (
+			curUser &&
+			curUser?.stsTokenManager?.expirationTime > new Date().getTime()
+		) {
+			console.log('Active user cache present, directing...', curUser)
 			navigate('/home')
 		}
 	}, [])

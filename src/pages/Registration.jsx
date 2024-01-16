@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useLayoutEffect, useState, useRef, useEffect } from 'react'
 import '@styles/signin.css'
 
 import Notification from '@components/notification/notification.tsx'
@@ -21,8 +21,19 @@ export default function Registration() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [errorMessages, setErrorMessages] = useState([])
 
-	const { createUser } = UserAuth()
+	const { createUser, fetchUserInCache } = UserAuth()
 	const navigate = useNavigate()
+
+	const curUser = fetchUserInCache()
+	useEffect(() => {
+		if (
+			curUser &&
+			curUser?.stsTokenManager?.expirationTime > new Date().getTime()
+		) {
+			console.log('Active user cache present, directing...', curUser)
+			navigate('/home')
+		}
+	}, [])
 
 	const handleCreateUser = async (e) => {
 		e.preventDefault()

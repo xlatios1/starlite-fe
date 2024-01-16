@@ -21,7 +21,7 @@ export const SearchBarComponent = ({
 		<div className="input-wrapper">
 			<RiSearchLine id="search-icon" />
 			<input
-				placeholder="Type to search..."
+				placeholder="Type your course codes..."
 				value={input}
 				ref={searchBoxRef}
 				onChange={(e) => handleInput(e.target.value)}

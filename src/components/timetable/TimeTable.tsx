@@ -1,5 +1,4 @@
-import React, { EventHandler } from 'react'
-import { useState, useId } from 'react'
+import React, { useState, useId } from 'react'
 import '@styles/timetable.css'
 
 type timetable = {

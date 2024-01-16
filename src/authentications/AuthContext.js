@@ -169,7 +169,7 @@ export const AuthContextProvider = ({ children }) => {
 			if (currentUser) {
 				localStorage.setItem(
 					'credentials',
-					JSON.stringify(currentUser) //{ displayname: currentUser.providerData.0.displayName, uid: currentUser.uid, accessToken: currentUser.stsTokenManager.accessToken }
+					JSON.stringify(currentUser) //{ displayname: currentUser.providerData.0.displayName, uid: currentUser.uid, accessToken: currentUser.stsTokenManager.accessToken, expirationTime: currentUser.stsTokenManager.expirationTime }
 				)
 			} else {
 				localStorage.removeItem('credentials')

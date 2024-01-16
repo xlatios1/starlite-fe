@@ -14,11 +14,11 @@ export const SearchResult = ({ result, handleSelect, setShouldHandleBlur }) => {
 	return (
 		<div
 			className="search-result"
-			onClick={(e) => handleSelect(result.name)}
+			onClick={(e) => handleSelect(result.code)}
 			onMouseDown={handleOptionMouseDown}
 			onMouseUp={handleOptionMouseUp}
 		>
-			{result.name}
+			{`${result.code}: ${result.name}`}
 		</div>
 	)
 }

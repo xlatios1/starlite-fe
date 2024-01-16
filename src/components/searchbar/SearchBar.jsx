@@ -11,7 +11,7 @@ export default function SearchBar({ handleSearch }) {
 	const [input, setInput] = useState('')
 	const searchBoxRef = useRef(null)
 	const [isFocused, setIsFocused] = useState(false)
-	const [shouldHandleBlur, setShouldHandleBlur] = useState(false)
+	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
 	const searchResultRef = useRef(null)
 
 	const handleSelect = (value) => {
@@ -20,31 +20,30 @@ export default function SearchBar({ handleSearch }) {
 		const modifiedSentence = words.join(' ') + ' '
 
 		setInput(modifiedSentence)
-		fetchData(value)
+		setResults((prev) => [])
 		FocusTextBox({ ref: searchBoxRef })
 	}
 
 	const handleInput = (value = '') => {
-		const words = value.trim().split(' ')
+		const words = value.split(' ')
 		setInput(value)
-		fetchData(words[words.length - 1])
+		if (words[words.length - 1] !== '') {
+			fetchData(words[words.length - 1])
+		}
 	}
 
 	const fetchData = (value) => {
 		// TODO: return bigram word from value
-		fetch('https://jsonplaceholder.typicode.com/users')
+		fetch(
+			`https://backend.ntusu.org/modsoptimizer/course_code/?search__icontains=${value}`
+		)
 			.then((response) => response.json())
-			.then((json) => {
-				const results = json.filter((user) => {
-					return (
-						value &&
-						user &&
-						user.name &&
-						user.name.toLowerCase().includes(value.toLowerCase())
-					)
-				})
-				setResults(results)
-			})
+			.then((json) => json.results)
+			.then((results) =>
+				setResults((prev) =>
+					results.map((items) => ({ code: items.code, name: items.name }))
+				)
+			)
 	}
 
 	useEffect(() => {
@@ -61,8 +60,8 @@ export default function SearchBar({ handleSearch }) {
 			context.font = `${16}px Arial, Helvetica, sans-serif`
 			const textWidth = context.measureText(input).width
 			searchBoxElement.style.left = `${Math.min(
-				inputRect.left + textWidth,
-				inputRect.right - searchBoxElement.getBoundingClientRect().width
+				textWidth,
+				1000 - searchBoxElement.getBoundingClientRect().width
 			)}px`
 		}
 	}, [isFocused, input])

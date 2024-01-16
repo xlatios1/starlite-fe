@@ -15,11 +15,11 @@ const ProtectedRoute = ({ path }) => {
 		'Cache: ',
 		curUser,
 		'Account auth expiring: ',
-		new Date(curUser.stsTokenManager.expirationTime)
+		new Date(curUser?.stsTokenManager?.expirationTime)
 	)
 	if (
-		!curUser &&
-		curUser.stsTokenManager.expirationTime > new Date().getTime()
+		!curUser ||
+		new Date().getTime() >= curUser?.stsTokenManager?.expirationTime
 	) {
 		return <Navigate to="/" />
 	}

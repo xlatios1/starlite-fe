@@ -1,7 +1,7 @@
 import React from 'react'
 import '@styles/scrollbutton.css'
 
-export default function Scrollbutton() {
+export default function ScrollButton() {
 	const scrollFn = () => {
 		window.scrollTo({
 			left: 0,

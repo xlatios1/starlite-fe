@@ -1,7 +1,7 @@
 import '@styles/error.css'
 import React from 'react'
 
-type renderAccountError = {
+type RenderAccountError = {
 	errorMessages: string[]
 	name: string
 }
@@ -9,7 +9,7 @@ type renderAccountError = {
 export default function RenderAccountError({
 	errorMessages,
 	name,
-}: renderAccountError) {
+}: RenderAccountError) {
 	const errors = (name: string) => {
 		return {
 			loginEmail: 'email not found',

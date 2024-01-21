@@ -1,0 +1,83 @@
+.preference-wrap{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: fit-content;
+    * {
+        user-select:none;
+    }
+}
+
+.preference-options{
+    position: relative;
+    padding: 20px 20px 10px;
+    background-color: white;
+    box-shadow: 0 0 1px 0  #b8b0b0;
+    margin-bottom: 1px;
+}
+
+.preference-options p.preference-option-title{
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.preference-options .preference-option-headers{
+    position: relative;
+    display: flex;
+    font-size: 14px;
+    flex-direction: row;
+}
+
+.preference-options .preference-option-headers .preference-option-header.course-code{
+    margin-right: 30px;
+}
+
+.preference-options .preference-option-headers .preference-option-header.ranking{
+    position: relative;
+    display: flex;
+
+}
+
+.preference-options .preference-option-headers .preference-option-header.rank{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 13px;
+    margin: 1px 10px;
+}
+
+.preference-options .preference-option-course{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.preference-options .preference-option-course .preference-option-course-code{
+    margin-right: 30px;
+}
+
+.preference-options .preference-option-course .preference-option-radiobuttons{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.preference-options.ncoursefilter .preference-option-ncoursefilter{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+.preference-option-ncoursefilter:is(.upper, .lower){
+    margin: 0px 5px;
+}
+
+toolcool-range-slider{
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+}

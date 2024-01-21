@@ -1,7 +1,7 @@
 import React, { useState, useId } from 'react'
 import '@styles/timetable.css'
 
-type timetable = {
+type TimeTable = {
 	timetable_data: string[][] | number[][]
 	missed_course: string[][]
 	info: string[][]
@@ -13,7 +13,7 @@ export default function TimeTable({
 	missed_course,
 	info,
 	exam_schedule,
-}: timetable) {
+}: TimeTable) {
 	const randID = useId()
 	const [isClicked, setIsClicked] = useState(false)
 	const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -42,7 +42,7 @@ export default function TimeTable({
 	])
 
 	let unikey = 1
-	console.log(info)
+
 	for (let col of timetable_data) {
 		for (let row = 0; row < 16; row++) {
 			if (col[row] === undefined) {
@@ -75,7 +75,7 @@ export default function TimeTable({
 		<div className="conic">
 			<p>Exam schedules</p>
 			{exam_schedule.map((exam) => (
-				<p>{exam}</p>
+				<p key={exam}>{exam}</p>
 			))}
 			<table
 				onClick={handleClick}

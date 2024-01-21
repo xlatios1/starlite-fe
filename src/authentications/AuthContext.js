@@ -16,26 +16,10 @@ const UserContext = createContext()
 export const AuthContextProvider = ({ children }) => {
 	const authWrapper = async (authFunction, email, password) => {
 		try {
-			const idToken = await authFunction(auth, email, password).then((user) => {
-				console.log('USER', user)
+			await authFunction(auth, email, password).then((user) => {
 				setData(user.user)
-				return user._tokenResponse.idToken
 			})
-			const [response_status, response_data] = await apiRequest(
-				'http://localhost:5000/login',
-				{
-					access_token: idToken,
-					username: email.split('@')[0],
-					password: password,
-				}
-			)
-			if (!response_status || !response_data) {
-				return {
-					message: 'Error: Unknown error, unsuccessful on login, do re-login.',
-				}
-			} else {
-				return true
-			}
+			return true
 		} catch (error) {
 			return error
 		}
@@ -44,18 +28,7 @@ export const AuthContextProvider = ({ children }) => {
 	const createUser = async (email, password) => {
 		try {
 			console.log('Create user CLICKED')
-			const [response_status, response_data] = await apiRequest(
-				'http://localhost:5000/validate',
-				{
-					username: email.split('@')[0],
-					password: password,
-				}
-			)
-			if (response_status && response_data) {
-				return authWrapper(createUserWithEmailAndPassword, email, password)
-			} else {
-				return { message: 'Error: NTU Account is invalid' }
-			}
+			return authWrapper(createUserWithEmailAndPassword, email, password)
 		} catch (e) {
 			return { message: 'Error: API request set user is unsuccessful' }
 		}
@@ -166,7 +139,10 @@ export const AuthContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		const login = onAuthStateChanged(auth, (currentUser) => {
-			if (currentUser) {
+			if (
+				currentUser &&
+				new Date().getTime() < currentUser?.stsTokenManager?.expirationTime
+			) {
 				localStorage.setItem(
 					'credentials',
 					JSON.stringify(currentUser) //{ displayname: currentUser.providerData.0.displayName, uid: currentUser.uid, accessToken: currentUser.stsTokenManager.accessToken, expirationTime: currentUser.stsTokenManager.expirationTime }

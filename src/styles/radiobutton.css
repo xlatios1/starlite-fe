@@ -1,0 +1,7 @@
+.radiobutton.option{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 1px 10px;
+}

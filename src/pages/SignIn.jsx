@@ -45,12 +45,12 @@ export default function Signin() {
 		console.log(errMsg)
 		if (errMsg.length === 0) {
 			const isSignIn = await signIn(login.email, login.password)
-
+			console.log('isSignIn', isSignIn)
 			if (isSignIn === true) {
 				Notification('success', 'Login successful!', 2000)
 				navigate('/home')
 			} else {
-				Notification('error', isSignIn.message.split(': ')[1], 3000)
+				Notification('error', isSignIn.message, 3000)
 			}
 		}
 	}

@@ -6,12 +6,12 @@ import Notification from '@components/notification/notification.tsx'
 import apiRequest from '@components/apihandler/apiRequest'
 import '@styles/navbar.css'
 
-type Navbar = {
+type NavBar = {
 	user: string
 	active: string
 }
 
-export default function Navbar({ user, active }: Navbar) {
+export default function NavBar({ user, active }: NavBar) {
 	const [isMenuClick, setIsMenuClick] = useState(true)
 	const { logout } = UserAuth()
 	const navigate = useNavigate()

@@ -4559,6 +4559,11 @@ dotenv@^10.0.0:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-10.0.0.tgz"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
+dotenv@^16.3.2:
+  version "16.3.2"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.3.2.tgz"
+  integrity sha512-HTlk5nmhkm8F6JcdXvHIzaorzCoziNQT9mGxLPVXW8wJF1TiGSL60ZGB4gHWabHOaMmWmhvk2/lPHfnBiT78AQ==
+
 duplexer@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
@@ -9864,6 +9869,11 @@ toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
+
+toolcool-range-slider@^4.0.28:
+  version "4.0.28"
+  resolved "https://registry.npmjs.org/toolcool-range-slider/-/toolcool-range-slider-4.0.28.tgz"
+  integrity sha512-DDZAEJ9hItgSbGWY6DkjvMoUBLZG9J3X6qvBzAruvGzcPwrZKRt3EB2ixPqFmrpEy98SyyM+WZbKL0+TR4fOkg==
 
 tough-cookie@^4.0.0:
   version "4.1.3"

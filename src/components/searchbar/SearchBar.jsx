@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import apiRequest from '@components/apihandler/apiRequest'
 
 import './searchbar.css'
 import './searchbarcomponents/searchbarcomponent.css'
 
-export default function SearchBar({ handleSearch }) {
+export default function SearchBar({ handleSearch, fetchData }) {
 	const [results, setResults] = useState([])
 	const [input, setInput] = useState('')
+	const [hint, setHint] = useState([])
 	const searchBoxRef = useRef(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
@@ -28,23 +30,27 @@ export default function SearchBar({ handleSearch }) {
 		const words = value.split(' ')
 		setInput(value)
 		if (words[words.length - 1] !== '') {
-			fetchData(words[words.length - 1])
+			fetchData(words[words.length - 1]).then((data) =>
+				setResults((prev) => data)
+			)
 		}
 	}
 
-	const fetchData = (value) => {
-		// TODO: return bigram word from value
-		fetch(
-			`https://backend.ntusu.org/modsoptimizer/course_code/?search__icontains=${value}`
-		)
-			.then((response) => response.json())
-			.then((json) => json.results)
-			.then((results) =>
-				setResults((prev) =>
-					results.map((items) => ({ code: items.code, name: items.name }))
-				)
+	useEffect(() => {
+		setTimeout(async () => {
+			const API_URL = 'http://localhost:5000/validate_courses'
+			const bodyParam = {
+				course_lists: input,
+			}
+			const [response_status, response_data] = await apiRequest(
+				API_URL,
+				bodyParam
 			)
-	}
+			if (response_status) {
+				setHint((prev) => response_data)
+			}
+		}, 2000)
+	}, [input])
 
 	useEffect(() => {
 		// Use the ref to get input position and dimensions
@@ -85,6 +91,12 @@ export default function SearchBar({ handleSearch }) {
 					/>
 				</div>
 			)}
+			<div className="search-valid">
+				Valid course codes:
+				{hint.map((c) => {
+					return ' ' + c.toUpperCase()
+				})}
+			</div>
 		</div>
 	)
 }

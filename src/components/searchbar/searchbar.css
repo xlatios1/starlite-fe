@@ -10,3 +10,11 @@
     padding: 3rem 5rem;
     width: 1000px;
 }
+
+.search-valid {
+    position: relative;
+    display: flex;
+    width: 930px;
+    align-content: flex-start;
+    padding-top: 10px;
+}

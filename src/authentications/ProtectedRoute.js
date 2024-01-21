@@ -1,12 +1,13 @@
 import { Route, useRoutes, useParams, Navigate } from 'react-router-dom'
 import { UserAuth } from '../authentications/AuthContext.js'
 
-import Navbar from '@components/navbar/navbar.tsx'
+import Notification from '@components/notification/notification.tsx'
+import NavBar from '@components/navbar/navbar.tsx'
 import HomePage from '@pages/Home'
 import Upload from '@pages/Upload'
 
 const ProtectedRoute = ({ path }) => {
-	const { fetchUserInCache } = UserAuth()
+	const { fetchUserInCache, logout } = UserAuth()
 
 	const curUser = fetchUserInCache()
 	console.log(
@@ -21,11 +22,15 @@ const ProtectedRoute = ({ path }) => {
 		!curUser ||
 		new Date().getTime() >= curUser?.stsTokenManager?.expirationTime
 	) {
+		if (curUser) {
+			logout()
+			Notification('info', 'Authentication expired, please login again!', 3000)
+		}
 		return <Navigate to="/" />
 	}
 	return (
 		<>
-			<Navbar user={curUser?.email} active={path} />
+			<NavBar user={curUser?.email} active={path} />
 			{path === '/home' && <HomePage />}
 			{path === '/upload' && <Upload />}
 		</>

@@ -16,18 +16,14 @@ export default function MultiSwitch({
 }: MultiSwitch) {
 	return (
 		<div className="multi-switch-options">
-			<div className="multi-switch-option">{text}</div>
+			<div className="multi-switch-option" key={text}>
+				{text}
+			</div>
 			<div className="slide-container">
 				{options.map((option, i) => {
 					return (
 						<>
-							<input
-								type="radio"
-								id={String(i)}
-								name={text}
-								key={text + option + i}
-								checked={check === option}
-							/>
+							<input type="radio" id={String(i)} name={text} key={text + option + i} checked={check === option} />
 							<label
 								onClick={() => {
 									handleMultiSwitch(text, option)

@@ -8,11 +8,17 @@
 
 .logo-container .logo {
     width: 40rem;
+    position: absolute;
+    left: max(calc(50% - 315px), 320px);
+    top: -30px;
     font-family: 'Bookman Old Style';
     font-size: 10rem;
     color:#0011acad;
-    margin: 5rem auto 0rem;
-    user-select:none;
+    /* margin: 3rem 0 2rem; */
+    -webkit-user-select:none;
+       -moz-user-select:none;
+        -ms-user-select:none;
+            user-select:none;
 }
 
 .upper-detail-wrapper{
@@ -21,6 +27,7 @@
 
 .lower-detail-wrapper{
     position: relative;
+    top: 10rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -28,8 +35,17 @@
 }
 
 .time-table-wrapper{
-    margin: 0 0 0 50px;
-    position: relative;
+    position: absolute;
     display: flex;
+    flex-direction: column;
+    left: max(calc(50% - 315px), 320px);
+}
+
+.search-wrapper{
+    display: flex;
+    position: absolute;
+    left: max(calc(50% - 320px - 300px - 5px), 10px);
+    /* margin-left: auto; 
+    margin-right: calc(50% + 330px); */
     flex-direction: column;
 }

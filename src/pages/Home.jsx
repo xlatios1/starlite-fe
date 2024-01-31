@@ -13,6 +13,8 @@ export default function Home() {
 	const [data, setData] = useState(null)
 	const [searched, setSearched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [toggleCourseList, setToggleCourseList] = useState(true)
+	const [transformYValue, setTransformYValue] = useState(0)
 
 	function popObject(obj) {
 		const keys = Object.keys(obj)
@@ -27,7 +29,7 @@ export default function Home() {
 		setTimeout(async () => {
 			const API_URL = 'http://localhost:5000/get_timetable_plan'
 			const bodyParam = {
-				course_lists: search,
+				course_lists: search.join(' '),
 				...(topn !== null ? { topn } : {}),
 				debugged: true,
 			}
@@ -46,6 +48,7 @@ export default function Home() {
 					setSearched((prev) =>
 						validCourses.validCourses.map((course) => course.toUpperCase())
 					)
+					setToggleCourseList(false)
 				} else {
 					Notification('info', 'No course data found', 2000)
 					setData((prev) => null)
@@ -74,7 +77,7 @@ export default function Home() {
 		if (data) {
 			window.scrollTo({
 				left: 0,
-				top: 400,
+				top: 250,
 				behavior: 'smooth',
 			})
 		}
@@ -87,38 +90,59 @@ export default function Home() {
 				<div className="logo-container">
 					<img className="logo" src={logo} alt="starlite" />
 				</div>
-				<SearchBar
-					handleSearch={handleSearch}
-					fetchData={fetchData}
-				></SearchBar>
 			</div>
-			{data ? (
-				<div className="lower-detail-wrapper">
-					<FilterLists courses={searched}></FilterLists>
-					<div className="time-table-wrapper">
-						{Object.keys(data).map((key) => {
-							const item = data[key]
-							return (
-								<div className="time-table-container" key={key}>
-									<TimeTable
-										key={key + key}
-										timetable_data={item['Timetable']}
-										missed_course={item['Conflict']}
-										info={item['Info']}
-										exam_schedule={item['Exam Schedule']}
-									/>
-								</div>
-							)
-						})}
-					</div>
-					<ScrollButton />
+			<div className="lower-detail-wrapper">
+				<div className="search-wrapper">
+					<SearchBar
+						handleSearch={handleSearch}
+						fetchData={fetchData}
+						setIsLoading={setIsLoading}
+						toggleCourseList={toggleCourseList}
+						setToggleCourseList={setToggleCourseList}
+						setTransformYValue={setTransformYValue}
+					></SearchBar>
+					{!!searched.length ? (
+						<FilterLists
+							courses={searched}
+							toggleCourseList={toggleCourseList}
+							transformYValue={transformYValue}
+						></FilterLists>
+					) : (
+						<></>
+					)}
 				</div>
-			) : (
-				<p></p>
-			)}
-			{/* <button className="btn" onClick={handleClick}>
-				test
-			</button> */}
+				<div className="time-table-wrapper">
+					{data ? (
+						<>
+							{Object.keys(data).map((key) => {
+								const item = data[key]
+								return (
+									<div className="time-table-container" key={key}>
+										<TimeTable
+											key={key + key}
+											timetable_data={item['Timetable']}
+											missed_course={item['Conflict']}
+											info={item['Info']}
+											exam_schedule={item['Exam Schedule']}
+										/>
+									</div>
+								)
+							})}
+							<ScrollButton />
+						</>
+					) : (
+						<TimeTable
+							key={'default_table'}
+							timetable_data={[...Array(7)].map((i) => {
+								return [...Array(16)].map(() => [])
+							})}
+							missed_course={[]}
+							info={null}
+							exam_schedule={[]}
+						/>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }

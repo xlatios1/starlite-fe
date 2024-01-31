@@ -7,7 +7,15 @@ import FinalExams from '@components/preference/finalexams.tsx'
 import NCourseFilter from '@components/preference/ncoursefilter.tsx'
 import './preferencelists.css'
 
-export default function PreferenceLists({ courses }) {
+PreferenceLists.defaultProps = {
+	transformYValue: 0, // Default value for transformYValue
+}
+
+export default function PreferenceLists({
+	courses,
+	toggleCourseList,
+	transformYValue,
+}) {
 	// const initialPriorityOfCourse = courses.reduce((acc, course) => {
 	// 	acc[course] = '0'
 	// 	return acc
@@ -23,12 +31,15 @@ export default function PreferenceLists({ courses }) {
 		})
 	}
 
-	useEffect(() => {
-		console.log('USEEFFECT', preference)
-	}, [preference])
-
 	return (
-		<div className="preference-wrap">
+		<div
+			className={`preference-wrap ${toggleCourseList ? '' : 'hidden'}`}
+			style={{
+				transform: toggleCourseList
+					? ''
+					: `translateY(-${transformYValue - 15}px)`,
+			}}
+		>
 			<div className="preference-container">
 				<NCourseFilter handlePreference={handlePreference} courses={courses} />
 				<FreeDay handlePreference={handlePreference} courses={courses} />

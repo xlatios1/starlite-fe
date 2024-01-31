@@ -38,7 +38,7 @@ export default function FreeDay({ handlePreference, courses }) {
 			<p className="preference-option-title">Free days</p>
 			{days.map((option) => {
 				return (
-					<div className="preference-option-freeday">
+					<div className="preference-option-freeday" key={option}>
 						<Checkbox
 							key={option}
 							handleCheckbox={() => {

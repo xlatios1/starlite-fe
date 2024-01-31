@@ -38,7 +38,7 @@ export default function Timeslot({ handlePreference, courses }) {
 			<p className="preference-option-title">Timeslots</p>
 			{days.map((day) => {
 				return (
-					<div className="preference-option-timeslot">
+					<div className="preference-option-timeslot" key={day}>
 						<MultiSwitch
 							handleMultiSwitch={handleTimeslot}
 							text={day}

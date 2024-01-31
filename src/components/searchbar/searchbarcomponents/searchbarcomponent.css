@@ -6,7 +6,7 @@
     box-shadow: 0px 0px 8px #ddd;
     display: flex;
     align-items: center;
-    width: 1000px;
+    width: 100%;
 }
 
 .search-bar-container input {
@@ -26,9 +26,9 @@
     color:royalblue;
 }
 
-.search-bar-wrapper{
+.search-bar-container .search-bar-wrapper{
     position: absolute;
-    top: 55%;
+    top: 50px;
     min-width: 250px;
     max-width: 300px;
 }

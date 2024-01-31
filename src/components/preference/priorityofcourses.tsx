@@ -63,13 +63,17 @@ export default function PriorityOfCourses({
 				<p className="preference-option-header course-code">Course</p>
 				<div className="preference-option-header ranking">
 					{courses.map((c, i) => {
-						return <p className="preference-option-header rank">{i}</p>
+						return (
+							<p className="preference-option-header rank" key={i}>
+								{i}
+							</p>
+						)
 					})}
 				</div>
 			</div>
 			{courses.map((course_code) => {
 				return (
-					<div className="preference-option-course">
+					<div className="preference-option-course" key={course_code}>
 						<p className="preference-option-course-code">{course_code}</p>
 						<div className="preference-option-radiobuttons">
 							{courses.map((c, i) => {
@@ -81,6 +85,7 @@ export default function PriorityOfCourses({
 										course_code={course_code}
 										id={String(i)}
 										check={poc[course_code]}
+										key={i}
 									></RadioButton>
 								)
 							})}

@@ -68,15 +68,21 @@ export default function TimeTable({
 
 	const handleClick = (e) => {
 		e.preventDefault()
-		setIsClicked((prev) => !prev)
+		if (info) setIsClicked((prev) => !prev)
 	}
 
 	return (
 		<div className="conic">
-			<p>Exam schedules</p>
-			{exam_schedule.map((exam) => (
-				<p key={exam}>{exam}</p>
-			))}
+			{info ? (
+				<>
+					<p>Exam schedules</p>
+					{exam_schedule.map((exam) => (
+						<p key={exam}>{exam}</p>
+					))}
+				</>
+			) : (
+				<></>
+			)}
 			<table
 				onClick={handleClick}
 				className={isClicked ? 'table blurred' : 'table'}

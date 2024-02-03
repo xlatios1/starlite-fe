@@ -15,15 +15,22 @@ export default function MultiSwitch({
 	check,
 }: MultiSwitch) {
 	return (
-		<div className="multi-switch-options">
+		<div className="multi-switch-options" key={text}>
 			<div className="multi-switch-option" key={text}>
 				{text}
 			</div>
 			<div className="slide-container">
 				{options.map((option, i) => {
 					return (
-						<>
-							<input type="radio" id={String(i)} name={text} key={text + option + i} checked={check === option} />
+						<React.Fragment key={text + option}>
+							<input
+								type="radio"
+								id={String(i)}
+								name={text}
+								key={text + option + i}
+								checked={check === option}
+								onChange={() => {}}
+							/>
 							<label
 								onClick={() => {
 									handleMultiSwitch(text, option)
@@ -31,7 +38,7 @@ export default function MultiSwitch({
 							>
 								{option}
 							</label>
-						</>
+						</React.Fragment>
 					)
 				})}
 				<a className="slide" aria-hidden="true"></a>

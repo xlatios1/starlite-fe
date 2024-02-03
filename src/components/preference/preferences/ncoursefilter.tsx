@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import 'toolcool-range-slider'
 
-import './preferencelists.css'
+import '../preferencelists.css'
 declare global {
 	namespace JSX {
 		interface IntrinsicElements {

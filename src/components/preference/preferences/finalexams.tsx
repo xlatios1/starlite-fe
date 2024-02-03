@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
-import './preferencelists.css'
+import '../preferencelists.css'
 
 export default function FinalExams({ handlePreference, courses }) {
 	const finalExamOptions = [

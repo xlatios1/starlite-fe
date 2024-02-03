@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Checkbox from '@components/checkbox/checkbox.tsx'
 
-import './preferencelists.css'
+import '../preferencelists.css'
 
 export default function FreeDay({ handlePreference, courses }) {
 	const days = [

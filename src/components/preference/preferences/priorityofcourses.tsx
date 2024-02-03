@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import RadioButton from '@components/radiobutton/radiobutton.tsx'
-import './preferencelists.css'
+import '../preferencelists.css'
 
 type PriorityOfCourses = {
 	handlePreference: (preferenceType: any, preferences: any) => void

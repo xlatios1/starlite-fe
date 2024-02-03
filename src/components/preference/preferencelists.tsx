@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
-import FreeDay from '@components/preference/freeday.tsx'
-import PriorityOfCourses from '@components/preference/priorityofcourses.tsx'
+import FreeDay from '@components/preference/preferences/freeday.tsx'
+import PriorityOfCourses from '@components/preference/preferences/priorityofcourses.tsx'
 import Timeslot from '@components/preference/timeslot.tsx'
-import FinalExams from '@components/preference/finalexams.tsx'
-import NCourseFilter from '@components/preference/ncoursefilter.tsx'
+import FinalExams from '@components/preference/preferences/finalexams.tsx'
+import NCourseFilter from '@components/preference/preferences/ncoursefilter.tsx'
 import './preferencelists.css'
 
-PreferenceLists.defaultProps = {
-	transformYValue: 0, // Default value for transformYValue
-}
-
-export default function PreferenceLists({
-	courses,
-	toggleCourseList,
-	transformYValue,
-}) {
+export default function PreferenceLists({ courses }) {
 	// const initialPriorityOfCourse = courses.reduce((acc, course) => {
 	// 	acc[course] = '0'
 	// 	return acc
@@ -32,14 +24,7 @@ export default function PreferenceLists({
 	}
 
 	return (
-		<div
-			className={`preference-wrap ${toggleCourseList ? '' : 'hidden'}`}
-			style={{
-				transform: toggleCourseList
-					? ''
-					: `translateY(-${transformYValue - 15}px)`,
-			}}
-		>
+		<div>
 			<div className="preference-container">
 				<NCourseFilter handlePreference={handlePreference} courses={courses} />
 				<FreeDay handlePreference={handlePreference} courses={courses} />

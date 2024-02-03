@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import logo from '@images/logo.png'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
@@ -7,6 +7,9 @@ import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import FilterLists from '@components/preference/preferencelists.tsx'
+import ExamInfo from '@components/examinfo/examinfo.tsx'
+import GenerateTimetable from '@utils/generatetimetable.ts'
+
 import '@styles/home.css'
 
 export default function Home() {
@@ -14,6 +17,7 @@ export default function Home() {
 	const [searched, setSearched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
+	const searchValidRef = useRef(null)
 	const [transformYValue, setTransformYValue] = useState(0)
 
 	function popObject(obj) {
@@ -83,6 +87,23 @@ export default function Home() {
 		}
 	}, [data])
 
+	useEffect(() => {
+		if (searchValidRef.current) {
+			const observer = new ResizeObserver((entries) => {
+				for (let entry of entries) {
+					if (entry.target === searchValidRef.current) {
+						setTransformYValue(entry.target.clientHeight)
+					}
+				}
+			})
+			observer.observe(searchValidRef.current)
+
+			return () => {
+				observer.disconnect()
+			}
+		}
+	}, [searchValidRef.current])
+
 	return (
 		<div className="hp">
 			{isLoading && <Loading />}
@@ -93,20 +114,35 @@ export default function Home() {
 			</div>
 			<div className="lower-detail-wrapper">
 				<div className="search-wrapper">
+					<button
+						onClick={() => {
+							GenerateTimetable('CZ3005').then((r) =>
+								console.log('SearchCourse', r)
+							)
+						}}
+					>
+						{' '}
+						TESTING API{' '}
+					</button>
 					<SearchBar
 						handleSearch={handleSearch}
 						fetchData={fetchData}
 						setIsLoading={setIsLoading}
-						toggleCourseList={toggleCourseList}
 						setToggleCourseList={setToggleCourseList}
-						setTransformYValue={setTransformYValue}
+						toggleCourseList={toggleCourseList}
+						searchValidRef={searchValidRef}
 					></SearchBar>
 					{!!searched.length ? (
-						<FilterLists
-							courses={searched}
-							toggleCourseList={toggleCourseList}
-							transformYValue={transformYValue}
-						></FilterLists>
+						<div
+							className={`preference-wrap ${toggleCourseList ? '' : 'hidden'}`}
+							style={{
+								transform: toggleCourseList
+									? ''
+									: `translateY(-${transformYValue - 15}px)`,
+							}}
+						>
+							<FilterLists courses={searched}></FilterLists>
+						</div>
 					) : (
 						<></>
 					)}
@@ -142,6 +178,16 @@ export default function Home() {
 						/>
 					)}
 				</div>
+				{data ? (
+					<ExamInfo
+						exam_schedule={[
+							'CZ1103: Not Applicable',
+							'CZ1104: 02-May-2024 1300to1500 hrs',
+						]}
+					/>
+				) : (
+					<></>
+				)}
 			</div>
 		</div>
 	)

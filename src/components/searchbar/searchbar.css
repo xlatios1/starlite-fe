@@ -56,7 +56,8 @@
 		.remove-course-name {
 			position: relative;
 			display: flex;
-			width: 10%;
+			width: 10px;
+			height: 10px;
 		}
 	}
 }

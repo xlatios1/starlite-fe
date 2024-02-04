@@ -16,14 +16,12 @@ type TimetableData = Array<TimetableClassData>
 
 type TimeTable = {
 	timetable_data: TimetableData
-	missed_course: string[][]
 	info: string[][]
 	setIsConflict: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function TimeTable({
 	timetable_data,
-	missed_course,
 	info,
 	setIsConflict,
 }: TimeTable) {
@@ -58,10 +56,7 @@ export default function TimeTable({
 	let gotConflict = false
 	for (let col of timetable_data) {
 		for (let row = 0; row < 16; row++, unikey++) {
-			console.log('ASDSAD', 'duration' in col[row])
 			if ('duration' in col[row]) {
-				console.log('WHAT', 'duration' in col[row], col[row])
-				console.log('?????')
 				let classDetails = col[row] as classDetails
 				timetable[row].push(
 					<td
@@ -98,6 +93,18 @@ export default function TimeTable({
 
 	return (
 		<div className="conic">
+			{info || !gotConflict ? null : (
+				<p
+					style={{
+						color: 'red',
+						display: 'flex',
+						justifyContent: 'center',
+						fontWeight: 'bold',
+					}}
+				>
+					Please resolve the course conflict!
+				</p>
+			)}
 			<table
 				onClick={handleClick}
 				className={isClicked ? 'table blurred' : 'table'}
@@ -124,11 +131,6 @@ export default function TimeTable({
 					})}
 				</tbody>
 			</table>
-			{missed_course.length !== 0 ? (
-				<p>The following courses clash: {missed_course.join(', ')}</p>
-			) : (
-				<></>
-			)}
 			{isClicked ? (
 				<div className="table-info" onClick={handleClick}>
 					<div className="table-wrapper">

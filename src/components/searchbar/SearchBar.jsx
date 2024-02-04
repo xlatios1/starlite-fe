@@ -51,7 +51,8 @@ export default function SearchBar({
 
 	const handleSearchValid = () => {
 		setIsLoading(true)
-		searchBoxRef.current.blur()
+		setInput('')
+		setResults([])
 		setTimeout(async () => {
 			const results = await GenerateCommonInfo(hint, input)
 			console.log('results', results)
@@ -64,7 +65,6 @@ export default function SearchBar({
 					return newHint
 				})
 			}
-			setInput('')
 			setIsLoading(false)
 		}, 2000)
 	}

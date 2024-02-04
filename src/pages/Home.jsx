@@ -163,8 +163,7 @@ export default function Home() {
 										<TimeTable
 											key={key + key}
 											timetable_data={timetablePreview}
-											missed_course={[]}
-											info={null}
+											info={undefined} //add in the course indexes informations {code: index}
 											setIsConflict={setIsConflict}
 										/>
 									</div>
@@ -176,7 +175,6 @@ export default function Home() {
 						<TimeTable
 							key={'default_table'}
 							timetable_data={timetablePreview}
-							missed_course={[]}
 							info={null}
 							setIsConflict={setIsConflict}
 						/>

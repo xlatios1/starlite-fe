@@ -2,83 +2,38 @@ import { useState, useEffect, useRef } from 'react'
 import logo from '@images/logo.png'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
-import apiRequest from '@components/apihandler/apiRequest'
 import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import FilterLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
-import GenerateTimetable from '@utils/generatetimetable.ts'
-
+import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import '@styles/home.css'
 
 export default function Home() {
-	const [data, setData] = useState(null)
-	const [searched, setSearched] = useState([])
+	const [data, setData] = useState(null) //timetable option datas
+	const [searched, setSearched] = useState([]) //searched courses
 	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
-	const [isConflict, setIsConflict] = useState(false)
-	const [timetablePreview, setTimetablePreview] = useState(
-		Array.from({ length: 7 }, () => Array.from({ length: 16 }, () => []))
-	)
-
-	function popObject(obj) {
-		const keys = Object.keys(obj)
-		const lastKey = keys[keys.length - 1]
-		const popValue = obj[lastKey]
-		delete obj[lastKey]
-		return { [lastKey]: popValue }
-	}
+	const [timetablePreview, setTimetablePreview] = useState([])
 
 	const handleSearch = (search, topn = null) => {
-		setIsLoading(() => true)
-		setTimeout(async () => {
-			const API_URL = 'http://localhost:5000/get_timetable_plan'
-			const bodyParam = {
-				course_lists: search.join(' '),
-				...(topn !== null ? { topn } : {}),
-				debugged: true,
-			}
-			const [response_status, response_data] = await apiRequest(
-				API_URL,
-				bodyParam
-			)
-			if (response_status) {
-				const validCourses = popObject(response_data)
-				// if (notFound['Not Found'].length !== 0) {
-				// 	//TODO: handle not found, have a pop up.
-				// }
-				if (Object.keys(response_data).length !== 0) {
-					Notification('success', 'Successful matched!', 2000)
-					setData((prev) => response_data)
-					setSearched((prev) =>
-						validCourses.validCourses.map((course) => course.toUpperCase())
-					)
-					setToggleCourseList(false)
-				} else {
-					Notification('info', 'No course data found', 2000)
-					setData((prev) => null)
-				}
-			} else {
-				Notification('error', 'Error! Unable to fetch data!', 2000)
-			}
-			setIsLoading(() => false)
-		}, 1000)
+		console.log('handleSearch clicked!')
 	}
 
-	const fetchData = async (value) => {
-		return await fetch(`${process.env.REACT_APP_COURSE_CODE_API}${value}`)
-			.then((response) => response.json())
-			.then((json) => json.results)
-			.then((results) => {
-				return results.map((items) => ({
-					code: items.code,
-					name: items.name,
-				}))
-			})
-	}
+	useEffect(() => {
+		const fetchData = async () => {
+			const EmptyTimetable = Array.from({ length: 7 }, () =>
+				Array.from({ length: 16 }, () => [])
+			)
+			const { timetable } = await GenerateTimetable(EmptyTimetable)
+			setTimetablePreview(timetable)
+		}
+
+		fetchData()
+	}, [])
 
 	useEffect(() => {
 		// Scroll only when there is data
@@ -106,7 +61,7 @@ export default function Home() {
 				observer.disconnect()
 			}
 		}
-	}, [searchValidRef.current])
+	}, [searchValidRef.current, transformYValue])
 
 	return (
 		<div className="hp">
@@ -118,25 +73,13 @@ export default function Home() {
 			</div>
 			<div className="lower-detail-wrapper">
 				<div className="search-wrapper">
-					<button
-						onClick={() => {
-							GenerateTimetable('CZ3005').then((r) =>
-								console.log('SearchCourse', r)
-							)
-						}}
-					>
-						{' '}
-						TESTING API{' '}
-					</button>
 					<SearchBar
 						handleSearch={handleSearch}
-						fetchData={fetchData}
 						setIsLoading={setIsLoading}
 						setToggleCourseList={setToggleCourseList}
 						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}
 						setTimetablePreview={setTimetablePreview}
-						isConflict={isConflict}
 					></SearchBar>
 					{!!searched.length ? (
 						<div
@@ -162,9 +105,8 @@ export default function Home() {
 									<div className="time-table-container" key={key}>
 										<TimeTable
 											key={key + key}
-											timetable_data={timetablePreview}
+											timetable={timetablePreview}
 											info={undefined} //add in the course indexes informations {code: index}
-											setIsConflict={setIsConflict}
 										/>
 									</div>
 								)
@@ -174,9 +116,8 @@ export default function Home() {
 					) : (
 						<TimeTable
 							key={'default_table'}
-							timetable_data={timetablePreview}
+							timetable={timetablePreview}
 							info={null}
-							setIsConflict={setIsConflict}
 						/>
 					)}
 				</div>
@@ -194,3 +135,56 @@ export default function Home() {
 		</div>
 	)
 }
+
+
+
+
+
+
+
+
+
+
+// function popObject(obj) {
+// 	const keys = Object.keys(obj)
+// 	const lastKey = keys[keys.length - 1]
+// 	const popValue = obj[lastKey]
+// 	delete obj[lastKey]
+// 	return { [lastKey]: popValue }
+// }
+
+// const handleSearch = (search, topn = null) => {
+// 	setIsLoading(() => true)
+// 	setTimeout(async () => {
+// 		const API_URL = 'http://localhost:5000/get_timetable_plan'
+// 		const bodyParam = {
+// 			course_lists: search.join(' '),
+// 			...(topn !== null ? { topn } : {}),
+// 			debugged: true,
+// 		}
+// 		const [response_status, response_data] = await apiRequest(
+// 			API_URL,
+// 			bodyParam
+// 		)
+// 		if (response_status) {
+// 			const validCourses = popObject(response_data)
+// 			// if (notFound['Not Found'].length !== 0) {
+// 			// 	//TODO: handle not found, have a pop up.
+// 			// }
+// 			if (Object.keys(response_data).length !== 0) {
+// 				Notification('success', 'Successful matched!', 2000)
+// 				setData((prev) => response_data)
+// 				setSearched((prev) =>
+// 					validCourses.validCourses.map((course) => course.toUpperCase())
+// 				)
+// 				setToggleCourseList(false)
+// 			} else {
+// 				Notification('info', 'No course data found', 2000)
+// 				setData((prev) => null)
+// 			}
+// 		} else {
+// 			Notification('error', 'Error! Unable to fetch data!', 2000)
+// 		}
+// 		setIsLoading(() => false)
+// 	}, 1000)
+// }

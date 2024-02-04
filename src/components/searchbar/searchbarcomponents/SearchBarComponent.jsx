@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { RiSearchLine } from 'react-icons/ri'
 
 export const SearchBarComponent = ({
-	handleSearchValid,
+	handleOnSearchValid,
 	handleInput,
 	input,
 	searchBoxRef,
@@ -27,7 +27,7 @@ export const SearchBarComponent = ({
 				onChange={(e) => handleInput(e.target.value)}
 				onKeyUp={(e) => {
 					if (e.key === 'Enter') {
-						handleSearchValid()
+						handleOnSearchValid()
 						searchBoxRef.current.blur()
 					}
 				}}

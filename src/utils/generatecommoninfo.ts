@@ -1,4 +1,5 @@
 import { timeslotToInt, daysToInt } from '@utils/parsers.ts'
+import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 
 type CourseDetails = {
 	course: {
@@ -11,7 +12,10 @@ type CourseDetails = {
 	}
 }
 
-export async function GenerateCommonInfo(prevSearch: object[], search: string) {
+export async function GenerateCommonInfo(
+	prevSearch: object[],
+	search: string
+): Promise<[] | Array<CourseDetails> | null> {
 	let prevCourse = prevSearch.map((obj) => Object.keys(obj)[0])
 	const text_without_punctuation: string = search.replace(
 		/[.,/#!$%^&*;:{@+|}=\-_`~()]/g,
@@ -26,10 +30,6 @@ export async function GenerateCommonInfo(prevSearch: object[], search: string) {
 		const course: string = match[0].toUpperCase()
 		if (!matches.includes(course) && !prevCourse.includes(course)) {
 			try {
-				console.log(
-					'HERE',
-					`${process.env.REACT_APP_COURSE_DETAIL_API}${course}/`
-				)
 				const response = await fetch(
 					`${process.env.REACT_APP_COURSE_DETAIL_API}${course}/`
 				)
@@ -62,7 +62,8 @@ export async function GenerateCommonInfo(prevSearch: object[], search: string) {
 						matches.push(course)
 					}
 				} else {
-					console.log('NOT FOUND')
+					console.log('Failed Response: Error fetching data', response)
+					return null
 				}
 			} catch (error) {
 				console.log('Error fetching data:', error)
@@ -140,5 +141,5 @@ export async function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 		}
 	}
 
-	return parsed_data
+	return await GenerateTimetable(parsed_data)
 }

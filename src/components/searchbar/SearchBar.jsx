@@ -13,13 +13,11 @@ import './searchbarcomponents/searchbarcomponent.css'
 
 export default function SearchBar({
 	handleSearch,
-	fetchData,
 	setIsLoading,
 	toggleCourseList,
 	setToggleCourseList,
 	searchValidRef,
 	setTimetablePreview,
-	isConflict,
 }) {
 	const [results, setResults] = useState([])
 	const [input, setInput] = useState('')
@@ -28,6 +26,7 @@ export default function SearchBar({
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(false)
 	const searchResultRef = useRef(null)
+	const [isConflict, setIsConflict] = useState(false)
 
 	const handleSelect = (value) => {
 		const words = input.trim().split(' ')
@@ -35,7 +34,7 @@ export default function SearchBar({
 		const modifiedSentence = words.join(' ') + ' '
 
 		setInput(modifiedSentence)
-		setResults((prev) => [])
+		setResults([])
 		FocusTextBox({ ref: searchBoxRef })
 	}
 
@@ -43,30 +42,49 @@ export default function SearchBar({
 		const words = value.split(' ')
 		setInput(value)
 		if (words[words.length - 1] !== '') {
-			fetchData(words[words.length - 1]).then((data) =>
-				setResults((prev) => data)
-			)
+			fetchData(words[words.length - 1]).then((data) => setResults(data))
 		}
 	}
 
-	const handleSearchValid = () => {
+	const fetchData = async (value) => {
+		return await fetch(`${process.env.REACT_APP_COURSE_CODE_API}${value}`)
+			.then((response) => response.json())
+			.then((json) => json.results)
+			.then((results) => {
+				return results.map((items) => ({
+					code: items.code,
+					name: items.name,
+				}))
+			})
+	}
+
+	const handleOnSearchValid = () => {
 		setIsLoading(true)
 		setInput('')
 		setResults([])
 		setTimeout(async () => {
 			const results = await GenerateCommonInfo(hint, input)
-			console.log('results', results)
 			if (results && results.length > 0) {
-				setHint((prev) => {
-					const newHint = [...prev, ...results]
-					GenerateCommonTimetable(newHint).then((data) =>
-						setTimetablePreview(data)
-					)
-					return newHint
-				})
+				const newHint = [...hint, ...results]
+				const { timetable, gotConflict } = await GenerateCommonTimetable(
+					newHint
+				)
+				setTimetablePreview(timetable)
+				setIsConflict(gotConflict)
+				setHint(newHint)
 			}
 			setIsLoading(false)
-		}, 2000)
+		}, 1000)
+	}
+
+	const handleOnDelete = async (code) => {
+		const prevHints = [...hint].filter(
+			(value) => Object.keys(value)[0] !== code
+		)
+		const { timetable, gotConflict } = await GenerateCommonTimetable(prevHints)
+		setTimetablePreview(timetable)
+		setIsConflict(gotConflict)
+		setHint(prevHints)
 	}
 
 	const handleFetchTimetable = () => {
@@ -101,21 +119,10 @@ export default function SearchBar({
 	// 	}
 	// }, [isFocused, input])
 
-	const handleOnDelete = (code) => {
-		setHint((prev) => {
-			const prevHints = [...prev].filter(
-				(value) => Object.keys(value)[0] !== code
-			)
-			GenerateCommonTimetable(prevHints).then((data) =>
-				setTimetablePreview(data)
-			)
-			return prevHints
-		})
-	}
 	return (
 		<div className="search-bar-container">
 			<SearchBarComponent
-				handleSearchValid={handleSearchValid}
+				handleOnSearchValid={handleOnSearchValid}
 				handleInput={handleInput}
 				input={input}
 				searchBoxRef={searchBoxRef}

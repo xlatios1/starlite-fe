@@ -71,22 +71,26 @@ export async function GenerateCommonInfo(prevSearch: object[], search: string) {
 
 // [[[],[],[],["cz3005","lec","2"],[]],   //mon
 //  [[],[],["cz3005","tut","1"],[],[],[]]]  //tues
-export async function GenerateCommonTimetable(prevSearch: CourseDetails) {
+export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 	let parsed_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-
-	for (const key in prevSearch) {
-		for (const class_ of prevSearch[key].get_common_information) {
+	console.log('prevSearch', prevSearch)
+	for (const course of prevSearch) {
+		let key = Object.keys(course)[0]
+		console.log(
+			'course[key].get_common_information',
+			course[key].get_common_information
+		)
+		for (const class_ of course[key].get_common_information) {
 			let { start, duration } = timeslotToInt(class_.time)
 			if (parsed_data[daysToInt(class_.day)][start].length !== 0) {
 				let prevData = parsed_data[daysToInt(class_.day)][start]
 				parsed_data[daysToInt(class_.day)][start] = {
-					classDetails: prevData.classDetails.push([
-						key,
-						class_.type,
-						class_.remark,
-					]),
+					classDetails: [
+						...prevData.classDetails,
+						[key, class_.type, class_.remark],
+					],
 					duration: duration + prevData.duration,
 				}
 			} else {
@@ -97,4 +101,5 @@ export async function GenerateCommonTimetable(prevSearch: CourseDetails) {
 			}
 		}
 	}
+	return parsed_data
 }

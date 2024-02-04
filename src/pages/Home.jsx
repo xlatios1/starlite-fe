@@ -17,8 +17,10 @@ export default function Home() {
 	const [searched, setSearched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
-	const searchValidRef = useRef(null)
 	const [transformYValue, setTransformYValue] = useState(0)
+	const searchValidRef = useRef(null)
+	const [timetablePreview, setTimetablePreview] = useState([])
+
 
 	function popObject(obj) {
 		const keys = Object.keys(obj)

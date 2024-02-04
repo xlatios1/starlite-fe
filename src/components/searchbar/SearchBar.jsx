@@ -2,8 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
-import { GenerateCommonInfo } from '@utils/generatecommoninfo.ts'
-// import GenerateCommonInfo from '@utils/generatecommoninfo.ts'
+import {
+	GenerateCommonInfo,
+	GenerateCommonTimetable,
+} from '@utils/generatecommoninfo.ts'
 
 import './searchbar.css'
 import './searchbarcomponents/searchbarcomponent.css'
@@ -51,7 +53,11 @@ export default function SearchBar({
 			console.log('results', results)
 			if (results && results.length > 0) {
 				setHint((prev) => {
-					return [...prev, ...results]
+					const newHint = [...prev, ...results]
+					GenerateCommonTimetable(newHint).then((data) =>
+						console.log('GenerateCommonTimetable', data)
+					)
+					return newHint
 				})
 			}
 			setInput('')

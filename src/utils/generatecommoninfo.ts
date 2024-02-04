@@ -26,6 +26,10 @@ export async function GenerateCommonInfo(prevSearch: object[], search: string) {
 		const course: string = match[0].toUpperCase()
 		if (!matches.includes(course) && !prevCourse.includes(course)) {
 			try {
+				console.log(
+					'HERE',
+					`${process.env.REACT_APP_COURSE_DETAIL_API}${course}/`
+				)
 				const response = await fetch(
 					`${process.env.REACT_APP_COURSE_DETAIL_API}${course}/`
 				)
@@ -71,17 +75,12 @@ export async function GenerateCommonInfo(prevSearch: object[], search: string) {
 
 // [[[],[],[],["cz3005","lec","2"],[]],   //mon
 //  [[],[],["cz3005","tut","1"],[],[],[]]]  //tues
-export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
+export async function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 	let parsed_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-	console.log('prevSearch', prevSearch)
 	for (const course of prevSearch) {
 		let key = Object.keys(course)[0]
-		console.log(
-			'course[key].get_common_information',
-			course[key].get_common_information
-		)
 		for (const class_ of course[key].get_common_information) {
 			let { start, duration } = timeslotToInt(class_.time)
 			if (parsed_data[daysToInt(class_.day)][start].length !== 0) {
@@ -89,17 +88,57 @@ export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 				parsed_data[daysToInt(class_.day)][start] = {
 					classDetails: [
 						...prevData.classDetails,
-						[key, class_.type, class_.remark],
+						{
+							code: key,
+							type: class_.type,
+							group: class_.group,
+							remark: class_.remark,
+						},
 					],
 					duration: duration + prevData.duration,
 				}
 			} else {
 				parsed_data[daysToInt(class_.day)][start] = {
-					classDetails: [[key, class_.type, class_.remark]],
+					classDetails: [
+						{
+							code: key,
+							type: class_.type,
+							group: class_.group,
+							remark: class_.remark,
+						},
+					],
 					duration: duration,
 				}
 			}
 		}
 	}
+	for (let days = 0; days < 7; days++) {
+		for (let timeslot = 0; timeslot < 16; timeslot++) {
+			if (parsed_data[days][timeslot]?.duration > 1) {
+				let duration = parsed_data[days][timeslot].duration - 1
+				let counter = 1
+				for (; duration > 0; duration--, counter++) {
+					if (parsed_data[days][timeslot + counter]?.duration) {
+						console.log('OVERLAP, PLS CHECK FOR THIS CASE')
+						parsed_data[days][timeslot] = {
+							...parsed_data[days][timeslot],
+							classDetails: [
+								...parsed_data[days][timeslot].classDetails,
+								...parsed_data[days][timeslot + counter].classDetails,
+							],
+						}
+						duration = Math.max(
+							duration,
+							parsed_data[days][timeslot + counter].duration
+						)
+						parsed_data[days][timeslot + counter] = []
+					}
+				}
+				parsed_data[days][timeslot].duration = counter
+				timeslot += counter
+			}
+		}
+	}
+
 	return parsed_data
 }

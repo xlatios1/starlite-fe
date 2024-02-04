@@ -19,8 +19,10 @@ export default function Home() {
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
-	const [timetablePreview, setTimetablePreview] = useState([])
-
+	const [isConflict, setIsConflict] = useState(false)
+	const [timetablePreview, setTimetablePreview] = useState(
+		Array.from({ length: 7 }, () => Array.from({ length: 16 }, () => []))
+	)
 
 	function popObject(obj) {
 		const keys = Object.keys(obj)
@@ -60,7 +62,7 @@ export default function Home() {
 					setData((prev) => null)
 				}
 			} else {
-				Notification('error', 'Error!', response_data, 2000)
+				Notification('error', 'Error! Unable to fetch data!', 2000)
 			}
 			setIsLoading(() => false)
 		}, 1000)
@@ -133,6 +135,8 @@ export default function Home() {
 						setToggleCourseList={setToggleCourseList}
 						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}
+						setTimetablePreview={setTimetablePreview}
+						isConflict={isConflict}
 					></SearchBar>
 					{!!searched.length ? (
 						<div
@@ -158,10 +162,10 @@ export default function Home() {
 									<div className="time-table-container" key={key}>
 										<TimeTable
 											key={key + key}
-											timetable_data={item['Timetable']}
-											missed_course={item['Conflict']}
-											info={item['Info']}
-											exam_schedule={item['Exam Schedule']}
+											timetable_data={timetablePreview}
+											missed_course={[]}
+											info={null}
+											setIsConflict={setIsConflict}
 										/>
 									</div>
 								)
@@ -171,12 +175,10 @@ export default function Home() {
 					) : (
 						<TimeTable
 							key={'default_table'}
-							timetable_data={[...Array(7)].map((i) => {
-								return [...Array(16)].map(() => [])
-							})}
+							timetable_data={timetablePreview}
 							missed_course={[]}
 							info={null}
-							exam_schedule={[]}
+							setIsConflict={setIsConflict}
 						/>
 					)}
 				</div>

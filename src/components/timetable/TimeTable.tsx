@@ -1,18 +1,31 @@
 import React, { useState, useId } from 'react'
 import '@styles/timetable.css'
 
+type Details = {
+	code: string
+	type: string
+	group: string
+	remark: string
+}
+
+type classDetails = { classDetails: Details[]; duration: number }
+
+type TimetableClassData = Array<[] | classDetails>
+
+type TimetableData = Array<TimetableClassData>
+
 type TimeTable = {
-	timetable_data: string[][] | number[][]
+	timetable_data: TimetableData
 	missed_course: string[][]
 	info: string[][]
-	exam_schedule: string[]
+	setIsConflict: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function TimeTable({
 	timetable_data,
 	missed_course,
 	info,
-	exam_schedule,
+	setIsConflict,
 }: TimeTable) {
 	const randID = useId()
 	const [isClicked, setIsClicked] = useState(false)
@@ -42,29 +55,41 @@ export default function TimeTable({
 	])
 
 	let unikey = 1
-
+	let gotConflict = false
 	for (let col of timetable_data) {
-		for (let row = 0; row < 16; row++) {
-			if (col[row] === undefined) {
-				timetable[row].push(<td key={`timeblock ${unikey}-${row}`}></td>)
+		for (let row = 0; row < 16; row++, unikey++) {
+			console.log('ASDSAD', 'duration' in col[row])
+			if ('duration' in col[row]) {
+				console.log('WHAT', 'duration' in col[row], col[row])
+				console.log('?????')
+				let classDetails = col[row] as classDetails
+				timetable[row].push(
+					<td
+						rowSpan={classDetails.duration}
+						style={{
+							color: classDetails.classDetails.length > 1 ? 'red' : '',
+						}}
+						key={`timeblock ${unikey}-${row}`}
+					>
+						{classDetails.classDetails.length > 1 ? (gotConflict = true) : null}
+						{classDetails.classDetails.map((details: Details) => (
+							<p>
+								{details.code}
+								<br /> {details.type}
+								<br /> {details.group}
+								<br /> {details.remark}
+							</p>
+						))}
+					</td>
+				)
+				row += classDetails.duration - 1
 			} else {
-				if (col[row][2] > 1) {
-					timetable[row].push(
-						<td rowSpan={col[row][2]} key={`timeblock ${unikey}-${row}`}>
-							{col[row][0]} {col[row][1]} {col[row][3]}
-						</td>
-					)
-					row += col[row][2] - 1
-				} else
-					timetable[row].push(
-						<td key={`timeblock ${unikey}-${row}`}>
-							{col[row][0]} {col[row][1]} {col[row][3]}
-						</td>
-					)
+				timetable[row].push(<td key={`timeblock ${unikey}-${row}`}></td>)
 			}
 		}
-		unikey++
 	}
+
+	setIsConflict(gotConflict)
 
 	const handleClick = (e) => {
 		e.preventDefault()
@@ -73,16 +98,6 @@ export default function TimeTable({
 
 	return (
 		<div className="conic">
-			{info ? (
-				<>
-					<p>Exam schedules</p>
-					{exam_schedule.map((exam) => (
-						<p key={exam}>{exam}</p>
-					))}
-				</>
-			) : (
-				<></>
-			)}
 			<table
 				onClick={handleClick}
 				className={isClicked ? 'table blurred' : 'table'}

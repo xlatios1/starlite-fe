@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import Notification from '@components/notification/notification.tsx'
 import {
 	GenerateCommonInfo,
 	GenerateCommonTimetable,
@@ -17,6 +18,8 @@ export default function SearchBar({
 	toggleCourseList,
 	setToggleCourseList,
 	searchValidRef,
+	setTimetablePreview,
+	isConflict,
 }) {
 	const [results, setResults] = useState([])
 	const [input, setInput] = useState('')
@@ -48,6 +51,7 @@ export default function SearchBar({
 
 	const handleSearchValid = () => {
 		setIsLoading(true)
+		searchBoxRef.current.blur()
 		setTimeout(async () => {
 			const results = await GenerateCommonInfo(hint, input)
 			console.log('results', results)
@@ -55,7 +59,7 @@ export default function SearchBar({
 				setHint((prev) => {
 					const newHint = [...prev, ...results]
 					GenerateCommonTimetable(newHint).then((data) =>
-						console.log('GenerateCommonTimetable', data)
+						setTimetablePreview(data)
 					)
 					return newHint
 				})
@@ -66,7 +70,14 @@ export default function SearchBar({
 	}
 
 	const handleFetchTimetable = () => {
-		handleSearch(hint.map((c) => Object.keys(c)[0]))
+		if (!isConflict) {
+			setInput('')
+			handleSearch(hint.map((c) => Object.keys(c)[0]))
+		} else {
+			const errorMessage =
+				'Error! Please resolve course conflict before search!'
+			Notification('error', errorMessage, 2000)
+		}
 	}
 
 	//handle adaptive movement result list
@@ -92,8 +103,13 @@ export default function SearchBar({
 
 	const handleOnDelete = (code) => {
 		setHint((prev) => {
-			const prevHints = prev
-			return prevHints.filter((value) => Object.keys(value)[0] !== code)
+			const prevHints = [...prev].filter(
+				(value) => Object.keys(value)[0] !== code
+			)
+			GenerateCommonTimetable(prevHints).then((data) =>
+				setTimetablePreview(data)
+			)
+			return prevHints
 		})
 	}
 	return (
@@ -128,8 +144,8 @@ export default function SearchBar({
 							return (
 								<div className="valid-course-container" key={i}>
 									<ol className="valid-course-name">
-										{course_code +
-											c[course_code].initialism +
+										{c[course_code].initialism +
+											course_code +
 											': ' +
 											c[course_code].name}
 									</ol>

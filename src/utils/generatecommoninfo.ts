@@ -1,5 +1,4 @@
 import { timeslotToInt, daysToInt } from '@utils/parsers.ts'
-import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 
 type CourseDetails = {
 	course: {
@@ -76,7 +75,7 @@ export async function GenerateCommonInfo(
 
 // [[[],[],[],["cz3005","lec","2"],[]],   //mon
 //  [[],[],["cz3005","tut","1"],[],[],[]]]  //tues
-export async function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
+export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 	let parsed_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
@@ -141,5 +140,5 @@ export async function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 		}
 	}
 
-	return await GenerateTimetable(parsed_data)
+	return parsed_data
 }

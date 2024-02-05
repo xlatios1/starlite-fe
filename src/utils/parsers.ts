@@ -51,6 +51,26 @@ export const timeslotToInt = (
 	return { start: start, duration: end - start }
 }
 
+export const convertRemarks = (remark: string): Array<number> | null => {
+	const defaultRemark = Array.from({ length: 15 }, (_, index) => index)
+	if (remark === '') {
+		return defaultRemark
+	} else if (remark.slice(0, 8) === 'Teaching') {
+		const wks = remark.split(' ')[1].slice(2)
+		if (wks.includes('-')) {
+			wks.split('-')
+			return Array.from(
+				{ length: +wks.split('-')[1] - +wks.split('-')[0] },
+				(_, index) => index + +wks.split('-')[0]
+			)
+		} else if (wks.includes(',')) {
+			return wks.split(',').map((i) => +i)
+		} else {
+			return defaultRemark
+		}
+	}
+}
+
 // [[[],[],[],["cz3005","lec","2","remarks"],[]],   //mon
 // [[],[],["cz3005","tut","1","remarks"],[],[],[]]]  //tues
 export const extractDetails = () => {}

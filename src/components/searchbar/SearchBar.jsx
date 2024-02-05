@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
-import Notification from '@components/notification/notification.tsx'
 import {
 	GenerateCommonInfo,
 	GenerateCommonTimetable,
@@ -26,7 +25,6 @@ export default function SearchBar({
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(false)
 	const searchResultRef = useRef(null)
-	const [isConflict, setIsConflict] = useState(false)
 
 	const handleSelect = (value) => {
 		const words = input.trim().split(' ')
@@ -66,11 +64,7 @@ export default function SearchBar({
 			const results = await GenerateCommonInfo(hint, input)
 			if (results && results.length > 0) {
 				const newHint = [...hint, ...results]
-				const { timetable, gotConflict } = await GenerateCommonTimetable(
-					newHint
-				)
-				setTimetablePreview(timetable)
-				setIsConflict(gotConflict)
+				setTimetablePreview(GenerateCommonTimetable(newHint))
 				setHint(newHint)
 			}
 			setIsLoading(false)
@@ -81,21 +75,8 @@ export default function SearchBar({
 		const prevHints = [...hint].filter(
 			(value) => Object.keys(value)[0] !== code
 		)
-		const { timetable, gotConflict } = await GenerateCommonTimetable(prevHints)
-		setTimetablePreview(timetable)
-		setIsConflict(gotConflict)
+		setTimetablePreview(GenerateCommonTimetable(prevHints))
 		setHint(prevHints)
-	}
-
-	const handleFetchTimetable = () => {
-		if (!isConflict) {
-			setInput('')
-			handleSearch(hint.map((c) => Object.keys(c)[0]))
-		} else {
-			const errorMessage =
-				'Error! Please resolve course conflict before search!'
-			Notification('error', errorMessage, 2000)
-		}
 	}
 
 	//handle adaptive movement result list
@@ -169,7 +150,7 @@ export default function SearchBar({
 						<button
 							className="fetch-btn"
 							role="button"
-							onClick={handleFetchTimetable}
+							onClick={() => handleSearch(hint)}
 						>
 							<span className="text">Search</span>
 						</button>

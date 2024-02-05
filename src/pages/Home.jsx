@@ -7,33 +7,33 @@ import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import FilterLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
-import { GenerateTimetable } from '@utils/generatetimetable.tsx'
+import { convertExamSchedule } from '@utils/parsers.ts'
 import '@styles/home.css'
 
 export default function Home() {
+	const initializedTimetable = Array.from({ length: 7 }, () =>
+		Array.from({ length: 16 }, () => [])
+	)
 	const [data, setData] = useState(null) //timetable option datas
 	const [searched, setSearched] = useState([]) //searched courses
 	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
-	const [timetablePreview, setTimetablePreview] = useState([])
+	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 
 	const handleSearch = (search, topn = null) => {
 		console.log('handleSearch clicked!')
-	}
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const EmptyTimetable = Array.from({ length: 7 }, () =>
-				Array.from({ length: 16 }, () => [])
-			)
-			const { timetable } = await GenerateTimetable(EmptyTimetable)
-			setTimetablePreview(timetable)
+		if (document.getElementsByClassName('conflict-message').length !== 0) {
+			const errorMessage =
+				'Error! Please resolve course conflict before search!'
+			Notification('error', errorMessage, 2000)
+		} else {
+			setSearched(search.map((obj) => Object.keys(obj)[0]))
+			setData(search)
+			console.table(search)
 		}
-
-		fetchData()
-	}, [])
+	}
 
 	useEffect(() => {
 		// Scroll only when there is data
@@ -97,7 +97,7 @@ export default function Home() {
 					)}
 				</div>
 				<div className="time-table-wrapper">
-					{data ? (
+					{null && data ? (
 						<>
 							{Object.keys(data).map((key) => {
 								const item = data[key]
@@ -116,17 +116,24 @@ export default function Home() {
 					) : (
 						<TimeTable
 							key={'default_table'}
-							timetable={timetablePreview}
+							timetable_data={timetablePreview}
 							info={null}
 						/>
 					)}
 				</div>
 				{data ? (
 					<ExamInfo
-						exam_schedule={[
-							'CZ1103: Not Applicable',
-							'CZ1104: 02-May-2024 1300to1500 hrs',
-						]}
+						exam_schedule={
+							data.map((obj) => {
+								const course = Object.keys(obj)[0]
+								return convertExamSchedule(
+									course,
+									obj[course].get_exam_schedule
+								)
+							})
+							// ['CZ1103: Not Applicable',
+							// 'CZ1104: 02-May-2024 1300to1500 hrs']
+						}
 					/>
 				) : (
 					<></>

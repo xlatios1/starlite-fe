@@ -18,18 +18,6 @@ export default function App() {
 
 	return (
 		<AuthContextProvider>
-			<Router>
-				{/* <div className="app">
-				<article className="bg"> */}
-				<Routes>
-					<Route path="/" element={<SignIn />} />
-					<Route path="/register" element={<Registration />} />
-					{renderProtectedPaths(['/home', '/upload', '/about'])}
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-				{/* </article>
-			</div> */}
-			</Router>
 			<ToastContainer
 				position="top-center"
 				autoClose={3000}
@@ -42,6 +30,18 @@ export default function App() {
 				pauseOnHover
 				theme="light"
 			/>
+			<Router>
+				{/* <div className="app">
+				<article className="bg"> */}
+				<Routes>
+					<Route path="/" element={<SignIn />} />
+					<Route path="/register" element={<Registration />} />
+					{renderProtectedPaths(['/home', '/upload', '/about'])}
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+				{/* </article>
+			</div> */}
+			</Router>
 		</AuthContextProvider>
 	)
 }

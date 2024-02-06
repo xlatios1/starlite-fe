@@ -57,7 +57,7 @@ export default function Dropzone({ identifier }) {
 		accept: {
 			'application/pdf': [],
 		},
-		maxSize: 1024 * 1000,
+		maxSize: 1024 * 1024,
 	})
 
 	useEffect(() => {

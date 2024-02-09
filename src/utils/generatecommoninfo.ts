@@ -1,13 +1,30 @@
 import { timeslotToInt, daysToInt } from '@utils/parsers.ts'
 
-type CourseDetails = {
-	course: {
+type classinfo = {
+	type: string
+	group: string
+	day: string
+	time: string
+	venue: string
+	remark: string
+}
+
+type indexinfos = {
+	id: string
+	index: string
+	get_information: classinfo[]
+	get_filtered_information: classinfo[] | []
+	schedule: string
+}
+
+export type CourseDetails = {
+	[courseCode: string]: {
 		name: string
 		initialism: string
 		academic_units: number
 		get_exam_schedule: { date: string; time: string; timecode: string }
-		get_common_information: Record<string, []>
-		indexes: Record<string, []>
+		get_common_information: classinfo[] | []
+		indexes: indexinfos[]
 	}
 }
 
@@ -92,10 +109,11 @@ export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 							code: key,
 							type: class_.type,
 							group: class_.group,
+							time: { start, duration },
 							remark: class_.remark,
 						},
 					],
-					duration: duration + prevData.duration,
+					duration: Math.max(duration, prevData.duration),
 				}
 			} else {
 				parsed_data[daysToInt(class_.day)][start] = {
@@ -104,6 +122,7 @@ export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
 							code: key,
 							type: class_.type,
 							group: class_.group,
+							time: { start, duration },
 							remark: class_.remark,
 						},
 					],

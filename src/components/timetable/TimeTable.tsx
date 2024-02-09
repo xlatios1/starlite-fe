@@ -1,10 +1,12 @@
 import React, { useState, useId } from 'react'
 import '@styles/timetable.css'
+import { convertRemarks } from '@utils/parsers.ts'
 
 type Details = {
 	code: string
 	type: string
 	group: string
+	time: { start: number; duration: number }
 	remark: string
 }
 
@@ -48,33 +50,63 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 		<td key={`time ${timeArr[i]}`}>{timeArr[i]}</td>,
 	])
 
+	const checkConflictWeeks = (classDetails: classDetails): boolean => {
+		// classDetails.classDetails.map((i) => console.log(i.remark))
+		// return true
+		let elementsSet = new Set()
+		for (const slot of classDetails.classDetails) {
+			let remarks = convertRemarks(slot.remark)
+			for (let i = 0; i < slot.time.duration; i++) {
+				for (const wk of remarks) {
+					let newEle = `${slot.time.start}${i}${wk}`
+					console.log(newEle, elementsSet)
+					if (elementsSet.has(newEle)) {
+						return true
+					}
+					elementsSet.add(newEle) // Add the element to the set
+				}
+			}
+		}
+		return false
+	}
+
 	let unikey = 1
 	let hasConflict = false
-
+	console.log(timetable_data)
 	for (let col of timetable_data) {
 		for (let row = 0; row < 16; row++, unikey++) {
 			if ('duration' in col[row]) {
 				let classDetails = col[row] as classDetails
+				let innerConflict = false
+				if (classDetails.classDetails.length > 1) {
+					innerConflict = checkConflictWeeks(classDetails)
+				}
 				timetable[row].push(
 					<td
 						key={`timeblock ${unikey}-${row}`}
 						rowSpan={classDetails.duration}
 						style={{
-							color: classDetails.classDetails.length > 1 ? 'red' : '',
+							color: innerConflict ? 'red' : '',
 						}}
 					>
-						{classDetails.classDetails.length > 1 ? (hasConflict = true) : null}
-						{classDetails.classDetails.map((details: Details) => (
-							<p key={`details ${unikey}-${row}-${details.code}`}>
-								{details.code}
-								<br /> {details.type}
-								<br /> {details.group}
-								<br /> {details.remark}
-							</p>
-						))}
+						<div>
+							{classDetails.classDetails.map((details: Details, i: number) => (
+								<>
+									<hr />
+									<p key={`details ${unikey}-${i}-${row}-${details.code}`}>
+										{details.code}
+										<br /> {details.type}
+										<br /> {details.group}
+										<br /> {details.remark}
+									</p>
+									<hr />
+								</>
+							))}
+						</div>
 					</td>
 				)
 				row += classDetails.duration - 1
+				hasConflict = hasConflict || innerConflict
 			} else {
 				timetable[row].push(<td key={`timeblock ${unikey}-${row}`}></td>)
 			}

@@ -8,6 +8,7 @@ import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import FilterLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
 import { convertExamSchedule } from '@utils/parsers.ts'
+import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import '@styles/home.css'
 
 export default function Home() {
@@ -29,9 +30,10 @@ export default function Home() {
 				'Error! Please resolve course conflict before search!'
 			Notification('error', errorMessage, 2000)
 		} else {
-			setSearched(search.map((obj) => Object.keys(obj)[0]))
-			setData(search)
-			console.table(search)
+			// setSearched(search.map((obj) => Object.keys(obj)[0]))
+			// setData(search)
+			GenerateTimetable(search)
+			// console.table(search)
 		}
 	}
 
@@ -123,17 +125,10 @@ export default function Home() {
 				</div>
 				{data ? (
 					<ExamInfo
-						exam_schedule={
-							data.map((obj) => {
-								const course = Object.keys(obj)[0]
-								return convertExamSchedule(
-									course,
-									obj[course].get_exam_schedule
-								)
-							})
-							// ['CZ1103: Not Applicable',
-							// 'CZ1104: 02-May-2024 1300to1500 hrs']
-						}
+						exam_schedule={data.map((obj) => {
+							const course = Object.keys(obj)[0]
+							return convertExamSchedule(course, obj[course].get_exam_schedule)
+						})}
 					/>
 				) : (
 					<></>

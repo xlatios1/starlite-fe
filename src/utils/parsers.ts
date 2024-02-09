@@ -51,11 +51,9 @@ export const timeslotToInt = (
 	return { start: start, duration: end - start }
 }
 
-export const convertRemarks = (remark: string): Array<number> | null => {
+export const convertRemarks = (remark: string): Array<number> => {
 	const defaultRemark = Array.from({ length: 15 }, (_, index) => index)
-	if (remark === '') {
-		return defaultRemark
-	} else if (remark.slice(0, 8) === 'Teaching') {
+	if (remark.slice(0, 8) === 'Teaching') {
 		const wks = remark.split(' ')[1].slice(2)
 		if (wks.includes('-')) {
 			wks.split('-')
@@ -65,10 +63,11 @@ export const convertRemarks = (remark: string): Array<number> | null => {
 			)
 		} else if (wks.includes(',')) {
 			return wks.split(',').map((i) => +i)
-		} else {
-			return defaultRemark
+		} else if (!isNaN(Number(wks))) {
+			return [+wks]
 		}
 	}
+	return defaultRemark
 }
 
 // [[[],[],[],["cz3005","lec","2","remarks"],[]],   //mon

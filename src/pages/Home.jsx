@@ -9,6 +9,7 @@ import FilterLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
 import { convertExamSchedule } from '@utils/parsers.ts'
 import { GenerateTimetable } from '@utils/generatetimetable.tsx'
+import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
 import '@styles/home.css'
 
 export default function Home() {
@@ -24,17 +25,20 @@ export default function Home() {
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 
 	const handleSearch = (search, topn = null) => {
-		console.log('handleSearch clicked!')
-		if (document.getElementsByClassName('conflict-message').length !== 0) {
-			const errorMessage =
-				'Error! Please resolve course conflict before search!'
-			Notification('error', errorMessage, 2000)
-		} else {
-			// setSearched(search.map((obj) => Object.keys(obj)[0]))
-			// setData(search)
-			GenerateTimetable(search)
-			// console.table(search)
-		}
+		setIsLoading(true)
+		setTimeout(async () => {
+			if (document.getElementsByClassName('conflict-message').length !== 0) {
+				const errorMessage =
+					'Error! Please resolve course conflict before search!'
+				Notification('error', errorMessage, 2000)
+			} else {
+				console.log(timetablePreview)
+				setSearched(search)
+				setData(GenerateTimetable(search))
+				Notification('success', 'Search successful', 2000)
+			}
+			setIsLoading(false)
+		}, 1000)
 	}
 
 	useEffect(() => {
@@ -92,23 +96,27 @@ export default function Home() {
 									: `translateY(-${transformYValue - 15}px)`,
 							}}
 						>
-							<FilterLists courses={searched}></FilterLists>
+							<FilterLists
+								courses={searched.map((obj) => Object.keys(obj)[0])}
+							></FilterLists>
 						</div>
 					) : (
 						<></>
 					)}
 				</div>
-				<div className="time-table-wrapper">
-					{null && data ? (
+				;<div className="time-table-wrapper">
+					{/* { timetable_data: temp, info: combi[1] } */}
+					{data ? (
 						<>
-							{Object.keys(data).map((key) => {
-								const item = data[key]
+							{data.map(({ timetable_data, info }, key) => {
+								let timetableData = GenerateTimetableFormat(timetable_data)
+								console.log('HERE', timetableData, timetable_data, info)
 								return (
 									<div className="time-table-container" key={key}>
 										<TimeTable
 											key={key + key}
-											timetable={timetablePreview}
-											info={undefined} //add in the course indexes informations {code: index}
+											timetable_data={timetableData}
+											info={info} //add in the course indexes informations {code: index}
 										/>
 									</div>
 								)
@@ -123,16 +131,21 @@ export default function Home() {
 						/>
 					)}
 				</div>
-				{data ? (
-					<ExamInfo
-						exam_schedule={data.map((obj) => {
-							const course = Object.keys(obj)[0]
-							return convertExamSchedule(course, obj[course].get_exam_schedule)
-						})}
-					/>
-				) : (
-					<></>
-				)}
+				{
+					data ? (
+						<ExamInfo
+							exam_schedule={searched.map((obj) => {
+								const course = Object.keys(obj)[0]
+								return convertExamSchedule(
+									course,
+									obj[course].get_exam_schedule
+								)
+							})}
+						/>
+					) : (
+						<></>
+					)
+				}
 			</div>
 		</div>
 	)

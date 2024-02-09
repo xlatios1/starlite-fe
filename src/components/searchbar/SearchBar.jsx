@@ -3,8 +3,9 @@ import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
 import {
-	GenerateCommonInfo,
-	GenerateCommonTimetable,
+	FetchCourseDetails,
+	generateCommonInfomationDetails,
+	GenerateTimetableFormat,
 } from '@utils/generatecommoninfo.ts'
 
 import './searchbar.css'
@@ -61,10 +62,11 @@ export default function SearchBar({
 		setInput('')
 		setResults([])
 		setTimeout(async () => {
-			const results = await GenerateCommonInfo(hint, input)
+			const results = await FetchCourseDetails(hint, input)
 			if (results && results.length > 0) {
 				const newHint = [...hint, ...results]
-				setTimetablePreview(GenerateCommonTimetable(newHint))
+				const customHint = generateCommonInfomationDetails(newHint)
+				setTimetablePreview(GenerateTimetableFormat(customHint))
 				setHint(newHint)
 			}
 			setIsLoading(false)
@@ -75,7 +77,8 @@ export default function SearchBar({
 		const prevHints = [...hint].filter(
 			(value) => Object.keys(value)[0] !== code
 		)
-		setTimetablePreview(GenerateCommonTimetable(prevHints))
+		const customHint = generateCommonInfomationDetails(prevHints)
+		setTimetablePreview(GenerateTimetableFormat(customHint))
 		setHint(prevHints)
 	}
 

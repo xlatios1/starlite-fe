@@ -59,7 +59,6 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 			for (let i = 0; i < slot.time.duration; i++) {
 				for (const wk of remarks) {
 					let newEle = `${slot.time.start}${i}${wk}`
-					console.log(newEle, elementsSet)
 					if (elementsSet.has(newEle)) {
 						return true
 					}
@@ -72,7 +71,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 
 	let unikey = 1
 	let hasConflict = false
-	console.log(timetable_data)
+
 	for (let col of timetable_data) {
 		for (let row = 0; row < 16; row++, unikey++) {
 			if ('duration' in col[row]) {
@@ -83,24 +82,20 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 				}
 				timetable[row].push(
 					<td
-						key={`timeblock ${unikey}-${row}`}
 						rowSpan={classDetails.duration}
-						style={{
-							color: innerConflict ? 'red' : '',
-						}}
+						style={{ color: innerConflict ? 'red' : '' }}
+						key={`timeblock data ${unikey}-${row}`}
 					>
 						<div>
 							{classDetails.classDetails.map((details: Details, i: number) => (
-								<>
-									<hr />
-									<p key={`details ${unikey}-${i}-${row}-${details.code}`}>
-										{details.code}
-										<br /> {details.type}
-										<br /> {details.group}
-										<br /> {details.remark}
-									</p>
-									<hr />
-								</>
+								<p
+									key={`details ${unikey}-${i}-${row}-${details.code}-${details.time}`}
+								>
+									{details.code}
+									<br /> {details.type}
+									<br /> {details.group}
+									<br /> {details.remark}
+								</p>
 							))}
 						</div>
 					</td>
@@ -119,62 +114,68 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 	}
 
 	return (
-		<div className="conic">
-			{info || !hasConflict ? null : (
-				<p
-					className="conflict-message"
-					style={{
-						color: 'red',
-						display: 'flex',
-						justifyContent: 'center',
-						fontWeight: 'bold',
-					}}
-				>
-					Please resolve the course conflict!
-				</p>
-			)}
-			<table
-				onClick={handleClick}
-				className={isClicked ? 'table blurred' : 'table'}
-			>
-				<tbody>
-					<tr key="details">
-						<th style={{ width: '60px' }}>Time/Day</th>
-						{days.map((day) => {
-							return (
-								<th style={{ width: '75px' }} key={day}>
-									{day}
-								</th>
-							)
-						})}
-					</tr>
-					{timetable.map((rows, i) => {
-						return (
-							<tr style={{ height: '30px' }} key={i}>
-								{rows.map((timeblock) => {
-									return timeblock
+		<>
+			{info && hasConflict ? (
+				<></>
+			) : (
+				<div className="conic">
+					{info || !hasConflict ? null : (
+						<p
+							className="conflict-message"
+							style={{
+								color: 'red',
+								display: 'flex',
+								justifyContent: 'center',
+								fontWeight: 'bold',
+							}}
+						>
+							Please resolve the course conflict!
+						</p>
+					)}
+					<table
+						onClick={handleClick}
+						className={isClicked ? 'table blurred' : 'table'}
+					>
+						<tbody>
+							<tr key="details">
+								<th style={{ width: '60px' }}>Time/Day</th>
+								{days.map((day) => {
+									return (
+										<th style={{ width: '75px' }} key={day}>
+											{day}
+										</th>
+									)
 								})}
 							</tr>
-						)
-					})}
-				</tbody>
-			</table>
-			{isClicked ? (
-				<div className="table-info" onClick={handleClick}>
-					<div className="table-wrapper">
-						<p className="table-content">List of courses with indexes</p>
-						{info.map(([courseCode, courseNumber]) => {
-							return (
-								<p key={randID} className="table-content">
-									{courseCode}: {courseNumber}
-								</p>
-							)
-						})}
-					</div>
+							{timetable.map((rows, i) => {
+								return (
+									<tr style={{ height: '30px' }} key={i}>
+										{rows.map((timeblock) => {
+											return timeblock
+										})}
+									</tr>
+								)
+							})}
+						</tbody>
+					</table>
+					{isClicked ? (
+						<div className="table-info" onClick={handleClick}>
+							<div className="table-wrapper">
+								<p className="table-content">List of courses with indexes</p>
+								{info.map(([courseCode, courseNumber]) => {
+									return (
+										<p key={randID} className="table-content">
+											{courseCode}: {courseNumber}
+										</p>
+									)
+								})}
+							</div>
+						</div>
+					) : (
+						<></>
+					)}
 				</div>
-			) : (
-				<></>
 			)}
-		</div>
+		</>
 	)
 }

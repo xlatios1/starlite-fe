@@ -1,6 +1,6 @@
 import { timeslotToInt, daysToInt } from '@utils/parsers.ts'
 
-type classinfo = {
+export type classinfo = {
 	type: string
 	group: string
 	day: string
@@ -9,7 +9,7 @@ type classinfo = {
 	remark: string
 }
 
-type indexinfos = {
+export type indexinfos = {
 	id: string
 	index: string
 	get_information: classinfo[]
@@ -28,7 +28,9 @@ export type CourseDetails = {
 	}
 }
 
-export async function GenerateCommonInfo(
+export type ModifiedCourseDetails = { [courseCode: string]: classinfo[] }
+
+export async function FetchCourseDetails(
 	prevSearch: object[],
 	search: string
 ): Promise<[] | Array<CourseDetails> | null> {
@@ -92,13 +94,24 @@ export async function GenerateCommonInfo(
 
 // [[[],[],[],["cz3005","lec","2"],[]],   //mon
 //  [[],[],["cz3005","tut","1"],[],[],[]]]  //tues
-export function GenerateCommonTimetable(prevSearch: CourseDetails[]) {
+
+export function generateCommonInfomationDetails(
+	search: Array<CourseDetails>
+): ModifiedCourseDetails[] {
+	return search.map((course) => {
+		const courseCode = Object.keys(course)[0]
+		const commonClasses = course[courseCode].get_common_information
+		return { [courseCode]: commonClasses }
+	})
+}
+
+export function GenerateTimetableFormat(prevSearch: ModifiedCourseDetails[]) {
 	let parsed_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
 	for (const course of prevSearch) {
-		let key = Object.keys(course)[0]
-		for (const class_ of course[key].get_common_information) {
+		const key = Object.keys(course)[0]
+		for (const class_ of course[key]) {
 			let { start, duration } = timeslotToInt(class_.time)
 			if (parsed_data[daysToInt(class_.day)][start].length !== 0) {
 				let prevData = parsed_data[daysToInt(class_.day)][start]

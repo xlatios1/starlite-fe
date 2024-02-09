@@ -36,11 +36,21 @@ export const convertExamSchedule = (
 	return `${code}: ${dd}-${monthNames[parseInt(mm)]}-${yyyy} ${formattedTime}`
 }
 
+/**
+ * 
+ * @param date
+ * @returns integer corresponding to the date
+ */
 export const daysToInt = (date: string): number => {
 	const days_arr = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 	return days_arr.indexOf(date.toUpperCase())
 }
 
+/**
+ * 
+ * @param duration 
+ * @returns start: starting slot, duration: how long the class is
+ */
 export const timeslotToInt = (
 	duration: string
 ): { start: number; duration: number } => {
@@ -69,7 +79,3 @@ export const convertRemarks = (remark: string): Array<number> => {
 	}
 	return defaultRemark
 }
-
-// [[[],[],[],["cz3005","lec","2","remarks"],[]],   //mon
-// [[],[],["cz3005","tut","1","remarks"],[],[],[]]]  //tues
-export const extractDetails = () => {}

@@ -23,6 +23,7 @@ export default function Home() {
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
+	const [preferences, setPreferences] = useState(null)
 
 	const handleSearch = (search, topn = null) => {
 		setIsLoading(true)
@@ -35,6 +36,7 @@ export default function Home() {
 				console.log(timetablePreview)
 				setSearched(search)
 				setData(GenerateTimetable(search))
+				setToggleCourseList(false)
 				Notification('success', 'Search successful', 2000)
 			}
 			setIsLoading(false)
@@ -69,6 +71,14 @@ export default function Home() {
 		}
 	}, [searchValidRef.current, transformYValue])
 
+	const handleApplyPreference = (preference) => {
+		setIsLoading(true)
+		setTimeout(async () => {
+			setPreferences(preference)
+			setIsLoading(false)
+		}, 1000)
+	}
+
 	return (
 		<div className="hp">
 			{isLoading && <Loading />}
@@ -98,13 +108,15 @@ export default function Home() {
 						>
 							<FilterLists
 								courses={searched.map((obj) => Object.keys(obj)[0])}
+								handleApplyPreference={handleApplyPreference}
 							></FilterLists>
 						</div>
 					) : (
 						<></>
 					)}
 				</div>
-				;<div className="time-table-wrapper">
+				;
+				<div className="time-table-wrapper">
 					{/* { timetable_data: temp, info: combi[1] } */}
 					{data ? (
 						<>
@@ -131,21 +143,16 @@ export default function Home() {
 						/>
 					)}
 				</div>
-				{
-					data ? (
-						<ExamInfo
-							exam_schedule={searched.map((obj) => {
-								const course = Object.keys(obj)[0]
-								return convertExamSchedule(
-									course,
-									obj[course].get_exam_schedule
-								)
-							})}
-						/>
-					) : (
-						<></>
-					)
-				}
+				{data ? (
+					<ExamInfo
+						exam_schedule={searched.map((obj) => {
+							const course = Object.keys(obj)[0]
+							return convertExamSchedule(course, obj[course].get_exam_schedule)
+						})}
+					/>
+				) : (
+					<></>
+				)}
 			</div>
 		</div>
 	)

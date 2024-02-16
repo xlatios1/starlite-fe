@@ -80,7 +80,7 @@
 	font-weight: bold;
 	justify-content: center;
 	line-height: 1em;
-	width: 80px;
+	width: fit-content;
 	padding: 3px;
 	text-decoration: none;
 	user-select: none;

@@ -3,9 +3,9 @@ import '@styles/radiobutton.css'
 
 type RadioButton = {
 	handleRadioButton: (...args: any[]) => void
-	id: string
+	id: number
 	course_code: string
-	check: string
+	check: number
 }
 
 export default function RadioButton({
@@ -19,10 +19,10 @@ export default function RadioButton({
 			<input
 				onChange={handleRadioButton}
 				type="radio"
-				id={id}
+				id={id.toString()}
 				name={course_code}
 				key={course_code + id}
-				checked={check === id}
+				checked={check === +id}
 			/>
 		</div>
 	)

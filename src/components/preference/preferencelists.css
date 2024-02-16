@@ -23,10 +23,28 @@
 	margin-bottom: 1px;
 }
 
-.preference-options p.preference-option-title {
+.preference-options div.preference-option-title-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	margin-bottom: 10px;
-	font-size: 15px;
-	font-weight: bold;
+
+	.preference-option-title{
+		font-size: 15px;
+		font-weight: bold;
+	}
+
+	.clear-filter-btn {
+		font-size: 12px;
+		cursor: pointer;
+		color: blue; /* Change the color to your preference */
+		text-decoration: underline;
+		align-items: center;
+	}
+	  
+	.clear-filter-btn:hover {
+		text-decoration: none; /* Remove underline on hover if desired */
+	}
 }
 
 .preference-options .preference-option-headers {
@@ -82,6 +100,11 @@
 }
 .preference-option-ncoursefilter:is(.upper, .lower) {
 	margin: 0px 5px;
+}
+
+.preference-options.setPreference{
+	display: flex;
+	justify-content: center;
 }
 
 toolcool-range-slider {

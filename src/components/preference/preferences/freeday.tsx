@@ -1,41 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Checkbox from '@components/checkbox/checkbox.tsx'
-
+import { days } from '@components/preference/preferenceUtils.tsx'
 import '../preferencelists.css'
 
-export default function FreeDay({ handlePreference, courses }) {
-	const days = [
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-		'Sunday',
-	]
-
-	const [freeDay, setFreeDay] = useState([])
-
+export default function FreeDay({ freeDay, handlePreference, handleReset }) {
 	const handleFreeDays = (option) => {
-		setFreeDay((prev) => {
-			let newFreeDays
-			if (prev.includes(option)) {
-				newFreeDays = prev.filter((day) => day !== option)
-			} else {
-				newFreeDays = [...prev, option]
-			}
-			handlePreference('Free days', newFreeDays)
-			return newFreeDays
-		})
+		let newFreeDays
+		if (freeDay.includes(option)) {
+			newFreeDays = freeDay.filter((day) => day !== option)
+		} else {
+			newFreeDays = [...freeDay, option]
+		}
+		handlePreference('freeDay', newFreeDays)
 	}
-
-	useEffect(() => {
-		handlePreference('Free days', freeDay)
-	}, [courses])
 
 	return (
 		<div className="preference-options freeday">
-			<p className="preference-option-title">Free days</p>
+			<div className="preference-option-title-container">
+				<p className="preference-option-title">Free days</p>
+				<span
+					className="clear-filter-btn"
+					onClick={() => handleReset('freeDay')}
+				>
+					Reset filter
+				</span>
+			</div>
 			{days.map((option) => {
 				return (
 					<div className="preference-option-freeday" key={option}>

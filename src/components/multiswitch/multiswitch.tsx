@@ -2,7 +2,7 @@ import React from 'react'
 import '@styles/multiswitch.css'
 
 type MultiSwitch = {
-	handleMultiSwitch: (...args: any[]) => void
+	handleMultiSwitch: (text: string, option: string) => void
 	text: string
 	options: string[]
 	check: string

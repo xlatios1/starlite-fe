@@ -72,6 +72,36 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 	let unikey = 1
 	let hasConflict = false
 
+	const handleMultipleClass = (input: Details[]) => {
+		const baseTime = Math.min(...input.map((data) => data.time.start))
+		const depth = Math.max(...input.map((data) => data.time.duration))
+		let beautify: any[][] = Array.from({ length: input.length }, () =>
+			Array.from({ length: depth }, () => [])
+		)
+
+		for (let c = 0; c < input.length; c++) {
+			let class_ = input[c]
+			let curBlock = class_.time.start - baseTime
+			if (beautify[curBlock].length === 0) {
+				beautify[curBlock].push(
+					<div
+						key={`details Combi ${c}-${class_.code}-${class_.time}-${class_.time.duration}`}
+						style={{
+							display: 'grid',
+							gridTemplateRows: `repeat(${class_.time.duration},1fr)`,
+						}}
+					>
+						{class_.code}
+						<br /> {class_.type}
+						<br /> {class_.group}
+						<br /> {class_.remark}
+					</div>
+				)
+			} else {
+			}
+		}
+	}
+
 	for (let col of timetable_data) {
 		for (let row = 0; row < 16; row++, unikey++) {
 			if ('duration' in col[row]) {
@@ -88,14 +118,14 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 					>
 						<div>
 							{classDetails.classDetails.map((details: Details, i: number) => (
-								<p
+								<div
 									key={`details ${unikey}-${i}-${row}-${details.code}-${details.time}`}
 								>
 									{details.code}
 									<br /> {details.type}
 									<br /> {details.group}
 									<br /> {details.remark}
-								</p>
+								</div>
 							))}
 						</div>
 					</td>

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../../authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
-import apiRequest from '@components/apihandler/apiRequest'
 import '@styles/navbar.css'
 
 type NavBar = {
@@ -18,20 +17,9 @@ export default function NavBar({ user, active }: NavBar) {
 
 	const handleLogout = async () => {
 		try {
-			const API_URL = `http://localhost:5000/handle_clean_up`
-			const [response_status, response_data] = await apiRequest(API_URL)
-			console.log(response_status, response_data)
-			if (response_status === true && response_data) {
-				await logout()
-				navigate('/')
-				Notification('success', 'Logout successful!', 3000)
-			} else {
-				Notification(
-					'error',
-					'Error! Unable to clear local data (Logout)',
-					2000
-				)
-			}
+			await logout()
+			navigate('/')
+			Notification('success', 'Logout successful!', 3000)
 		} catch (e) {
 			Notification('error', 'An unexpected error has occured (Logout)', 3000)
 			console.log(e.message)

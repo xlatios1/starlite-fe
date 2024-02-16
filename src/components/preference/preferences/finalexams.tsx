@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
-export default function FinalExams({ handlePreference, courses }) {
+export default function FinalExams({
+	finalExam,
+	handlePreference,
+	handleReset,
+}) {
 	const finalExamOptions = [
 		'Any Exams',
 		'With Final Exams',
 		'Without Final Exams',
 	]
 
-	const [finalexam, setFinalExam] = useState('Any Exams')
-
-	const handleFinalExams = (text, option) => {
-		setFinalExam((prev) => {
-			handlePreference('Final Exam', option)
-			return option
-		})
+	const handleFinalExams = (_, option) => {
+		handlePreference('finalExam', option)
 	}
-
-	useEffect(() => {
-		handlePreference('Final Exam', finalexam)
-	}, [courses])
 
 	return (
 		<div className="preference-options finalexam">
-			<p className="preference-option-title">Final Exams</p>
+			<div className="preference-option-title-container">
+				<p className="preference-option-title">Final Exams</p>
+				<span
+					className="clear-filter-btn"
+					onClick={() => handleReset('finalExam')}
+				>
+					Reset filter
+				</span>
+			</div>
 			<div className="preference-option-finalexam">
 				<MultiSwitch
 					handleMultiSwitch={handleFinalExams}
 					text={''}
 					options={finalExamOptions}
-					check={finalexam}
+					check={finalExam}
 				></MultiSwitch>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import 'toolcool-range-slider'
 
 import '../preferencelists.css'
@@ -10,25 +10,25 @@ declare global {
 	}
 }
 
-export default function NCourseFilter({ handlePreference, courses }) {
-	const [ncourse, setNCourse] = useState(0)
+export default function NCourseFilter({
+	nCourseFilter,
+	handlePreference,
+	handleReset,
+	courses,
+}) {
 	const nfcRef = useRef(null)
 
 	useEffect(() => {
 		const slider = nfcRef.current
-		handlePreference('N Course Filter', ncourse)
-
+		let value = 0
 		const onChange = (e) => {
-			const value = e.detail.value
-			setNCourse((prev) => {
-				handlePreference('N Course Filter', value)
-				return value
-			})
+			value = e.detail.value
 		}
 		const blurIt = () => {
 			if (nfcRef.current) {
 				nfcRef.current.blur()
 			}
+			handlePreference('nCourseFilter', Math.round(value))
 		}
 		slider?.addEventListener('change', onChange)
 		document.addEventListener('mouseup', blurIt)
@@ -40,13 +40,21 @@ export default function NCourseFilter({ handlePreference, courses }) {
 
 	return (
 		<div className="preference-options ncoursefilter">
-			<p className="preference-option-title">N-Course Filter</p>
+			<div className="preference-option-title-container">
+				<p className="preference-option-title">N-Course Filter</p>
+				<span
+					className="clear-filter-btn"
+					onClick={() => handleReset('nCourseFilter')}
+				>
+					Reset filter
+				</span>
+			</div>
 			<div className="preference-option-ncoursefilter">
 				<p className="preference-option-ncoursefilter lower">0</p>
 				<toolcool-range-slider
 					min="0"
 					max={`${courses.length}`}
-					value={ncourse}
+					value={nCourseFilter}
 					step="1"
 					theme="circle"
 					slider-width="160px"

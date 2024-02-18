@@ -3,7 +3,7 @@ import Checkbox from '@components/checkbox/checkbox.tsx'
 import { days } from '@components/preference/preferenceUtils.tsx'
 import '../preferencelists.css'
 
-export default function FreeDay({ freeDay, handlePreference, handleReset }) {
+export default function FreeDay({ freeDay, dispatchPreference, handleReset }) {
 	const handleFreeDays = (option) => {
 		let newFreeDays
 		if (freeDay.includes(option)) {
@@ -11,7 +11,7 @@ export default function FreeDay({ freeDay, handlePreference, handleReset }) {
 		} else {
 			newFreeDays = [...freeDay, option]
 		}
-		handlePreference('freeDay', newFreeDays)
+		dispatchPreference({ type: 'freeDay', value: newFreeDays })
 	}
 
 	return (

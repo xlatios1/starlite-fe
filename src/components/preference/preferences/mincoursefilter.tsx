@@ -10,9 +10,9 @@ declare global {
 	}
 }
 
-export default function NCourseFilter({
-	nCourseFilter,
-	handlePreference,
+export default function MinCourseFilter({
+	minCourseFilter,
+	dispatchPreference,
 	handleReset,
 	courses,
 }) {
@@ -20,7 +20,7 @@ export default function NCourseFilter({
 
 	useEffect(() => {
 		const slider = nfcRef.current
-		let value = 0
+		let value = 1
 		const onChange = (e) => {
 			value = e.detail.value
 		}
@@ -28,7 +28,7 @@ export default function NCourseFilter({
 			if (nfcRef.current) {
 				nfcRef.current.blur()
 			}
-			handlePreference('nCourseFilter', Math.round(value))
+			dispatchPreference({ type: 'minCourseFilter', value: Math.round(value) })
 		}
 		slider?.addEventListener('change', onChange)
 		document.addEventListener('mouseup', blurIt)
@@ -39,28 +39,30 @@ export default function NCourseFilter({
 	}, [courses])
 
 	return (
-		<div className="preference-options ncoursefilter">
+		<div className="preference-options mincoursefilter">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">N-Course Filter</p>
+				<p className="preference-option-title">Minimum Course Filter</p>
 				<span
 					className="clear-filter-btn"
-					onClick={() => handleReset('nCourseFilter')}
+					onClick={() => handleReset('minCourseFilter')}
 				>
 					Reset filter
 				</span>
 			</div>
-			<div className="preference-option-ncoursefilter">
-				<p className="preference-option-ncoursefilter lower">0</p>
+			<div className="preference-option-mincoursefilter">
+				<p className="preference-option-mincoursefilter lower">1</p>
 				<toolcool-range-slider
-					min="0"
+					min="1"
 					max={`${courses.length}`}
-					value={nCourseFilter}
+					value={minCourseFilter}
 					step="1"
 					theme="circle"
 					slider-width="160px"
 					ref={nfcRef}
+					generate-labels="true"
+					style={{ margin: '0 10px' }}
 				></toolcool-range-slider>
-				<p className="preference-option-ncoursefilter upper">
+				<p className="preference-option-mincoursefilter upper">
 					{courses.length}
 				</p>
 			</div>

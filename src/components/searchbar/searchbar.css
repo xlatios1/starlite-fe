@@ -39,26 +39,63 @@
 		background-color: rgb(169, 220, 230);
 		border-radius: 10px;
 		width: 95%;
+		height: 100%;
 		padding: 20px 0 20px 10px;
 		font-size: 13px;
 		font-weight: bold;
 		overflow-wrap: break-word;
 		position: relative;
 		display: flex;
-		flex-direction: row;
 		margin-bottom: 5px;
+		user-select: none;
 
-		.valid-course-name {
+		.details{
 			position: relative;
 			display: flex;
-			width: 90%;
+			flex-direction: row;
+			
+			.draggable-container {
+				display: flex;
+				align-items: center;
+				width: 10%;
+				
+				.uil--draggabledots {
+					display: inline-block;
+					width: 1em;
+					height: 1em;
+					--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M8.5 10a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0 7a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7-10a2 2 0 1 0-2-2a2 2 0 0 0 2 2m-7-4a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7 14a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0-7a2 2 0 1 0 2 2a2 2 0 0 0-2-2'/%3E%3C/svg%3E");
+					background-color: currentColor;
+					-webkit-mask-image: var(--svg);
+					mask-image: var(--svg);
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					-webkit-mask-size: 100% 100%;
+					mask-size: 100% 100%;
+					cursor: grab;
+				}
+			}
+
+			.valid-course-name {
+				position: relative;
+				display: flex;
+				width: 70%;
+			}
+			.remove-course-name {
+				display: flex;
+				align-items: center;
+				font-weight: '10px';
+				cursor: 'pointer'
+			}
 		}
-		.remove-course-name {
-			position: relative;
-			display: flex;
-			width: 10px;
-			height: 10px;
-		}
+	}
+
+	.valid-course-container.dragging{
+		opacity: 0.6;
+	}
+
+	.valid-course-container.dragging :where(.details, i) {
+		opacity: 0;
+		background-color: rgb(255, 255, 255);
 	}
 }
 

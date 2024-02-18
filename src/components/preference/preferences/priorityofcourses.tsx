@@ -3,11 +3,16 @@ import React from 'react'
 import RadioButton from '@components/radiobutton/radiobutton.tsx'
 import '../preferencelists.css'
 
-export default function PriorityOfCourses({ poc, handlePreference, handleReset, courses }) {
+export default function PriorityOfCourses({
+	poc,
+	dispatchPreference,
+	handleReset,
+	courses,
+}) {
 	const handlePoc = (course_code, i) => {
 		const newPOC = { ...poc }
 		newPOC[course_code] = +i
-		handlePreference('poc', newPOC)
+		dispatchPreference({ type: 'poc', value: newPOC })
 	}
 
 	return (

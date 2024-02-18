@@ -1,43 +1,45 @@
-export const convertExamSchedule = (
-	code: string,
-	examSchedule: {
-		date: string
-		time: string
-		timecode: string
-	} | null
-) => {
-	if (!examSchedule) {
-		return `${code}: Not Applicable`
-	}
-	const { date, time } = examSchedule
-	const monthNames = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	]
-	const [yyyy, mm, dd] = date.split('-')
+export const convertExamSchedule = (searched) => {
+	const examSchedule = searched.map((obj) => {
+		const course = Object.keys(obj)[0]
+		let examSchedule = obj[course].get_exam_schedule
 
-	// Parse time
-	const [startTime, endTime] = time.split('-')
-	const formattedTime = `${startTime.replace(':', '')}to${endTime.replace(
-		':',
-		''
-	)} hrs`
+		if (!examSchedule) {
+			return `${course}: Not Applicable`
+		}
+		const { date, time } = examSchedule
+		const monthNames = [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec',
+		]
+		const [yyyy, mm, dd] = date.split('-')
 
-	return `${code}: ${dd}-${monthNames[parseInt(mm)]}-${yyyy} ${formattedTime}`
+		// Parse time
+		const [startTime, endTime] = time.split('-')
+		const formattedTime = `${startTime.replace(':', '')}to${endTime.replace(
+			':',
+			''
+		)} hrs`
+
+		return `${course}: ${dd}-${
+			monthNames[parseInt(mm)]
+		}-${yyyy} ${formattedTime}`
+	})
+	examSchedule.sort((a, b) => a.localeCompare(b))
+	return examSchedule
 }
 
 /**
- * 
+ *
  * @param date
  * @returns integer corresponding to the date
  */
@@ -47,8 +49,8 @@ export const daysToInt = (date: string): number => {
 }
 
 /**
- * 
- * @param duration 
+ *
+ * @param duration
  * @returns start: starting slot, duration: how long the class is
  */
 export const timeslotToInt = (

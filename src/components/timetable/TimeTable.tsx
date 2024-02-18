@@ -1,7 +1,6 @@
 import React, { useState, useId } from 'react'
 import '@styles/timetable.css'
 import { convertRemarks } from '@utils/parsers.ts'
-
 type Details = {
 	code: string
 	type: string
@@ -10,9 +9,9 @@ type Details = {
 	remark: string
 }
 
-type classDetails = { classDetails: Details[]; duration: number }
+export type classDetails = { classDetails: Details[]; duration: number }
 
-type TimetableClassData = Array<[] | classDetails>
+export type TimetableClassData = Array<[] | classDetails>
 
 type TimetableData = {
 	timetable_data: Array<TimetableClassData>
@@ -23,9 +22,6 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 	const randID = useId()
 	const [isClicked, setIsClicked] = useState(false)
 	const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-	// [[[],[],[],["cz3005","lec","2"],[]],   //mon
-	//  [[],[],["cz3005","tut","1"],[],[],[]]]  //tues
 
 	const timeArr = [
 		'0800-0830', //0
@@ -51,8 +47,6 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 	])
 
 	const checkConflictWeeks = (classDetails: classDetails): boolean => {
-		// classDetails.classDetails.map((i) => console.log(i.remark))
-		// return true
 		let elementsSet = new Set()
 		for (const slot of classDetails.classDetails) {
 			let remarks = convertRemarks(slot.remark)
@@ -162,7 +156,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							Please resolve the course conflict!
 						</p>
 					)}
-					<table
+					;<table
 						onClick={handleClick}
 						className={isClicked ? 'table blurred' : 'table'}
 					>
@@ -171,7 +165,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 								<th style={{ width: '60px' }}>Time/Day</th>
 								{days.map((day) => {
 									return (
-										<th style={{ width: '75px' }} key={day}>
+										<th style={{ width: '75px' }} key={'DAY' + day}>
 											{day}
 										</th>
 									)
@@ -179,7 +173,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							</tr>
 							{timetable.map((rows, i) => {
 								return (
-									<tr style={{ height: '30px' }} key={i}>
+									<tr style={{ height: '30px' }} key={'I' + i}>
 										{rows.map((timeblock) => {
 											return timeblock
 										})}
@@ -188,22 +182,24 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							})}
 						</tbody>
 					</table>
-					{isClicked ? (
-						<div className="table-info" onClick={handleClick}>
-							<div className="table-wrapper">
-								<p className="table-content">List of courses with indexes</p>
-								{info.map(([courseCode, courseNumber]) => {
-									return (
-										<p key={randID} className="table-content">
-											{courseCode}: {courseNumber}
-										</p>
-									)
-								})}
+					{
+						isClicked ? (
+							<div className="table-info" onClick={handleClick}>
+								<div className="table-wrapper">
+									<p className="table-content">List of courses with indexes</p>
+									{info.map(([courseCode, courseNumber], i) => {
+										return (
+											<p key={'randID' + i} className="table-content">
+												{courseCode}: {courseNumber}
+											</p>
+										)
+									})}
+								</div>
 							</div>
-						</div>
-					) : (
-						<></>
-					)}
+						) : (
+							<></>
+						)
+					}
 				</div>
 			)}
 		</>

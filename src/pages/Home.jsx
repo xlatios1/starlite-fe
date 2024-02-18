@@ -5,11 +5,12 @@ import TimeTable from '@components/timetable/TimeTable.tsx'
 import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
-import FilterLists from '@components/preference/preferencelists.tsx'
+import PreferenceLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
 import { convertExamSchedule } from '@utils/parsers.ts'
 import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
+import { handlePreferences } from '@components/timetable/TimeTableCalc.tsx'
 import '@styles/home.css'
 
 export default function Home() {
@@ -17,15 +18,15 @@ export default function Home() {
 		Array.from({ length: 16 }, () => [])
 	)
 	const [data, setData] = useState(null) //timetable option datas
+	const [preferedData, setPreferedData] = useState(null) //timetable option datas
 	const [searched, setSearched] = useState([]) //searched courses
 	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
-	const [preferences, setPreferences] = useState(null)
 
-	const handleSearch = (search, topn = null) => {
+	const handleSearch = (search) => {
 		setIsLoading(true)
 		setTimeout(async () => {
 			if (document.getElementsByClassName('conflict-message').length !== 0) {
@@ -33,9 +34,15 @@ export default function Home() {
 					'Error! Please resolve course conflict before search!'
 				Notification('error', errorMessage, 2000)
 			} else {
-				console.log(timetablePreview)
+				console.log(search)
 				setSearched(search)
-				setData(GenerateTimetable(search))
+				const compatibleTimetable = GenerateTimetable(search)
+				setData(
+					compatibleTimetable.map(({ timetable_data, info }) =>
+						GenerateTimetableFormat(timetable_data, info)
+					)
+				)
+				setPreferedData(null)
 				setToggleCourseList(false)
 				Notification('success', 'Search successful', 2000)
 			}
@@ -74,7 +81,9 @@ export default function Home() {
 	const handleApplyPreference = (preference) => {
 		setIsLoading(true)
 		setTimeout(async () => {
-			setPreferences(preference)
+			setPreferedData(
+				handlePreferences(data, preference, convertExamSchedule(searched))
+			)
 			setIsLoading(false)
 		}, 1000)
 	}
@@ -106,28 +115,24 @@ export default function Home() {
 									: `translateY(-${transformYValue - 15}px)`,
 							}}
 						>
-							<FilterLists
+							<PreferenceLists
 								courses={searched.map((obj) => Object.keys(obj)[0])}
 								handleApplyPreference={handleApplyPreference}
-							></FilterLists>
+							></PreferenceLists>
 						</div>
 					) : (
 						<></>
 					)}
 				</div>
-				;
 				<div className="time-table-wrapper">
-					{/* { timetable_data: temp, info: combi[1] } */}
-					{data ? (
+					{preferedData || data ? (
 						<>
-							{data.map(({ timetable_data, info }, key) => {
-								let timetableData = GenerateTimetableFormat(timetable_data)
-								console.log('HERE', timetableData, timetable_data, info)
+							{(preferedData || data).map(({ timetable, info }, key) => {
 								return (
 									<div className="time-table-container" key={key}>
 										<TimeTable
 											key={key + key}
-											timetable_data={timetableData}
+											timetable_data={timetable}
 											info={info} //add in the course indexes informations {code: index}
 										/>
 									</div>
@@ -144,12 +149,7 @@ export default function Home() {
 					)}
 				</div>
 				{data ? (
-					<ExamInfo
-						exam_schedule={searched.map((obj) => {
-							const course = Object.keys(obj)[0]
-							return convertExamSchedule(course, obj[course].get_exam_schedule)
-						})}
-					/>
+					<ExamInfo exam_schedule={convertExamSchedule(searched)} />
 				) : (
 					<></>
 				)}

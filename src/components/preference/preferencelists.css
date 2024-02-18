@@ -84,6 +84,7 @@
 }
 
 .preference-options .preference-option-course .preference-option-course-code {
+	width: 43px;
 	margin-right: 30px;
 }
 
@@ -93,18 +94,19 @@
 	flex-direction: row;
 }
 
-.preference-options.ncoursefilter .preference-option-ncoursefilter {
+.preference-options.mincoursefilter .preference-option-mincoursefilter {
 	position: relative;
 	display: flex;
 	flex-direction: row;
 }
-.preference-option-ncoursefilter:is(.upper, .lower) {
+.preference-option-mincoursefilter:is(.upper, .lower) {
 	margin: 0px 5px;
 }
 
 .preference-options.setPreference{
 	display: flex;
 	justify-content: center;
+	padding: 20px;
 }
 
 toolcool-range-slider {

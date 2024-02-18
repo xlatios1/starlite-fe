@@ -3,19 +3,19 @@ import React from 'react'
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
+export const finalExamOptions = [
+	'Any Exams',
+	'With Final Exams',
+	'Without Final Exams',
+]
+
 export default function FinalExams({
 	finalExam,
-	handlePreference,
+	dispatchPreference,
 	handleReset,
 }) {
-	const finalExamOptions = [
-		'Any Exams',
-		'With Final Exams',
-		'Without Final Exams',
-	]
-
 	const handleFinalExams = (_, option) => {
-		handlePreference('finalExam', option)
+		dispatchPreference({ type: 'finalExam', value: option })
 	}
 
 	return (

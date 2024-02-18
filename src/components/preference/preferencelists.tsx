@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 
 import FreeDay from '@components/preference/preferences/freeday.tsx'
-import PriorityOfCourses from '@components/preference/preferences/priorityofcourses.tsx'
+// import PriorityOfCourses from '@components/preference/preferences/priorityofcourses.tsx'
 import Timeslot from '@components/preference/preferences/timeslot.tsx'
 import FinalExams from '@components/preference/preferences/finalexams.tsx'
-import NCourseFilter from '@components/preference/preferences/ncoursefilter.tsx'
+import MinCourseFilter from '@components/preference/preferences/mincoursefilter.tsx'
 import {
 	days,
 	initializeState,
@@ -12,86 +12,79 @@ import {
 import './preferencelists.css'
 
 export default function PreferenceLists({ courses, handleApplyPreference }) {
-	let course = ['CZ3004', 'CZ3005', 'CZ3006', 'CZ3003']
-	const defaultState = {
-		nCourseFilter: 0,
+	const initialState = {
+		minCourseFilter: 1,
 		freeDay: [],
-		poc: initializeState(course, 0),
+		// poc: initializeState(courses, 0),
 		timeslot: initializeState(days, 'Any Time'),
 		finalExam: 'Any Exams',
 	}
-	const [preference, setPreference] = useState(defaultState)
+
+	const reducer = (state: typeof initialState, action) => {
+		switch (action.type) {
+			case 'reset':
+				return action.value
+			default:
+				return { ...state, [action.type]: action.value }
+		}
+	}
+	const [curCourse, setCurCourse] = useState([])
+	const [statePreference, dispatchPreference] = useReducer(
+		reducer,
+		initialState
+	)
 
 	useEffect(() => {
-		setPreference(defaultState)
+		if (
+			JSON.stringify(curCourse.slice().sort()) !==
+			JSON.stringify(courses.slice().sort())
+		) {
+			dispatchPreference({ type: 'reset', value: initialState })
+			setCurCourse(courses)
+		}
 	}, [courses])
 
-	const handlePreference = (preferenceType: string, values) => {
-		setPreference((prev) => {
-			const newPreference = { ...prev }
-			newPreference[preferenceType] = values
-			return newPreference
-		})
-	}
-
 	const handleReset = (preferenceType: string) => {
-		setPreference((prev) => {
-			const newPreference = { ...prev }
-			switch (preferenceType) {
-				case 'nCourseFilter':
-					newPreference[preferenceType] = 0
-					break
-				case 'freeDay':
-					newPreference[preferenceType] = []
-					break
-				case 'poc':
-					newPreference[preferenceType] = initializeState(courses, 0)
-					break
-				case 'timeslot':
-					newPreference[preferenceType] = initializeState(days, 'Any Time')
-					break
-				case 'finalExam':
-					newPreference[preferenceType] = 'Any Exams'
-					break
-			}
-			return newPreference
+		dispatchPreference({
+			type: preferenceType,
+			value: initialState[preferenceType],
 		})
 	}
 
 	return (
 		<div>
 			<div className="preference-container">
-				<NCourseFilter
-					nCourseFilter={preference.nCourseFilter}
-					handlePreference={handlePreference}
+				<MinCourseFilter
+					minCourseFilter={statePreference.minCourseFilter}
+					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 					courses={courses}
 				/>
 				<FreeDay
-					freeDay={preference.freeDay}
-					handlePreference={handlePreference}
+					freeDay={statePreference.freeDay}
+					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 				/>
-				<PriorityOfCourses
-					poc={preference.poc}
-					handlePreference={handlePreference}
+				{/* <PriorityOfCourses
+					poc={statePreference.poc}
+					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
-					courses={course}
-				/>
+					courses={courses}
+				/> */}
 				<Timeslot
-					timeslot={preference.timeslot}
-					handlePreference={handlePreference}
+					timeslot={statePreference.timeslot}
+					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 				/>
 				<FinalExams
-					finalExam={preference.finalExam}
-					handlePreference={handlePreference}
+					finalExam={statePreference.finalExam}
+					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 				/>
 				<div className="preference-options setPreference">
 					<button
 						className="fetch-btn"
-						onClick={() => handleApplyPreference(preference)}
+						onClick={() => handleApplyPreference(statePreference)}
 					>
 						<span className="text">Apply Preference</span>
 					</button>

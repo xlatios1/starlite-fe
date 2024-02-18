@@ -6,11 +6,6 @@ type combinations = [number, courseCombi[], string[], string[]] | []
 
 export function GenerateTimetable(timetable_data: CourseDetails[]) {
 	const new_timetable_data = [...timetable_data]
-	new_timetable_data.sort(
-		(a, b) =>
-			Object.values(a)[0].indexes.length - Object.values(b)[0].indexes.length
-	)
-	console.log('CALLED', new_timetable_data)
 
 	let allCombi = [] as combinations[] //holds all combinations
 	for (const course of new_timetable_data) {

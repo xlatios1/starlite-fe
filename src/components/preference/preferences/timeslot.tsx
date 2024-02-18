@@ -3,11 +3,17 @@ import { days } from '@components/preference/preferenceUtils.tsx'
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
-export default function Timeslot({ timeslot, handlePreference, handleReset }) {
+export const timeslotOptions = ['Any Time', 'Morning', 'Afternoon', 'Evening']
+
+export default function Timeslot({
+	timeslot,
+	dispatchPreference,
+	handleReset,
+}) {
 	const handleTimeslot = (text, option) => {
 		const newTS = { ...timeslot }
 		newTS[text] = option
-		handlePreference('timeslot', newTS)
+		dispatchPreference({ type: 'timeslot', value: newTS })
 	}
 
 	return (
@@ -27,7 +33,7 @@ export default function Timeslot({ timeslot, handlePreference, handleReset }) {
 						<MultiSwitch
 							handleMultiSwitch={handleTimeslot}
 							text={day}
-							options={['Any Time', 'Morning', 'Afternoon', 'Evening']}
+							options={timeslotOptions}
 							check={timeslot[day]}
 						></MultiSwitch>
 					</div>

@@ -80,8 +80,7 @@ export async function FetchCourseDetails(
 						matches.push(course)
 					}
 				} else {
-					console.log('Failed Response: Error fetching data', response)
-					return null
+					console.log(`Unable to fetch course: ${course}`)
 				}
 			} catch (error) {
 				console.log('Error fetching data:', error)
@@ -105,7 +104,10 @@ export function generateCommonInfomationDetails(
 	})
 }
 
-export function GenerateTimetableFormat(prevSearch: ModifiedCourseDetails[]) {
+export function GenerateTimetableFormat(
+	prevSearch: ModifiedCourseDetails[],
+	info: [string, string][]
+) {
 	let parsed_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
@@ -172,5 +174,5 @@ export function GenerateTimetableFormat(prevSearch: ModifiedCourseDetails[]) {
 		}
 	}
 
-	return parsed_data
+	return { timetable: parsed_data, info, rank: 1 }
 }

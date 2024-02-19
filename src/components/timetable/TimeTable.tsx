@@ -156,7 +156,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							Please resolve the course conflict!
 						</p>
 					)}
-					;<table
+					<table
 						onClick={handleClick}
 						className={isClicked ? 'table blurred' : 'table'}
 					>
@@ -182,24 +182,22 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							})}
 						</tbody>
 					</table>
-					{
-						isClicked ? (
-							<div className="table-info" onClick={handleClick}>
-								<div className="table-wrapper">
-									<p className="table-content">List of courses with indexes</p>
-									{info.map(([courseCode, courseNumber], i) => {
-										return (
-											<p key={'randID' + i} className="table-content">
-												{courseCode}: {courseNumber}
-											</p>
-										)
-									})}
-								</div>
+					{isClicked ? (
+						<div className="table-info" onClick={handleClick}>
+							<div className="table-wrapper">
+								<p className="table-content">List of courses with indexes</p>
+								{info.map(([courseCode, courseNumber], i) => {
+									return (
+										<p key={'randID' + i} className="table-content">
+											{courseCode}: {courseNumber}
+										</p>
+									)
+								})}
 							</div>
-						) : (
-							<></>
-						)
-					}
+						</div>
+					) : (
+						<></>
+					)}
 				</div>
 			)}
 		</>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Checkbox from '@components/checkbox/checkbox.tsx'
-import { days } from '@components/preference/preferenceUtils.tsx'
+import { ToolTip, days } from '@components/preference/preferenceUtils.tsx'
 import '../preferencelists.css'
 
 export default function FreeDay({ freeDay, dispatchPreference, handleReset }) {
@@ -17,7 +17,10 @@ export default function FreeDay({ freeDay, dispatchPreference, handleReset }) {
 	return (
 		<div className="preference-options freeday">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">Free days</p>
+				<p className="preference-option-title">
+					Free days
+					<ToolTip text={'good!'} />
+				</p>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('freeDay')}

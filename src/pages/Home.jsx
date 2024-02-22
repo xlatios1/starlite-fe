@@ -25,6 +25,7 @@ export default function Home() {
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
+	const [activeTab, setActiveTab] = useState('timetable')
 
 	const handleSearch = (search) => {
 		setIsLoading(true)
@@ -44,6 +45,7 @@ export default function Home() {
 				)
 				setPreferedData(null)
 				setToggleCourseList(false)
+				setActiveTab('combinations')
 				Notification('success', 'Search successful', 2000)
 			}
 			setIsLoading(false)
@@ -88,6 +90,21 @@ export default function Home() {
 		}, 1000)
 	}
 
+	const openTab = (tabName) => {
+		if (data) {
+			setActiveTab(tabName)
+		}
+	}
+
+	const helperMessage = (tabName) => {
+		switch (tabName) {
+			case 'timetable':
+				return 'This tab shows the fixed timetable classes within a course.'
+			case 'combinations':
+				return `This tab shows all the possible course combinations. Navigate to 'Timetable Preview' for a better understanding of using preferences!`
+		}
+	}
+
 	return (
 		<div className="hp">
 			{isLoading && <Loading />}
@@ -124,29 +141,58 @@ export default function Home() {
 						<></>
 					)}
 				</div>
-				<div className="time-table-wrapper">
-					{preferedData || data ? (
-						<>
-							{(preferedData || data).map(({ timetable, info }, key) => {
-								return (
-									<div className="time-table-container" key={key}>
-										<TimeTable
-											key={key + key}
-											timetable_data={timetable}
-											info={info} //add in the course indexes informations {code: index}
-										/>
-									</div>
-								)
-							})}
-							<ScrollButton />
-						</>
-					) : (
-						<TimeTable
-							key={'default_table'}
-							timetable_data={timetablePreview}
-							info={null}
-						/>
-					)}
+				<div className="time-table-body">
+					<div className="time-table-tab">
+						<div
+							className={`time-table-tab-option ${
+								activeTab === 'timetable' ? 'active' : ''
+							}`}
+							style={{ borderTopLeftRadius: '15px' }}
+							onClick={() => openTab('timetable')}
+						>
+							Timetable Preview
+						</div>
+						<div
+							className={`time-table-tab-option ${
+								activeTab === 'combinations' ? 'active' : ''
+							} ${data ? '' : 'disabled'}`}
+							style={{ borderTopRightRadius: '15px' }}
+							onClick={() => openTab('combinations')}
+						>
+							Combinations
+						</div>
+					</div>
+					<div className="time-table-helper">
+						<i
+							class="fa fa-info-circle"
+							style={{ color: 'lightblue', margin: '0 10px' }}
+						></i>
+						{helperMessage(activeTab)}
+					</div>
+					<div className="time-table-wrapper">
+						{activeTab === 'combinations' ? (
+							<>
+								{(preferedData || data).map(({ timetable, info }, key) => {
+									return (
+										<div className="time-table-container" key={key}>
+											<TimeTable
+												key={key + key}
+												timetable_data={timetable}
+												info={info} //add in the course indexes informations {code: index}
+											/>
+										</div>
+									)
+								})}
+								<ScrollButton />
+							</>
+						) : (
+							<TimeTable
+								key={'default_table'}
+								timetable_data={timetablePreview}
+								info={null}
+							/>
+						)}
+					</div>
 				</div>
 				{data ? (
 					<ExamInfo exam_schedule={convertExamSchedule(searched)} />

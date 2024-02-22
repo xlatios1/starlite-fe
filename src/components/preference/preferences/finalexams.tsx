@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { ToolTip } from '@components/preference/preferenceUtils.tsx'
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
@@ -18,10 +18,16 @@ export default function FinalExams({
 		dispatchPreference({ type: 'finalExam', value: option })
 	}
 
+	const finalExamTooltip =
+		'Choose between with or without final exams, the chosen one will have priority.'
+
 	return (
 		<div className="preference-options finalexam">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">Final Exams</p>
+				<p className="preference-option-title">
+					Final Exams
+					<ToolTip text={finalExamTooltip} />
+				</p>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('finalExam')}

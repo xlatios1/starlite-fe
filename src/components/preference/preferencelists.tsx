@@ -13,7 +13,7 @@ import './preferencelists.css'
 
 export default function PreferenceLists({ courses, handleApplyPreference }) {
 	const initialState = {
-		minCourseFilter: 1,
+		minCourseFilter: courses.length,
 		freeDay: [],
 		// poc: initializeState(courses, 0),
 		timeslot: initializeState(days, 'Any Time'),

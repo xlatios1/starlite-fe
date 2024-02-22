@@ -30,8 +30,10 @@
 	margin-bottom: 10px;
 
 	.preference-option-title{
+		display: flex;
 		font-size: 15px;
 		font-weight: bold;
+		flex-direction: row;
 	}
 
 	.clear-filter-btn {
@@ -114,4 +116,35 @@ toolcool-range-slider {
 	display: flex;
 	align-items: center;
 	padding: 0 5px;
+}
+
+.tooltip{
+	display:flex;
+	padding-left: 6px;
+	cursor: pointer;
+	align-items:start;
+	height: 10.5px;
+	width: 10.5px;
+	width: 100px;
+}
+
+.tooltip-text {
+	position: relative;
+	top: -25px;
+	padding: 2px;
+	font-size: 12px;
+	border: 1px solid black;
+	background-color: white;
+	border-radius: 5px;
+	z-index: 1000;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.tooltip.active .tooltip-text {
+	opacity: 1;
+}
+
+.tooltip:hover .tooltip-text {
+	opacity: 1;
 }

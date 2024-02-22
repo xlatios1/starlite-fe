@@ -1,5 +1,5 @@
 import React from 'react'
-import { days } from '@components/preference/preferenceUtils.tsx'
+import { ToolTip, days } from '@components/preference/preferenceUtils.tsx'
 import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
@@ -19,7 +19,10 @@ export default function Timeslot({
 	return (
 		<div className="preference-options timeslot">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">Timeslots</p>
+				<p className="preference-option-title">
+					Timeslots
+					<ToolTip text={'good!'} />
+				</p>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('timeslot')}

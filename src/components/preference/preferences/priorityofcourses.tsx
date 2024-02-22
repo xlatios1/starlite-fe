@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { ToolTip } from '@components/preference/preferenceUtils.tsx'
 import RadioButton from '@components/radiobutton/radiobutton.tsx'
 import '../preferencelists.css'
 
@@ -18,7 +18,10 @@ export default function PriorityOfCourses({
 	return (
 		<div className="preference-options priorityofcourses">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">Priority of Courses</p>
+				<p className="preference-option-title">
+					Priority of Courses
+					<ToolTip text={'good!'} />
+				</p>
 				<span className="clear-filter-btn" onClick={() => handleReset('poc')}>
 					Reset filter
 				</span>

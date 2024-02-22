@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import 'toolcool-range-slider'
 
 import '../preferencelists.css'
+import { ToolTip } from '@components/preference/preferenceUtils.tsx'
 declare global {
 	namespace JSX {
 		interface IntrinsicElements {
@@ -41,7 +42,10 @@ export default function MinCourseFilter({
 	return (
 		<div className="preference-options mincoursefilter">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">Minimum Course Filter</p>
+				<p className="preference-option-title">
+					Minimum Course Filter
+					<ToolTip text={'good!'} />
+				</p>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('minCourseFilter')}

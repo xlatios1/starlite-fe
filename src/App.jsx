@@ -42,6 +42,7 @@ export default function App() {
 				{/* </article>
 			</div> */}
 			</Router>
+			<div className="version-tag">Beta version: 1.1.1</div>
 		</AuthContextProvider>
 	)
 }

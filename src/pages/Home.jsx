@@ -17,7 +17,7 @@ export default function Home() {
 	const initializedTimetable = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-	const [data, setData] = useState(null) //timetable option datas
+	const [originalData, setOriginalData] = useState(null) //timetable option datas
 	const [preferedData, setPreferedData] = useState(null) //timetable option datas
 	const [searched, setSearched] = useState([]) //searched courses
 	const [isLoading, setIsLoading] = useState(false)
@@ -28,6 +28,13 @@ export default function Home() {
 	const [activeTab, setActiveTab] = useState('timetable')
 
 	const handleSearch = (search) => {
+		const initialPreferences = {
+			minCourseFilter: search.length,
+			freeDay: [],
+			timeslot: [],
+			finalExam: 'Any Exams',
+		}
+
 		setIsLoading(true)
 		setTimeout(async () => {
 			if (document.getElementsByClassName('conflict-message').length !== 0) {
@@ -38,12 +45,17 @@ export default function Home() {
 				console.log(search)
 				setSearched(search)
 				const compatibleTimetable = GenerateTimetable(search)
-				setData(
-					compatibleTimetable.map(({ timetable_data, info }) =>
-						GenerateTimetableFormat(timetable_data, info)
+				const data = compatibleTimetable.map(({ timetable_data, info }) =>
+					GenerateTimetableFormat(timetable_data, info)
+				)
+				setOriginalData(data)
+				setPreferedData(
+					handlePreferences(
+						data,
+						initialPreferences,
+						convertExamSchedule(search)
 					)
 				)
-				setPreferedData(null)
 				setToggleCourseList(false)
 				setActiveTab('combinations')
 				Notification('success', 'Search successful', 2000)
@@ -54,14 +66,14 @@ export default function Home() {
 
 	useEffect(() => {
 		// Scroll only when there is data
-		if (data) {
+		if (preferedData) {
 			window.scrollTo({
 				left: 0,
 				top: 250,
 				behavior: 'smooth',
 			})
 		}
-	}, [data])
+	}, [preferedData])
 
 	useEffect(() => {
 		if (searchValidRef.current) {
@@ -84,14 +96,18 @@ export default function Home() {
 		setIsLoading(true)
 		setTimeout(async () => {
 			setPreferedData(
-				handlePreferences(data, preference, convertExamSchedule(searched))
+				handlePreferences(
+					originalData,
+					preference,
+					convertExamSchedule(searched)
+				)
 			)
 			setIsLoading(false)
 		}, 1000)
 	}
 
 	const openTab = (tabName) => {
-		if (data) {
+		if (preferedData) {
 			setActiveTab(tabName)
 		}
 	}
@@ -155,7 +171,7 @@ export default function Home() {
 						<div
 							className={`time-table-tab-option ${
 								activeTab === 'combinations' ? 'active' : ''
-							} ${data ? '' : 'disabled'}`}
+							} ${preferedData ? '' : 'disabled'}`}
 							style={{ borderTopRightRadius: '15px' }}
 							onClick={() => openTab('combinations')}
 						>
@@ -172,7 +188,7 @@ export default function Home() {
 					<div className="time-table-wrapper">
 						{activeTab === 'combinations' ? (
 							<>
-								{(preferedData || data).map(({ timetable, info }, key) => {
+								{preferedData.map(({ timetable, info }, key) => {
 									return (
 										<div className="time-table-container" key={key}>
 											<TimeTable
@@ -194,7 +210,7 @@ export default function Home() {
 						)}
 					</div>
 				</div>
-				{data ? (
+				{preferedData ? (
 					<ExamInfo exam_schedule={convertExamSchedule(searched)} />
 				) : (
 					<></>

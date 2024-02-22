@@ -60,3 +60,12 @@
   justify-content: center;
   align-items: center;
 }
+
+
+.version-tag{
+  bottom: 0px;
+  right: 0px;
+  opacity: 0.4;
+  position: fixed;
+  user-select: none;
+}

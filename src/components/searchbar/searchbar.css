@@ -18,6 +18,12 @@
 	overflow: hidden;
 }
 
+.search-valid-helper{
+	width: 100%;
+	padding: 0 10px 5px;
+	font-size: 12px;
+}
+
 .search-valid-container {
 	position: relative;
 	display: flex;
@@ -78,7 +84,8 @@
 			.valid-course-name {
 				position: relative;
 				display: flex;
-				width: 70%;
+				width: 187px;
+				align-items: center;
 			}
 			.remove-course-name {
 				display: flex;

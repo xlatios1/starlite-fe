@@ -119,26 +119,25 @@ toolcool-range-slider {
 }
 
 .tooltip{
-	display:flex;
+	position: relative;
+	display: inline-block;
 	padding-left: 6px;
 	cursor: pointer;
-	align-items:start;
-	height: 10.5px;
-	width: 10.5px;
-	width: 100px;
 }
 
 .tooltip-text {
-	position: relative;
-	top: -25px;
+	position: absolute;
+	width: 110px;
 	padding: 2px;
+	left: 20px;
 	font-size: 12px;
 	border: 1px solid black;
 	background-color: white;
 	border-radius: 5px;
-	z-index: 1000;
+	z-index: 200;
 	opacity: 0;
 	transition: opacity 0.3s;
+	pointer-events: none;
 }
 
 .tooltip.active .tooltip-text {

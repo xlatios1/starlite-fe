@@ -160,6 +160,13 @@ export default function SearchBar({
 						}`}
 						ref={searchValidRef}
 					>
+						<p className="search-valid-helper">
+							<i
+								class="fa fa-info-circle"
+								style={{ color: 'lightblue', margin: '0 5px' }}
+							></i>
+							Course priority based on top to bottom.
+						</p>
 						{courses.map((c, i) => {
 							const course_code = Object.keys(c)[0]
 							return (

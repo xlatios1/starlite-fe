@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import 'toolcool-range-slider'
-
 import '../preferencelists.css'
-import { ToolTip } from '@components/preference/preferenceUtils.tsx'
+import {
+	ToolTip,
+	tooltipHelperText,
+} from '@components/preference/preferenceUtils.tsx'
+
 declare global {
 	namespace JSX {
 		interface IntrinsicElements {
@@ -21,7 +24,7 @@ export default function MinCourseFilter({
 
 	useEffect(() => {
 		const slider = nfcRef.current
-		let value = 1
+		let value = minCourseFilter
 		const onChange = (e) => {
 			value = e.detail.value
 		}
@@ -44,7 +47,7 @@ export default function MinCourseFilter({
 			<div className="preference-option-title-container">
 				<p className="preference-option-title">
 					Minimum Course Filter
-					<ToolTip text={'good!'} />
+					<ToolTip text={tooltipHelperText.minCourseFilter} />
 				</p>
 				<span
 					className="clear-filter-btn"
@@ -65,6 +68,7 @@ export default function MinCourseFilter({
 					ref={nfcRef}
 					generate-labels="true"
 					style={{ margin: '0 10px' }}
+					disabled={minCourseFilter === 0}
 				></toolcool-range-slider>
 				<p className="preference-option-mincoursefilter upper">
 					{courses.length}

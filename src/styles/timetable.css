@@ -12,7 +12,8 @@
     margin-bottom: 20px; 
     cursor: pointer;
     overflow: hidden;
-
+    user-select:none;
+    
 	&::before {
 		content: '';
 		position: absolute;

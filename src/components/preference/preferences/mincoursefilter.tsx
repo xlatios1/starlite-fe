@@ -68,7 +68,7 @@ export default function MinCourseFilter({
 					ref={nfcRef}
 					generate-labels="true"
 					style={{ margin: '0 10px' }}
-					disabled={minCourseFilter === 0}
+					disabled={minCourseFilter < 2}
 				></toolcool-range-slider>
 				<p className="preference-option-mincoursefilter upper">
 					{courses.length}

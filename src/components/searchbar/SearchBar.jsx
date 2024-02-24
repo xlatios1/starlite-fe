@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import Notification from '@components/notification/notification.tsx'
 import {
 	FetchCourseDetails,
 	generateCommonInfomationDetails,
@@ -20,6 +21,8 @@ export default function SearchBar({
 	setToggleCourseList,
 	searchValidRef,
 	setTimetablePreview,
+	isWalkThrough,
+	setisWalkThrough,
 }) {
 	const [results, setResults] = useState([])
 	const [input, setInput] = useState('')
@@ -72,6 +75,19 @@ export default function SearchBar({
 				const customCourses = generateCommonInfomationDetails(newCourses)
 				setTimetablePreview(GenerateTimetableFormat(customCourses).timetable)
 				setCourses(newCourses)
+				console.log(newCourses)
+				Notification(
+					'success',
+					`Successfully mapped course: ${results
+						.map((c) => Object.keys(c)[0])
+						.join(', ')}`,
+					1000
+				)
+				if (isWalkThrough) {
+					setisWalkThrough(2)
+				}
+			} else {
+				Notification('info', 'No unique valid course found!', 1000)
 			}
 			setIsLoading(false)
 		}, 1000)
@@ -162,7 +178,7 @@ export default function SearchBar({
 					>
 						<p className="search-valid-helper">
 							<i
-								class="fa fa-info-circle"
+								className="fa fa-info-circle"
 								style={{ color: 'lightblue', margin: '0 5px' }}
 							></i>
 							Course priority based on top to bottom.

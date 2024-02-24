@@ -127,7 +127,7 @@ toolcool-range-slider {
 
 .tooltip-text {
 	position: absolute;
-	width: 110px;
+	width: min-content;
 	padding: 2px;
 	left: 20px;
 	font-size: 12px;

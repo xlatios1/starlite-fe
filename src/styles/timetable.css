@@ -12,7 +12,6 @@
     margin-bottom: 20px; 
     cursor: pointer;
     overflow: hidden;
-    user-select:none;
     
 	&::before {
 		content: '';
@@ -47,6 +46,7 @@ table.table{
     margin: auto;
     filter: none; 
     transition: filter ease-in-out;
+    user-select:none;
 }
 
 table.table.blurred {

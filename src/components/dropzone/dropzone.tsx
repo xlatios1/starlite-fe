@@ -13,7 +13,7 @@ interface FileWithPreview extends File {
 export default function Dropzone({ identifier }) {
 	const [files, setFiles] = useState<FileWithPreview | null>()
 	const [pdfText, setPdfText] = useState(null)
-	const { fetchUserInCache, setData, getData, rmData } = UserAuth()
+	const { fetchUserInCache, setData, getFileData, rmData } = UserAuth()
 
 	const curUser = fetchUserInCache()
 
@@ -61,7 +61,7 @@ export default function Dropzone({ identifier }) {
 	})
 
 	useEffect(() => {
-		getData(curUser, [identifier]).then(async (result) => {
+		getFileData(curUser, [identifier]).then(async (result) => {
 			if (Object.keys(result).length !== 0) {
 				setFiles((prev) => result[identifier].file)
 				setPdfText((prev) => result[identifier].courses)

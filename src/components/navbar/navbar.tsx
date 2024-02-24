@@ -19,7 +19,7 @@ export default function NavBar({ user, active }: NavBar) {
 		try {
 			await logout()
 			navigate('/')
-			Notification('success', 'Logout successful!', 3000)
+			Notification('success', 'Logout successful!', 1000)
 		} catch (e) {
 			Notification('error', 'An unexpected error has occured (Logout)', 3000)
 			console.log(e.message)

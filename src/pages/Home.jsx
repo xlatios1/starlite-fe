@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import { useState, useEffect, useRef } from 'react'
 import logo from '@images/logo.png'
 import SearchBar from '@components/searchbar/SearchBar'
@@ -7,11 +8,13 @@ import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
+import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { convertExamSchedule } from '@utils/parsers.ts'
 import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
 import { handlePreferences } from '@components/timetable/TimeTableCalc.tsx'
 import '@styles/home.css'
+const _ = require('lodash')
 
 export default function Home() {
 	const initializedTimetable = Array.from({ length: 7 }, () =>
@@ -26,6 +29,7 @@ export default function Home() {
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [activeTab, setActiveTab] = useState('timetable')
+	const [isWalkThrough, setisWalkThrough] = useState(0)
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -42,7 +46,6 @@ export default function Home() {
 					'Error! Please resolve course conflict before search!'
 				Notification('error', errorMessage, 2000)
 			} else {
-				console.log(search)
 				setSearched(search)
 				const compatibleTimetable = GenerateTimetable(search)
 				const data = compatibleTimetable.map(({ timetable_data, info }) =>
@@ -58,7 +61,10 @@ export default function Home() {
 				)
 				setToggleCourseList(false)
 				setActiveTab('combinations')
-				Notification('success', 'Search successful', 2000)
+				Notification('success', 'Search successful', 1000)
+				if (isWalkThrough) {
+					setisWalkThrough(3)
+				}
 			}
 			setIsLoading(false)
 		}, 1000)
@@ -102,6 +108,7 @@ export default function Home() {
 					convertExamSchedule(searched)
 				)
 			)
+			Notification('success', 'Successfully set preferences!', 1000)
 			setIsLoading(false)
 		}, 1000)
 	}
@@ -130,7 +137,13 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="lower-detail-wrapper">
-				<div className="search-wrapper">
+				<div
+					className={`search-wrapper${
+						isWalkThrough < 3 ? ' highlight-element' : ''
+					}`}
+				>
+					{isWalkThrough === 1 && helperText('searchTip')}
+					{isWalkThrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
 						handleSearch={handleSearch}
 						setIsLoading={setIsLoading}
@@ -138,10 +151,14 @@ export default function Home() {
 						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}
 						setTimetablePreview={setTimetablePreview}
+						isWalkThrough={isWalkThrough}
+						setisWalkThrough={setisWalkThrough}
 					></SearchBar>
 					{!!searched.length ? (
 						<div
-							className={`preference-wrap ${toggleCourseList ? '' : 'hidden'}`}
+							className={`preference-wrap ${
+								toggleCourseList ? '' : ' hidden '
+							}${isWalkThrough > 2 ? ' highlight-element ' : ''}`}
 							style={{
 								transform: toggleCourseList
 									? ''
@@ -151,13 +168,25 @@ export default function Home() {
 							<PreferenceLists
 								courses={searched.map((obj) => Object.keys(obj)[0])}
 								handleApplyPreference={handleApplyPreference}
+								isWalkThrough={isWalkThrough}
+								setisWalkThrough={setisWalkThrough}
 							></PreferenceLists>
+							{isWalkThrough === 3 && helperText('searchTip')}
 						</div>
 					) : (
 						<></>
 					)}
 				</div>
-				<div className="time-table-body">
+				<div
+					className={`time-table-body ${
+						isWalkThrough > 1 ? ' highlight-element ' : ''
+					}`}
+				>
+					{isWalkThrough === 2 && helperText('searchPreviewTip')}
+					{isWalkThrough === 2 && helperText('showUnableToToggleTabTip')}
+					{isWalkThrough === 3 && helperText('showTimetableToggleTip')}
+					{isWalkThrough === 3 && helperText('showCombinationNoChangeTip')}
+
 					<div className="time-table-tab">
 						<div
 							className={`time-table-tab-option ${
@@ -180,7 +209,7 @@ export default function Home() {
 					</div>
 					<div className="time-table-helper">
 						<i
-							class="fa fa-info-circle"
+							className="fa fa-info-circle"
 							style={{ color: 'lightblue', margin: '0 10px' }}
 						></i>
 						{helperMessage(activeTab)}
@@ -188,6 +217,7 @@ export default function Home() {
 					<div className="time-table-wrapper">
 						{activeTab === 'combinations' ? (
 							<>
+								{isWalkThrough === 3 && helperText('showCourseIndexTip')}
 								{preferedData.map(({ timetable, info }, key) => {
 									return (
 										<div className="time-table-container" key={key}>
@@ -211,23 +241,27 @@ export default function Home() {
 					</div>
 				</div>
 				{preferedData ? (
-					<ExamInfo exam_schedule={convertExamSchedule(searched)} />
+					<div
+						className={`exam-wrapper ${
+							isWalkThrough === 3 ? ' highlight-element ' : ''
+						}`}
+					>
+						<ExamInfo exam_schedule={convertExamSchedule(searched)} />
+						{isWalkThrough === 3 && helperText('showExamScheduleTip')}
+					</div>
 				) : (
 					<></>
 				)}
 			</div>
+			<TutorialButton
+				isWalkThrough={isWalkThrough}
+				setisWalkThrough={setisWalkThrough}
+				stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
+				stepThree={Boolean(preferedData)}
+			/>
 		</div>
 	)
 }
-
-
-
-
-
-
-
-
-
 
 // function popObject(obj) {
 // 	const keys = Object.keys(obj)

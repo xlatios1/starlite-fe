@@ -47,7 +47,7 @@ export default function Signin() {
 			const isSignIn = await signIn(login.email, login.password)
 			console.log('isSignIn', isSignIn)
 			if (isSignIn === true) {
-				Notification('success', 'Login successful!', 2000)
+				Notification('success', 'Login successful!', 1000)
 				navigate('/home')
 			} else {
 				Notification('error', isSignIn.message, 3000)

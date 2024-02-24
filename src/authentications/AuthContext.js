@@ -85,8 +85,8 @@ export const AuthContextProvider = ({ children }) => {
 		})
 	}
 
-	const getData = async (user, fields = null) => {
-		console.log('getData called!')
+	const getFileData = async (user, fields = null) => {
+		console.log('getFileData called!')
 		function dataURLtoBlob(dataURL) {
 			const byteString = atob(dataURL.split(',')[1])
 			const ab = new ArrayBuffer(byteString.length)
@@ -168,7 +168,7 @@ export const AuthContextProvider = ({ children }) => {
 				signIn,
 				logout,
 				setData,
-				getData,
+				getFileData,
 				rmData,
 			}}
 		>

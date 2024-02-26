@@ -1,0 +1,27 @@
+.about-wrapper{
+    display: flex;
+    position: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 7.5rem auto 3rem;
+    width: 40rem;
+}
+
+.logo-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-container .logo {
+    width: 40rem;
+    font-family: 'Bookman Old Style';
+    font-size: 10rem;
+    color:#0011acad;
+    margin-bottom: 50px;
+    -webkit-user-select:none;
+       -moz-user-select:none;
+        -ms-user-select:none;
+            user-select:none;
+}

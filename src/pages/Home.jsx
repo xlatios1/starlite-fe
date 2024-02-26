@@ -129,7 +129,7 @@ export default function Home() {
 	}
 
 	return (
-		<div className="hp">
+		<div className="homepage">
 			{isLoading && <Loading />}
 			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">

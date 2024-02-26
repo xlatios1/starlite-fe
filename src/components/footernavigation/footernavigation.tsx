@@ -1,4 +1,4 @@
-import { Box, Typography, Grid } from '@mui/material'
+import { Typography, Grid } from '@mui/material'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import React from 'react'

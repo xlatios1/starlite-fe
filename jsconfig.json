@@ -12,7 +12,6 @@
 			"@utils/*": ["utils/*"],
 			"@root/*": ["*"]
 		},
-		"allowImportingTsExtensions": true,
-		"allowJs": true
+		"allowImportingTsExtensions": true
 	}
 }

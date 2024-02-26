@@ -1,14 +1,19 @@
+.homepage{
+    
+}
+
 .upper-detail-wrapper{
 
 }
 
 .lower-detail-wrapper{
+    display: flex;
     position: relative;
     top: 6rem;
-    display: flex;
     flex-direction: row;
     justify-content: center;
     margin: auto;
+    height: 100vh;
 }
 
 .search-wrapper{

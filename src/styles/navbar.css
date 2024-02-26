@@ -8,7 +8,7 @@
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
     width: 100%; /* Full width */
-    z-index: 800;
+    z-index: 1050;
 }
 
 .nav .user-detail {
@@ -86,7 +86,7 @@
     .nav .nav-container #navLinks.active{
         background: #31acbd;
         opacity: 0.8;
-        z-index: 800;
+        z-index: 1050;
         right: 0px;
         border-bottom-left-radius: 10%;
     }

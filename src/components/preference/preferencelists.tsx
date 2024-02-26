@@ -85,6 +85,7 @@ export default function PreferenceLists({
 					finalExam={statePreference.finalExam}
 					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
+					courses={courses}
 				/>
 				<div className="preference-options setPreference">
 					<button

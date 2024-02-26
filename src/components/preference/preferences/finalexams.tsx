@@ -16,6 +16,7 @@ export default function FinalExams({
 	finalExam,
 	dispatchPreference,
 	handleReset,
+	courses,
 }) {
 	const handleFinalExams = (_, option) => {
 		dispatchPreference({ type: 'finalExam', value: option })
@@ -41,6 +42,7 @@ export default function FinalExams({
 					text={''}
 					options={finalExamOptions}
 					check={finalExam}
+					disabled={courses.length < 2}
 				></MultiSwitch>
 			</div>
 		</div>

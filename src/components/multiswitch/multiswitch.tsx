@@ -6,6 +6,7 @@ type MultiSwitch = {
 	text: string
 	options: string[]
 	check: string
+	disabled: boolean
 }
 
 export default function MultiSwitch({
@@ -13,6 +14,7 @@ export default function MultiSwitch({
 	text,
 	options,
 	check,
+	disabled,
 }: MultiSwitch) {
 	return (
 		<div className="multi-switch-options" key={text}>
@@ -32,6 +34,7 @@ export default function MultiSwitch({
 								onChange={() => {}}
 							/>
 							<label
+								className={`${disabled ? ' disabled' : ''}`}
 								onClick={() => {
 									handleMultiSwitch(text, option)
 								}}
@@ -41,7 +44,10 @@ export default function MultiSwitch({
 						</React.Fragment>
 					)
 				})}
-				<a className="slide" aria-hidden="true"></a>
+				<a
+					className={`slide${disabled ? ' disabled' : ''}`}
+					aria-hidden="true"
+				></a>
 			</div>
 		</div>
 	)

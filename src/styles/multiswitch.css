@@ -224,3 +224,8 @@ Because a11y
 .multi-switch-options input:focus ~ a {
 outline: 2px solid #0088ce;
 }
+
+.disabled{
+    opacity: 0.3;
+    pointer-events: none; 
+}

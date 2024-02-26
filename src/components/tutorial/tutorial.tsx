@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import './tutorial.css'
+import { Box } from '@mui/material'
 
 export default function TutorialButton({
 	isWalkThrough,
@@ -30,11 +31,9 @@ export default function TutorialButton({
 				variant="outlined"
 				sx={{
 					backgroundColor: 'white',
-					position: 'fixed',
-					bottom: '20px',
-					right: '10px',
 					fontSize: '10px',
-					zIndex: '899',
+					marginRight: '20px',
+					zIndex: '999',
 				}}
 				onClick={handleTutorial}
 			>
@@ -56,12 +55,12 @@ export const helperText = (text: string) => {
 		case 'dragNDropTip':
 			return (
 				<>
-					<div className="highlight-helper" style={{ top: '-95px' }}>
+					<div className="highlight-helper" style={{ top: '-90px' }}>
 						2. Over here you may reposition your courses by drag-n-drop, courses
 						are ranked priority from top to bottom, meaning it will attempt to
 						map the highest priority first!
 					</div>
-					<div className="highlight-helper" style={{ bottom: '-70px' }}>
+					<div className="highlight-helper" style={{ bottom: '-90px' }}>
 						3. Once ready, click on [Search].
 						<br />
 						Condition: Only able to search if there are no conflicts so do
@@ -147,6 +146,21 @@ export const helperText = (text: string) => {
 					}}
 				>
 					Exam Schedules of mapped courses are shown here!
+				</div>
+			)
+		case 'showPreferenceTip':
+			return (
+				<div
+					className="highlight-helper"
+					style={{
+						top: '-115px',
+						// right: '50px',
+						width: '300px',
+					}}
+				>
+					4. You may choose your preferences to find your most suited timetable!
+					[Hover/Click] the help icon to understand what each preferences does!
+					After selection click [Apply Preference] below!
 				</div>
 			)
 	}

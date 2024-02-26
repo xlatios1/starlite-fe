@@ -1,33 +1,10 @@
-.logo-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 7.5rem auto 3rem;
-}
-
-.logo-container .logo {
-    width: 40rem;
-    position: absolute;
-    left: max(calc(50% - 315px), 320px);
-    top: -30px;
-    font-family: 'Bookman Old Style';
-    font-size: 10rem;
-    color:#0011acad;
-    /* margin: 3rem 0 2rem; */
-    -webkit-user-select:none;
-       -moz-user-select:none;
-        -ms-user-select:none;
-            user-select:none;
-}
-
 .upper-detail-wrapper{
 
 }
 
 .lower-detail-wrapper{
     position: relative;
-    top: 10rem;
+    top: 6rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -36,18 +13,18 @@
 
 .search-wrapper{
     display: flex;
-    position: absolute;
-    left: max(calc(50% - 320px - 300px - 5px), 10px);
-    /* margin-left: auto; 
-    margin-right: calc(50% + 330px); */
+    position: relative;
+    margin-right: 10px; 
     flex-direction: column;
+    height: min-content;
+    /* margin-bottom: 100px; */
 }
 
 .time-table-body{
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
-    left: max(calc(50% - 315px), 320px);
+    padding-bottom: 80px;
 }
 
 .time-table-tab{
@@ -88,13 +65,14 @@
 .time-table-helper{
     display: flex;
     align-items: center;
-    height: 100%;
+    height: min-content;
     width: 640px;
     background-color: #ffffff;
     border-radius: 5px;
     margin: 2px;
     padding: 4px 0;
     box-sizing: border-box; /* Ensure box-sizing is set to border-box */
+    /* z-index: -100; */
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
@@ -105,13 +83,22 @@
     flex-direction: column;
 }
 
+.placeholder{
+    display: flex;
+    position: relative;
+    width: 300px;
+    margin-left: 10px;
+}
+
 .exam-wrapper{
     display: flex;
-    position: absolute;
+    position: relative;
     width: 300px;
+    min-width: 300px;
+    height: fit-content;
+    margin-left: 10px;
     background-color: white;
     flex-direction: column;
-    left: max(calc(50% + 320px + 20px), 975px);
 	padding: 20px;
 	background-color: white;
 	box-shadow: 0 0 1px 0 #b8b0b0;

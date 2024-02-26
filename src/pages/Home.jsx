@@ -1,6 +1,5 @@
 /* eslint-disable default-case */
 import { useState, useEffect, useRef } from 'react'
-import logo from '@images/logo.png'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
 import Loading from '@components/loading/Loading.tsx'
@@ -8,6 +7,7 @@ import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
 import ExamInfo from '@components/examinfo/examinfo.tsx'
+import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { convertExamSchedule } from '@utils/parsers.ts'
 import { GenerateTimetable } from '@utils/generatetimetable.tsx'
@@ -75,7 +75,7 @@ export default function Home() {
 		if (preferedData) {
 			window.scrollTo({
 				left: 0,
-				top: 250,
+				top: 40,
 				behavior: 'smooth',
 			})
 		}
@@ -131,15 +131,11 @@ export default function Home() {
 	return (
 		<div className="hp">
 			{isLoading && <Loading />}
-			<div className="upper-detail-wrapper">
-				<div className="logo-container">
-					<img className="logo" src={logo} alt="starlite" />
-				</div>
-			</div>
+			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">
 				<div
 					className={`search-wrapper${
-						isWalkThrough < 3 ? ' highlight-element' : ''
+						0 < isWalkThrough && isWalkThrough < 3 ? ' highlight-element' : ''
 					}`}
 				>
 					{isWalkThrough === 1 && helperText('searchTip')}
@@ -154,15 +150,17 @@ export default function Home() {
 						isWalkThrough={isWalkThrough}
 						setisWalkThrough={setisWalkThrough}
 					></SearchBar>
-					{!!searched.length ? (
+					{searched.length > 0 ? (
 						<div
 							className={`preference-wrap ${
 								toggleCourseList ? '' : ' hidden '
-							}${isWalkThrough > 2 ? ' highlight-element ' : ''}`}
+							}${isWalkThrough > 2 ? ' highlight-element' : ''}
+							`}
 							style={{
 								transform: toggleCourseList
 									? ''
 									: `translateY(-${transformYValue - 15}px)`,
+								marginBottom: toggleCourseList ? '100px' : '',
 							}}
 						>
 							<PreferenceLists
@@ -171,7 +169,7 @@ export default function Home() {
 								isWalkThrough={isWalkThrough}
 								setisWalkThrough={setisWalkThrough}
 							></PreferenceLists>
-							{isWalkThrough === 3 && helperText('searchTip')}
+							{isWalkThrough === 3 && helperText('showPreferenceTip')}
 						</div>
 					) : (
 						<></>
@@ -229,7 +227,6 @@ export default function Home() {
 										</div>
 									)
 								})}
-								<ScrollButton />
 							</>
 						) : (
 							<TimeTable
@@ -250,15 +247,26 @@ export default function Home() {
 						{isWalkThrough === 3 && helperText('showExamScheduleTip')}
 					</div>
 				) : (
-					<></>
+					<div className="placeholder"></div>
 				)}
 			</div>
-			<TutorialButton
-				isWalkThrough={isWalkThrough}
-				setisWalkThrough={setisWalkThrough}
-				stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
-				stepThree={Boolean(preferedData)}
-			/>
+			<Box
+				sx={{
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'end',
+					position: 'sticky',
+					bottom: '30px',
+				}}
+			>
+				<ScrollButton display={Boolean(preferedData)} />
+				<TutorialButton
+					isWalkThrough={isWalkThrough}
+					setisWalkThrough={setisWalkThrough}
+					stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
+					stepThree={Boolean(preferedData)}
+				/>
+			</Box>
 		</div>
 	)
 }

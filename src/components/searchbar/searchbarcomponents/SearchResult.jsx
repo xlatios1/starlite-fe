@@ -1,6 +1,11 @@
 import React from 'react'
 
-export const SearchResult = ({ result, handleSelect, setShouldHandleBlur }) => {
+export const SearchResult = ({
+	result,
+	handleSelect,
+	setShouldHandleBlur,
+	selectedIndex,
+}) => {
 	const handleOptionMouseDown = () => {
 		// Set the flag to indicate that the blur event should not be handled
 		setShouldHandleBlur(false)
@@ -13,7 +18,7 @@ export const SearchResult = ({ result, handleSelect, setShouldHandleBlur }) => {
 
 	return (
 		<div
-			className="search-result"
+			className={`search-result ${selectedIndex ? 'selected' : ''}`}
 			onClick={(e) => handleSelect(result.code)}
 			onMouseDown={handleOptionMouseDown}
 			onMouseUp={handleOptionMouseUp}

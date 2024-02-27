@@ -5,6 +5,7 @@ export const SearchResultList = ({
 	results,
 	handleSelect,
 	setShouldHandleBlur,
+	selectedIndex,
 }) => {
 	return (
 		<div className="results-list">
@@ -13,6 +14,7 @@ export const SearchResultList = ({
 					<SearchResult
 						result={result}
 						key={id}
+						selectedIndex={selectedIndex === id}
 						handleSelect={handleSelect}
 						setShouldHandleBlur={setShouldHandleBlur}
 					/>

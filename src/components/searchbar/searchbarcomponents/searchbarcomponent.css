@@ -52,6 +52,10 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.search-bar-wrapper .search-result.selected{
+    background-color: rgb(230, 230, 230);
+}
+
 .search-bar-wrapper .search-result:hover{
     background-color: #efefef;
 }

@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
 import logo from '@images/logo.png'
+import zenaImage from '@images/zena.jpg'
 import '@styles/about.css'
 import FeedbackForm from '@components/formcontrol/feedbackform.tsx'
-import { Box, Grid, Typography } from '@mui/material'
-import zenaImage from '@images/zena.jpg'
+import { Box, Typography } from '@mui/material'
 
 const About = () => {
 	return (
-		<section>
+		<section className="aboutpage">
 			<div className="logo-container">
 				<img className="logo" src={logo} alt="starlite" />
 			</div>
@@ -156,13 +156,8 @@ const About = () => {
 							>
 								Starlite is a dynamic platform that evolves with your feedback
 								and changing needs. I will try my best to be committed to
-								continual improvement, incorporating new features and
-								enhancements based on your user experiences. If you feel that
-								somethings could be improve, do tell me! I only just started
-								self-learning Front-End for Starlite, and I am sure there are
-								tons of space for improvements that I could make. Your insights
-								are invaluable, and it will aid in shaping the future of
-								timetable planning at NTU.
+								continual improvement of features, incorporating new features
+								and enhancements based on your user experiences.
 							</Typography>
 						</Box>
 						<Box
@@ -195,13 +190,15 @@ const About = () => {
 					}}
 					align="justify"
 				>
-					It has been a excellent one year project and journey. This project
-					taught me almost from zero to advance frontend frameworks and best
-					practices for React, TypeScript and all the complex hooks/libraries
-					there is. I hope that Starlite will be a Quality-of-Life improvement
-					for future NTU students when it comes to mapping courses. If you have
-					any improvements or suggestions please feel free to drop me any
-					feedback!! Cheers and all the best for your future endeavor.
+					Summing it up, it has been a excellent one year project and journey.
+					This project taught me almost from zero to advance frontend frameworks
+					and best practices for React, TypeScript and all the complex
+					hooks/libraries there is. I hope that Starlite will be a
+					Quality-of-Life improvement for future NTU students when it comes to
+					mapping courses. If you have any improvements or suggestions please
+					feel free to drop me any feedback!! Your insights are invaluable, and
+					it will aid in shaping the future of timetable planning at NTU. Cheers
+					and all the best for your future endeavor.
 				</Typography>
 			</Box>
 		</section>

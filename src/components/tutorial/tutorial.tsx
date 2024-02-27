@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '@mui/material/Button'
 import './tutorial.css'
-import { Box } from '@mui/material'
 
 export default function TutorialButton({
 	isWalkThrough,
@@ -33,7 +32,7 @@ export default function TutorialButton({
 					backgroundColor: 'white',
 					fontSize: '10px',
 					marginRight: '20px',
-					zIndex: '999',
+					zIndex: '9999',
 				}}
 				onClick={handleTutorial}
 			>
@@ -47,7 +46,7 @@ export const helperText = (text: string) => {
 	switch (text) {
 		case 'searchTip':
 			return (
-				<div className="highlight-helper" style={{ top: '-95px' }}>
+				<div className="highlight-helper" style={{ top: '-92px' }}>
 					1. Type in your course code/name below! Suggestions will be shown
 					below and able to be selected. Hit [Enter] to register search course.
 				</div>

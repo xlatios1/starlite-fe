@@ -21,13 +21,13 @@
     text-align: center; 
     border-radius: 5px;
     padding: 2px;
-    color:rgb(0, 0, 0);
+    color:rgb(255, 255, 255);
 }
 
 .highlight-helper.primary{
-    background-color: #FFA500;
+    background-color: rgb(4,172,116);
 }
 
 .highlight-helper.secondary{
-    background-color: #ADD8E6;
+    background-color: rgb(4,172,116);
 }

@@ -110,7 +110,9 @@ export default function Home() {
 			)
 			Notification('success', 'Successfully set preferences!', 1000)
 			setIsLoading(false)
-			setisWalkThrough(4)
+			if (isWalkThrough !== 0) {
+				setisWalkThrough(4)
+			}
 		}, 1000)
 	}
 

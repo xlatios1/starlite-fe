@@ -110,6 +110,7 @@ export default function Home() {
 			)
 			Notification('success', 'Successfully set preferences!', 1000)
 			setIsLoading(false)
+			setisWalkThrough(4)
 		}, 1000)
 	}
 
@@ -167,9 +168,10 @@ export default function Home() {
 								courses={searched.map((obj) => Object.keys(obj)[0])}
 								handleApplyPreference={handleApplyPreference}
 								isWalkThrough={isWalkThrough}
-								setisWalkThrough={setisWalkThrough}
 							></PreferenceLists>
 							{isWalkThrough === 3 && helperText('showPreferenceTip')}
+							{isWalkThrough === 3 &&
+								helperText('showPreferenceButtonLocationTip')}
 						</div>
 					) : (
 						<></>
@@ -184,7 +186,7 @@ export default function Home() {
 					{isWalkThrough === 2 && helperText('showUnableToToggleTabTip')}
 					{isWalkThrough === 3 && helperText('showTimetableToggleTip')}
 					{isWalkThrough === 3 && helperText('showCombinationNoChangeTip')}
-
+					{isWalkThrough === 4 && helperText('showAfterPreferenceChangeTip')}
 					<div className="time-table-tab">
 						<div
 							className={`time-table-tab-option ${

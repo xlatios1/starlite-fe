@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '@mui/material/Button'
 import './tutorial.css'
-import { Box } from '@mui/material'
 
 export default function TutorialButton({
 	isWalkThrough,
@@ -33,7 +32,7 @@ export default function TutorialButton({
 					backgroundColor: 'white',
 					fontSize: '10px',
 					marginRight: '20px',
-					zIndex: '999',
+					zIndex: '9999',
 				}}
 				onClick={handleTutorial}
 			>
@@ -47,21 +46,21 @@ export const helperText = (text: string) => {
 	switch (text) {
 		case 'searchTip':
 			return (
-				<div className="highlight-helper" style={{ top: '-95px' }}>
-					1. Type in your course code/name below! Suggestions will be shown
+				<div className="highlight-helper primary" style={{ top: '-92px' }}>
+					1) Type in your course code/name below! Suggestions will be shown
 					below and able to be selected. Hit [Enter] to register search course.
 				</div>
 			)
 		case 'dragNDropTip':
 			return (
 				<>
-					<div className="highlight-helper" style={{ top: '-90px' }}>
-						2. Over here you may reposition your courses by drag-n-drop, courses
+					<div className="highlight-helper primary" style={{ top: '-90px' }}>
+						2) Over here you may reposition your courses by drag-n-drop, courses
 						are ranked priority from top to bottom, meaning it will attempt to
 						map the highest priority first!
 					</div>
-					<div className="highlight-helper" style={{ bottom: '-90px' }}>
-						3. Once ready, click on [Search].
+					<div className="highlight-helper primary" style={{ bottom: '-90px' }}>
+						3) Once ready, click on [Search].
 						<br />
 						Condition: Only able to search if there are no conflicts so do
 						remove any conflicting courses!
@@ -71,7 +70,7 @@ export const helperText = (text: string) => {
 		case 'searchPreviewTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
 						top: '300px',
 						left: '465px',
@@ -87,7 +86,7 @@ export const helperText = (text: string) => {
 		case 'showUnableToToggleTabTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
 						top: '-30px',
 						left: '140px',
@@ -99,7 +98,7 @@ export const helperText = (text: string) => {
 		case 'showCourseIndexTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
 						top: '200px',
 						left: '565px',
@@ -112,21 +111,22 @@ export const helperText = (text: string) => {
 		case 'showCombinationNoChangeTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
-						top: '100px',
+						top: '150px',
 						left: '565px',
-						width: '150px',
+						width: '300px',
 					}}
 				>
-					*Note that the Combinations will not update, even when removing a
-					course from the searched list, unless an [Search] is performed.
+					*Note that the Combinations will not update when removing a course
+					from the searched list, it will only reflect changes when a [Search]
+					is performed.
 				</div>
 			)
 		case 'showTimetableToggleTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
 						top: '-30px',
 						left: '100px',
@@ -138,7 +138,7 @@ export const helperText = (text: string) => {
 		case 'showExamScheduleTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper secondary"
 					style={{
 						top: '-55px',
 						right: '50px',
@@ -151,17 +151,59 @@ export const helperText = (text: string) => {
 		case 'showPreferenceTip':
 			return (
 				<div
-					className="highlight-helper"
+					className="highlight-helper primary"
 					style={{
 						top: '-115px',
-						// right: '50px',
-						width: '300px',
+						left: '-40px',
+						width: '350px',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
 					}}
 				>
-					4. You may choose your preferences to find your most suited timetable!
+					4) You may choose your preferences to find your most suited timetable!
 					[Hover/Click] the help icon to understand what each preferences does!
 					After selection click [Apply Preference] below!
+					<div
+						className="walk-through-scroll-btn"
+						onClick={() =>
+							window.scrollTo({
+								left: 0,
+								top: 400,
+								behavior: 'smooth',
+							})
+						}
+					>
+						{'<scroll to preference btn>'}
+					</div>
 				</div>
 			)
+		case 'showPreferenceButtonLocationTip':
+			return (
+				<div
+					className="highlight-helper secondary"
+					style={{
+						top: '830px',
+						left: '-70px',
+						width: '150px',
+					}}
+				>
+					{'[Preference button] can be found here! ->'}
+				</div>
+			)
+			case 'showAfterPreferenceChangeTip':
+				return (
+					<div
+						className="highlight-helper primary"
+						style={{
+							top: '150px',
+							left: '565px',
+							width: '200px',
+						}}
+					>
+						5) After setting preferences, the timetable are ranked accordingly
+						to the preferences set!
+					</div>
+				)
 	}
 }

@@ -11,12 +11,7 @@ import {
 } from '@components/preference/preferenceUtils.tsx'
 import './preferencelists.css'
 
-export default function PreferenceLists({
-	courses,
-	handleApplyPreference,
-	isWalkThrough,
-	setisWalkThrough,
-}) {
+export default function PreferenceLists({ courses, handleApplyPreference, isWalkThrough }) {
 	const initialState = {
 		minCourseFilter: courses.length,
 		freeDay: [],

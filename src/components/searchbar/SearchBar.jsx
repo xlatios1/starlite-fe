@@ -31,7 +31,7 @@ export default function SearchBar({
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(false)
 	const searchResultRef = useRef(null)
-
+	const [selectedIndex, setSelectedIndex] = useState(-1)
 	const [draggedItem, setDraggedItem] = useState(null)
 
 	const handleSelect = (value) => {
@@ -41,6 +41,7 @@ export default function SearchBar({
 
 		setInput(modifiedSentence)
 		setResults([])
+		setSelectedIndex(-1)
 		FocusTextBox({ ref: searchBoxRef })
 	}
 
@@ -149,10 +150,28 @@ export default function SearchBar({
 		setDraggedItem(null)
 	}
 
+	const handleKeyDown = (event) => {
+		if (event.key === 'ArrowDown') {
+			setSelectedIndex((prevIndex) =>
+				Math.min(prevIndex + 1, results.length - 1)
+			)
+		} else if (event.key === 'ArrowUp') {
+			setSelectedIndex((prevIndex) => Math.max(prevIndex - 1, 0))
+		} else if (event.key === 'Enter') {
+			if (selectedIndex !== -1) {
+				handleSelect(results[selectedIndex].code)
+			} else {
+				handleOnSearchValid()
+				searchBoxRef.current.blur()
+			}
+		} else if (event.key === 'Escape') {
+			setSelectedIndex(-1)
+		}
+	}
+
 	return (
-		<div className="search-bar-container">
+		<div className="search-bar-container" onKeyDown={handleKeyDown}>
 			<SearchBarComponent
-				handleOnSearchValid={handleOnSearchValid}
 				handleInput={handleInput}
 				input={input}
 				searchBoxRef={searchBoxRef}
@@ -165,6 +184,7 @@ export default function SearchBar({
 						results={results}
 						handleSelect={handleSelect}
 						setShouldHandleBlur={setShouldHandleBlur}
+						selectedIndex={selectedIndex}
 					/>
 				</div>
 			)}
@@ -235,7 +255,6 @@ export default function SearchBar({
 							onClick={() => {
 								setToggleCourseList((prev) => !prev)
 							}}
-							style={{}}
 						></span>
 					</div>
 				</div>

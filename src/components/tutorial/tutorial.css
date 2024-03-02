@@ -1,0 +1,33 @@
+.walk-through-scroll-btn {
+    color: rgb(39, 16, 255);
+    cursor: pointer;
+}
+
+.walk-through-scroll-btn:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    right: 69px;
+    width: 160px;
+    height: 2px;
+    background-color: rgb(39, 16, 255);
+}   
+
+.highlight-helper {
+    position:absolute;
+    z-index: 1060;
+    opacity: 1;
+    border: 1px solid black;
+    text-align: center; 
+    border-radius: 5px;
+    padding: 2px;
+    color:rgb(255, 255, 255);
+}
+
+.highlight-helper.primary{
+    background-color: rgb(4,172,116);
+}
+
+.highlight-helper.secondary{
+    background-color: rgb(4,172,116);
+}

@@ -14,9 +14,11 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import './searchbar.css'
 import './searchbarcomponents/searchbarcomponent.css'
 
+import { loadingActions } from '@store/loading/loadingSlice.ts'
+import { useDispatch } from 'react-redux'
+
 export default function SearchBar({
 	handleSearch,
-	setIsLoading,
 	toggleCourseList,
 	setToggleCourseList,
 	searchValidRef,
@@ -33,6 +35,9 @@ export default function SearchBar({
 	const searchResultRef = useRef(null)
 	const [selectedIndex, setSelectedIndex] = useState(-1)
 	const [draggedItem, setDraggedItem] = useState(null)
+
+	const dispatch = useDispatch()
+	const { openLoading, closeLoading } = loadingActions
 
 	const handleSelect = (value) => {
 		const words = input.trim().split(' ')
@@ -66,7 +71,7 @@ export default function SearchBar({
 	}
 
 	const handleOnSearchValid = () => {
-		setIsLoading(true)
+		dispatch(openLoading())
 		setInput('')
 		setResults([])
 		setTimeout(async () => {
@@ -76,7 +81,6 @@ export default function SearchBar({
 				const customCourses = generateCommonInfomationDetails(newCourses)
 				setTimetablePreview(GenerateTimetableFormat(customCourses).timetable)
 				setCourses(newCourses)
-				console.log(newCourses)
 				Notification(
 					'success',
 					`Successfully mapped course: ${results
@@ -90,7 +94,7 @@ export default function SearchBar({
 			} else {
 				Notification('info', 'No unique valid course found!', 1000)
 			}
-			setIsLoading(false)
+			dispatch(closeLoading())
 		}, 1000)
 	}
 

@@ -1,22 +1,23 @@
 import './upload.css'
 import { useState, useEffect } from 'react'
 import Dropzone from '@components/dropzone/dropzone.tsx'
-import Loading from '@components/loading/Loading.tsx'
+
+import { useDispatch } from 'react-redux'
+import { loadingActions } from '@store/loading/loadingSlice.ts'
 
 export default function Upload() {
-	const [isLoading, setIsLoading] = useState(false)
 	const [currentTab, setCurrentTab] = useState('upload')
-
+	const dispatch = useDispatch()
+	const { openLoading, closeLoading } = loadingActions
 	useEffect(() => {
-		setIsLoading(true)
+		dispatch(openLoading())
 		setTimeout(() => {
-			setIsLoading(false)
+			dispatch(closeLoading())
 		}, 1000)
 	}, [currentTab])
 
 	return (
 		<>
-			{isLoading && <Loading />}
 			<div className="upload-content">
 				<h2 className="upload-title">Progression tracker</h2>
 				<p className="upload-description">

@@ -1,5 +1,4 @@
 import '@styles/signin.css'
-import '@styles/loading.css'
 import Registration from '@pages/Registration/Registration.jsx'
 import SignIn from '@pages/SignIn/SignIn.jsx'
 import NotFound from '@pages/NotFound/NotFound.jsx'
@@ -8,6 +7,7 @@ import { AuthContextProvider } from './authentications/AuthContext.js'
 import ProtectedRoute from './authentications/ProtectedRoute.js'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Loading from '@components/loading/Loading.tsx'
 
 export default function App() {
 	const renderProtectedPaths = (paths) =>
@@ -17,6 +17,7 @@ export default function App() {
 
 	return (
 		<AuthContextProvider>
+			<Loading />
 			<ToastContainer
 				position="top-center"
 				autoClose={3000}
@@ -30,16 +31,12 @@ export default function App() {
 				theme="light"
 			/>
 			<Router>
-				{/* <div className="app">
-				<article className="bg"> */}
 				<Routes>
 					<Route path="/" element={<SignIn />} />
 					<Route path="/register" element={<Registration />} />
 					{renderProtectedPaths(['/home', '/upload', '/about'])}
 					<Route path="*" element={<NotFound />} />
 				</Routes>
-				{/* </article>
-			</div> */}
 			</Router>
 			<div className="version-tag">Beta version: 2.16.0</div>
 		</AuthContextProvider>

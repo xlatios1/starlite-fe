@@ -9,7 +9,7 @@ export const SearchResultList = ({
 }) => {
 	return (
 		<div className="results-list">
-			{results.length > 1 ? (
+			{results.length > 0 ? (
 				results.map((result, id) => {
 					return (
 						<SearchResult

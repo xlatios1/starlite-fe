@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
-import Loading from '@components/loading/Loading.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
@@ -14,6 +13,9 @@ import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
 import { handlePreferences } from '@components/timetable/TimeTableCalc.tsx'
 import './home.css'
+
+import { loadingActions } from '@store/loading/loadingSlice.ts'
+import { useDispatch } from 'react-redux'
 const _ = require('lodash')
 
 export default function Home() {
@@ -23,13 +25,15 @@ export default function Home() {
 	const [originalData, setOriginalData] = useState(null) //timetable option datas
 	const [preferedData, setPreferedData] = useState(null) //timetable option datas
 	const [searched, setSearched] = useState([]) //searched courses
-	const [isLoading, setIsLoading] = useState(false)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [activeTab, setActiveTab] = useState('timetable')
 	const [isWalkThrough, setisWalkThrough] = useState(0)
+
+	const dispatch = useDispatch()
+	const { openLoading, closeLoading } = loadingActions
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -39,7 +43,7 @@ export default function Home() {
 			finalExam: 'Any Exams',
 		}
 
-		setIsLoading(true)
+		dispatch(openLoading())
 		setTimeout(async () => {
 			if (document.getElementsByClassName('conflict-message').length !== 0) {
 				const errorMessage =
@@ -66,7 +70,7 @@ export default function Home() {
 					setisWalkThrough(3)
 				}
 			}
-			setIsLoading(false)
+			dispatch(closeLoading())
 		}, 1000)
 	}
 
@@ -99,7 +103,7 @@ export default function Home() {
 	}, [searchValidRef.current, transformYValue])
 
 	const handleApplyPreference = (preference) => {
-		setIsLoading(true)
+		dispatch(openLoading())
 		setTimeout(async () => {
 			setPreferedData(
 				handlePreferences(
@@ -109,7 +113,7 @@ export default function Home() {
 				)
 			)
 			Notification('success', 'Successfully set preferences!', 1000)
-			setIsLoading(false)
+			dispatch(closeLoading())
 			if (isWalkThrough !== 0) {
 				setisWalkThrough(4)
 			}
@@ -133,7 +137,6 @@ export default function Home() {
 
 	return (
 		<div className="homepage">
-			{isLoading && <Loading />}
 			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">
 				{searched.length > 0 ? (
@@ -208,14 +211,11 @@ export default function Home() {
 								})}
 							</>
 						) : (
-							<>
-								<TimeTable
-									key={'default_table'}
-									timetable_data={timetablePreview}
-									info={null}
-								/>
-								<div className="placeholder"></div>
-							</>
+							<TimeTable
+								key={'default_table'}
+								timetable_data={timetablePreview}
+								info={null}
+							/>
 						)}
 					</div>
 				</div>
@@ -246,7 +246,6 @@ export default function Home() {
 					{isWalkThrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
 						handleSearch={handleSearch}
-						setIsLoading={setIsLoading}
 						setToggleCourseList={setToggleCourseList}
 						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}

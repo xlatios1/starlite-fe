@@ -13,6 +13,7 @@ module.exports = function override(config) {
 			'@pages': path.resolve(__dirname, 'src/pages/'),
 			'@styles': path.resolve(__dirname, 'src/styles/'),
 			'@utils': path.resolve(__dirname, 'src/utils/'),
+			'@store': path.resolve(__dirname, 'src/store/'),
 			'@root': path.resolve(__dirname, 'src/'),
 		},
 	}

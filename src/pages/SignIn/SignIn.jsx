@@ -42,7 +42,6 @@ export default function Signin() {
 			FocusTextBox({ ref: pass })
 		}
 		setErrorMessages(Array.from(new Set(errMsg)))
-		console.log(errMsg)
 		if (errMsg.length === 0) {
 			const isSignIn = await signIn(login.email, login.password)
 			console.log('isSignIn', isSignIn)

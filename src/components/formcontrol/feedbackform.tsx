@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
 	FormControl,
 	TextField,
@@ -7,28 +7,32 @@ import {
 	Paper,
 	Typography,
 } from '@mui/material'
-import Loading from '@components/loading/Loading.tsx'
 import { useForm } from 'react-hook-form'
 import { FormValues } from '@components/formcontrol/feedbackform.model.tsx'
 import { formSetup } from './feedbackform.utils.tsx'
 import Notification from '@components/notification/notification.tsx'
+
+import { useDispatch } from 'react-redux'
+import { loadingActions } from '@store/loading/loadingSlice.ts'
 const _ = require('lodash')
 
 const FeedbackForm = () => {
 	const { register, handleSubmit, formState, reset } = useForm<FormValues>()
 	const { errors } = formState
 	const formInputs = formSetup(register)
-	const [isLoading, setIsLoading] = useState(false)
+
+	const dispatch = useDispatch()
+	const { openLoading, closeLoading } = loadingActions
 
 	const onSubmit = async (data: FormValues) => {
 		try {
-			setIsLoading(true)
+			dispatch(openLoading())
 			setTimeout(() => {
 				//Send feedback to somewhere
 				const { name, title, feedback } = data
 				console.log('Received!', name, title, feedback)
 				Notification('success', 'Thank you for your valuable feedback!', 2000)
-				setIsLoading(false)
+				dispatch(closeLoading())
 				reset({ name: '', title: '', feedback: '' })
 			}, 1000)
 		} catch (error) {
@@ -40,7 +44,6 @@ const FeedbackForm = () => {
 
 	return (
 		<Box display="flex" justifyContent="center" marginTop="40px">
-			{isLoading && <Loading />}
 			<FormControl>
 				<Paper
 					sx={{

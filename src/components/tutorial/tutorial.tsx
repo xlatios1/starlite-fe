@@ -9,7 +9,6 @@ export default function TutorialButton({
 	stepThree,
 }) {
 	const handleTutorial = () => {
-		console.log(stepTwo, stepThree)
 		if (!isWalkThrough) {
 			if (stepThree) {
 				setisWalkThrough(3)

@@ -65,5 +65,5 @@ body {
   line-height: 1.5;
   font-size: 0.875rem;
   min-width: 1000px;
-  min-height: none;
+  min-height: fit-content;
 }

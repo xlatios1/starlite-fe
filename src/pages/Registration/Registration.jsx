@@ -3,10 +3,12 @@ import '@styles/signin.css'
 import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
-import Loading from '@components/loading/Loading.tsx'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { handleEmailChanges } from '@root/components/emailhandler/handleEmailChanges.tsx'
 import { Link, useNavigate } from 'react-router-dom'
+
+import { useDispatch } from 'react-redux'
+import { loadingActions } from '@store/loading/loadingSlice.ts'
 
 export default function Registration() {
 	const registerEmail = useRef(null)
@@ -17,11 +19,12 @@ export default function Registration() {
 		newPassword: '',
 		retypePassword: '',
 	})
-	const [isLoading, setIsLoading] = useState(false)
 	const [errorMessages, setErrorMessages] = useState([])
-
 	const { createUser, fetchUserInCache } = UserAuth()
 	const navigate = useNavigate()
+
+	const dispatch = useDispatch()
+	const { openLoading, closeLoading } = loadingActions
 
 	const curUser = fetchUserInCache()
 	useEffect(() => {
@@ -53,7 +56,7 @@ export default function Registration() {
 		}
 		setErrorMessages(Array.from(new Set(errMsg)))
 		if (errMsg.length === 0) {
-			setIsLoading(true)
+			dispatch(openLoading())
 			const isCreated = await createUser(
 				registration.newEmail,
 				registration.newPassword
@@ -64,7 +67,7 @@ export default function Registration() {
 			} else {
 				Notification('error', isCreated.message.split(': ')[1], 3000)
 			}
-			setIsLoading(false)
+			dispatch(closeLoading())
 		}
 	}
 
@@ -88,7 +91,6 @@ export default function Registration() {
 
 	return (
 		<div className="login-initializer">
-			{isLoading && <Loading />}
 			<form className="form">
 				<h3>Sign up for a free account</h3>
 				<p>

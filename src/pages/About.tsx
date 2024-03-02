@@ -19,12 +19,10 @@ const About = () => {
 							display: 'flex',
 							height: '100%',
 							justifyContent: 'space-between',
-							margin: '16px 0',
 						}}
 					>
 						<Box
 							sx={{
-								marginBottom: '40px',
 								color: '#5c5959',
 								width: '480px',
 								paddingRight: '20px',
@@ -151,7 +149,6 @@ const About = () => {
 									color: '#5c5959',
 									textAlign: 'right',
 									marginTop: '10px',
-									marginBottom: '40px',
 								}}
 							>
 								Starlite is a dynamic platform that evolves with your feedback
@@ -163,10 +160,10 @@ const About = () => {
 						<Box
 							sx={{
 								position: 'sticky',
-								top: '20%',
+								top: 'calc(50% - 200px)',
 								overflow: 'auto',
 								paddingLeft: '20px',
-								maxHeight: 'calc(100vh)',
+								maxHeight: '410px',
 							}}
 						>
 							<img

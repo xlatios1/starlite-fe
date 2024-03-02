@@ -39,7 +39,7 @@ const FeedbackForm = () => {
 	}
 
 	return (
-		<Box display="flex" justifyContent="center">
+		<Box display="flex" justifyContent="center" marginTop="40px">
 			{isLoading && <Loading />}
 			<FormControl>
 				<Paper

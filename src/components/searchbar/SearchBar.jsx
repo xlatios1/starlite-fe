@@ -182,7 +182,7 @@ export default function SearchBar({
 				setIsFocused={setIsFocused}
 				shouldHandleBlur={shouldHandleBlur}
 			/>
-			{isFocused && (
+			{isFocused && input.split('')[input.split('').length - 1] !== ' ' && (
 				<div className="search-bar-wrapper" ref={searchResultRef}>
 					<SearchResultList
 						results={results}

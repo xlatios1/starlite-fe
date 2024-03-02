@@ -1,0 +1,119 @@
+.homepage{
+    height: fit-content;
+    min-height: calc(100vh - 60px);
+}
+
+.upper-detail-wrapper{
+
+}
+
+.lower-detail-wrapper{
+    display: flex;
+    position: relative;
+    top: 6rem;
+    flex-direction: row;
+    justify-content: center;
+    margin: auto;
+    height: fit-content;
+    width: fit-content;
+}
+
+.search-wrapper{
+    display: flex;
+    position: relative;
+    margin-left: 10px; 
+    flex-direction: column;
+    height: min-content;
+    /* margin-bottom: 100px; */
+}
+
+.time-table-body{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+}
+
+.time-table-tab{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 640px;
+}
+
+.time-table-tab-option{
+    width: 50%;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    background: #ffffff;
+    user-select: none;
+    font-size: 20px;
+    border: 2px solid rgb(149, 217, 240);
+    border-bottom: 2px solid rgb(23, 156, 201);
+    transition: background 0.4s;
+}
+
+.time-table-tab-option.active {
+    background: rgb(149, 217, 240);
+}
+
+.time-table-tab-option.disabled {
+    border: none;
+    border-bottom: 2px solid gray;
+    color: gray;
+    cursor: not-allowed;
+    background: rgb(255, 255, 255);
+}
+
+.time-table-helper{
+    display: flex;
+    align-items: center;
+    height: min-content;
+    width: 640px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 4px 4px;
+    box-sizing: border-box; /* Ensure box-sizing is set to border-box */
+    z-index: -100;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.time-table-wrapper{
+    display:flex;
+    position:relative;
+    flex-direction: column;
+}
+
+.placeholder{
+    display: flex;
+    position: relative;
+    width: 300px;
+    margin-left: 10px;
+    margin-bottom: calc(100vh - 850px);
+}
+
+.exam-wrapper{
+    display: flex;
+    position: relative;
+    width: 300px;
+    min-width: 300px;
+    height: fit-content;
+    margin: 10px 0;
+    background-color: white;
+    flex-direction: column;
+	padding: 20px;
+	background-color: white;
+	box-shadow: 0 0 1px 0 #b8b0b0;
+    border-radius: 10px;
+    transition: transform 1s ease;
+}
+
+.exam-wrapper.hidden{
+	transform: translateY(0);
+}

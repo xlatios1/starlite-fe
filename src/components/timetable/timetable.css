@@ -1,0 +1,118 @@
+
+.conic {
+	z-index: 0;
+    position: relative;
+    border: 1px solid #ccc; 
+    padding: 20px; 
+    width: 40rem;
+    margin: 0 auto;
+    background-color: #f9f9f9; 
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    margin-bottom: 20px; 
+    cursor: pointer;
+    overflow: hidden;
+    
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -50%;
+		width: 200%;
+		height: 200%;
+		background-color: #a4bdcf;
+		background-repeat: no-repeat;
+		background-position: 0 0;
+		background-image: conic-gradient(transparent, rgba(168, 239, 255, 1), transparent 30%);
+		animation: rotate 4s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 4px;
+		top: 4px;
+		width: calc(100% - 8px);
+		height: calc(100% - 8px);
+		background: #ffffff;
+		border-radius: 5px;
+	}
+}
+
+table.table{
+    z-index: 1;
+    margin: auto;
+    filter: none; 
+    transition: filter ease-in-out;
+    user-select:none;
+}
+
+table.table.blurred {
+    z-index: 1;
+    margin: auto;
+    filter: blur(2px);
+    transition: filter ease-in-out;
+}
+
+table, th, td {
+    border:1px solid black;
+}
+
+table tbody tr th {
+    text-align: center;
+    background-color: #cacaca;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+table tbody tr td {
+    text-align: center;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: rgb(255, 255, 255);
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: rgb(149, 217, 240);
+}
+
+.conic .table-info {
+    /* display: none; */
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 2, 2, 0.3);
+    transition: ease-in-out;
+}
+
+.conic .table-info .table-wrapper{
+    width: fit-content;
+    color:#000000cc;
+    background: rgba(212, 247, 255, 0.5);
+    transition: 0.3s ease-in-out;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.conic .table-info .table-content{
+    font-family: 'Arial';
+    font-size: 1.5rem;
+    font-weight: 500;
+    width: fit-content;
+    color:#000000cc;
+}
+@keyframes rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}

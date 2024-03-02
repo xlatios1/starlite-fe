@@ -4,15 +4,11 @@
 	flex-direction: column;
 	width: 300px;
 	height: fit-content;
-	transition: transform 1s ease;
-	margin-top: 10px;
+	margin-right: 10px;
 	* {
 		user-select: none;
 	}
-}
-
-.preference-wrap.hidden{
-	transform: translateY(0);
+	margin-bottom: 120px;
 }
 
 .preference-options {

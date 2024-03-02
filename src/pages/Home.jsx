@@ -125,9 +125,9 @@ export default function Home() {
 	const helperMessage = (tabName) => {
 		switch (tabName) {
 			case 'timetable':
-				return 'This tab shows the fixed timetable classes within a course.'
+				return 'This tab shows the preview of fixed classes within the courses, preventing guarenteed conflicts from happening. This does not prevent conflicts from happening within changable indexes.'
 			case 'combinations':
-				return `This tab shows all the possible course combinations. Navigate to 'Timetable Preview' for a better understanding of using preferences!`
+				return `This tab shows all possible course combinations. If the timetable matched less than the input course, it is likely due to all of that course indexes has conflicts within the combination.`
 		}
 	}
 
@@ -136,49 +136,24 @@ export default function Home() {
 			{isLoading && <Loading />}
 			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">
-				<div
-					className={`search-wrapper${
-						0 < isWalkThrough && isWalkThrough < 3 ? ' highlight-element' : ''
-					}`}
-				>
-					{isWalkThrough === 1 && helperText('searchTip')}
-					{isWalkThrough === 2 && helperText('dragNDropTip')}
-					<SearchBar
-						handleSearch={handleSearch}
-						setIsLoading={setIsLoading}
-						setToggleCourseList={setToggleCourseList}
-						toggleCourseList={toggleCourseList}
-						searchValidRef={searchValidRef}
-						setTimetablePreview={setTimetablePreview}
-						isWalkThrough={isWalkThrough}
-						setisWalkThrough={setisWalkThrough}
-					></SearchBar>
-					{searched.length > 0 ? (
-						<div
-							className={`preference-wrap ${
-								toggleCourseList ? '' : ' hidden '
-							}${isWalkThrough > 2 ? ' highlight-element' : ''}
-							`}
-							style={{
-								transform: toggleCourseList
-									? ''
-									: `translateY(-${transformYValue - 15}px)`,
-								marginBottom: toggleCourseList ? '100px' : '',
-							}}
-						>
-							<PreferenceLists
-								courses={searched.map((obj) => Object.keys(obj)[0])}
-								handleApplyPreference={handleApplyPreference}
-								isWalkThrough={isWalkThrough}
-							></PreferenceLists>
-							{isWalkThrough === 3 && helperText('showPreferenceTip')}
-							{isWalkThrough === 3 &&
-								helperText('showPreferenceButtonLocationTip')}
-						</div>
-					) : (
-						<></>
-					)}
-				</div>
+				{searched.length > 0 ? (
+					<div
+						className={`preference-wrap ${toggleCourseList ? '' : ' hidden '}${
+							isWalkThrough > 2 ? ' highlight-element' : ''
+						}`}
+					>
+						<PreferenceLists
+							courses={searched.map((obj) => Object.keys(obj)[0])}
+							handleApplyPreference={handleApplyPreference}
+							isWalkThrough={isWalkThrough}
+						></PreferenceLists>
+						{isWalkThrough === 3 && helperText('showPreferenceTip')}
+						{isWalkThrough === 3 &&
+							helperText('showPreferenceButtonLocationTip')}
+					</div>
+				) : (
+					<div className="placeholder"></div>
+				)}
 				<div
 					className={`time-table-body ${
 						isWalkThrough > 1 ? ' highlight-element ' : ''
@@ -233,26 +208,53 @@ export default function Home() {
 								})}
 							</>
 						) : (
-							<TimeTable
-								key={'default_table'}
-								timetable_data={timetablePreview}
-								info={null}
-							/>
+							<>
+								<TimeTable
+									key={'default_table'}
+									timetable_data={timetablePreview}
+									info={null}
+								/>
+								<div className="placeholder"></div>
+							</>
 						)}
 					</div>
 				</div>
-				{preferedData ? (
-					<div
-						className={`exam-wrapper ${
-							isWalkThrough === 3 ? ' highlight-element ' : ''
-						}`}
-					>
-						<ExamInfo exam_schedule={convertExamSchedule(searched)} />
-						{isWalkThrough === 3 && helperText('showExamScheduleTip')}
-					</div>
-				) : (
-					<div className="placeholder"></div>
-				)}
+				<div
+					className={`search-wrapper${
+						0 < isWalkThrough && isWalkThrough < 3 ? ' highlight-element' : ''
+					}`}
+				>
+					{preferedData ? (
+						<div
+							className={`exam-wrapper ${
+								isWalkThrough === 3 ? ' highlight-element ' : ''
+							}`}
+							// style={{
+							// 	transform: toggleCourseList
+							// 		? ''
+							// 		: `translateY(-${transformYValue - 15}px)`,
+							// 	marginBottom: toggleCourseList ? '100px' : '',
+							// }}
+						>
+							<ExamInfo exam_schedule={convertExamSchedule(searched)} />
+							{isWalkThrough === 3 && helperText('showExamScheduleTip')}
+						</div>
+					) : (
+						<></>
+					)}
+					{isWalkThrough === 1 && helperText('searchTip')}
+					{isWalkThrough === 2 && helperText('dragNDropTip')}
+					<SearchBar
+						handleSearch={handleSearch}
+						setIsLoading={setIsLoading}
+						setToggleCourseList={setToggleCourseList}
+						toggleCourseList={toggleCourseList}
+						searchValidRef={searchValidRef}
+						setTimetablePreview={setTimetablePreview}
+						isWalkThrough={isWalkThrough}
+						setisWalkThrough={setisWalkThrough}
+					></SearchBar>
+				</div>
 			</div>
 			<Box
 				sx={{

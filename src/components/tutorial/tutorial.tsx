@@ -59,7 +59,7 @@ export const helperText = (text: string) => {
 						are ranked priority from top to bottom, meaning it will attempt to
 						map the highest priority first!
 					</div>
-					<div className="highlight-helper primary" style={{ bottom: '-90px' }}>
+					<div className="highlight-helper primary" style={{ bottom: '-70px' }}>
 						3) Once ready, click on [Search].
 						<br />
 						Condition: Only able to search if there are no conflicts so do
@@ -72,13 +72,15 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper secondary"
 					style={{
-						top: '300px',
-						left: '465px',
+						top: '50px',
+						right: '465px',
 						width: '300px',
 						opacity: '0.95',
 					}}
 				>
-					{`<-- The common classes within indexes of a course are shown here under
+					{'^'}
+					<br />
+					{`The common classes within indexes of a course are shown here under
 					[Timetable Preview] tab. Use this information to plan around using the
 					preferences options!`}
 				</div>
@@ -153,26 +155,25 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper primary"
 					style={{
-						top: '-115px',
-						left: '-40px',
+						top: '-60px',
+						left: '-20px',
 						width: '350px',
 						display: 'flex',
 						flexDirection: 'column',
 						justifyContent: 'center',
 					}}
 				>
-					4) You may choose your preferences to find your most suited timetable!
-					[Hover/Click] the help icon to understand what each preferences does!
-					After selection click [Apply Preference] below!
+					4) Set preferences to find your most suited timetable! After selection
+					click [Apply Preference] below!
 					<div
 						className="walk-through-scroll-btn"
-						onClick={() =>
+						onClick={() => {
 							window.scrollTo({
 								left: 0,
 								top: 400,
 								behavior: 'smooth',
 							})
-						}
+						}}
 					>
 						{'<scroll to preference btn>'}
 					</div>
@@ -183,27 +184,27 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper secondary"
 					style={{
-						top: '830px',
-						left: '-70px',
+						top: '880px',
+						left: '70px',
 						width: '150px',
 					}}
 				>
-					{'[Preference button] can be found here! ->'}
+					{'[Preference button] can be found here!'}
 				</div>
 			)
-			case 'showAfterPreferenceChangeTip':
-				return (
-					<div
-						className="highlight-helper primary"
-						style={{
-							top: '150px',
-							left: '565px',
-							width: '200px',
-						}}
-					>
-						5) After setting preferences, the timetable are ranked accordingly
-						to the preferences set!
-					</div>
-				)
+		case 'showAfterPreferenceChangeTip':
+			return (
+				<div
+					className="highlight-helper primary"
+					style={{
+						top: '150px',
+						left: '565px',
+						width: '200px',
+					}}
+				>
+					5) After setting preferences, the timetable are ranked accordingly to
+					the preferences set!
+				</div>
+			)
 	}
 }

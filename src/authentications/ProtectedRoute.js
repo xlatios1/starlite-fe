@@ -3,9 +3,9 @@ import { UserAuth } from '../authentications/AuthContext.js'
 import FooterNavigation from '@components/footernavigation/footernavigation.tsx'
 import Notification from '@components/notification/notification.tsx'
 import NavBar from '@components/navbar/navbar.tsx'
-import HomePage from '@pages/Home'
-import Upload from '@pages/Upload'
-import About from '@pages/About.tsx'
+import HomePage from '@pages/Home/Home.jsx'
+import Upload from '@pages/Upload/Upload.jsx'
+import About from '@pages/About/About.tsx'
 
 const ProtectedRoute = ({ path }) => {
 	const { fetchUserInCache, logout } = UserAuth()

@@ -7,6 +7,7 @@ module.exports = function override(config) {
 		...config.resolve,
 		alias: {
 			'@components': path.resolve(__dirname, 'src/components/'),
+			'@authentications': path.resolve(__dirname, 'src/authentications/'),
 			'@images': path.resolve(__dirname, 'src/images/'),
 			'@customhooks': path.resolve(__dirname, 'src/customhooks/'),
 			'@pages': path.resolve(__dirname, 'src/pages/'),

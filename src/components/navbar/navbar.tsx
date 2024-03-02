@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { UserAuth } from '../../authentications/AuthContext.js'
+import { UserAuth } from '@authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
-import '@styles/navbar.css'
+import './navbar.css'
 
 type NavBar = {
 	user: string
@@ -36,7 +36,7 @@ export default function NavBar({ user, active }: NavBar) {
 				>
 					<li>
 						<Link className={active === '/home' ? 'active' : null} to="/home">
-							Search
+							Home
 						</Link>
 					</li>
 					<li>

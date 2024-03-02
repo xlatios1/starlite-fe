@@ -1,5 +1,5 @@
 import React from 'react'
-import '@styles/checkbox.css'
+import './checkbox.css'
 
 type CheckBoxType = {
 	handleCheckbox: (...args: any[]) => void

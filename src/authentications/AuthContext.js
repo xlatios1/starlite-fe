@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect } from 'react'
 import { auth, db } from '@root/firebase'
-import apiRequest from '@components/apihandler/apiRequest'
 
 import {
 	createUserWithEmailAndPassword,

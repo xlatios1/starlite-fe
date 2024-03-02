@@ -1,4 +1,4 @@
-import '@styles/error.css'
+import './error.css'
 import React from 'react'
 
 type RenderAccountError = {

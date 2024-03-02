@@ -1,4 +1,3 @@
-import { convertExamSchedule } from '@utils/parsers.ts'
 import type { TimetableClassData, classDetails } from './TimeTable.tsx'
 import { finalExamOptions } from '@components/preference/preferences/finalexams.tsx'
 import { timeslotOptions } from '@components/preference/preferences/timeslot.tsx'

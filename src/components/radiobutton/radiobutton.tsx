@@ -1,5 +1,5 @@
 import React from 'react'
-import '@styles/radiobutton.css'
+import './radiobutton.css'
 
 type RadioButton = {
 	handleRadioButton: (...args: any[]) => void

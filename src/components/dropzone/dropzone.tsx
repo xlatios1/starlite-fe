@@ -4,7 +4,7 @@ import Notification from '@components/notification/notification.tsx'
 import { ExtractTextFromFile } from '@components/dropzone/extractPDFText.tsx'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { UserAuth } from '../../authentications/AuthContext.js'
+import { UserAuth } from '@authentications/AuthContext.js'
 
 interface FileWithPreview extends File {
 	preview: string // Define the type for the preview property

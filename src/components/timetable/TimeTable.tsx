@@ -1,5 +1,5 @@
 import React, { useState, useId } from 'react'
-import '@styles/timetable.css'
+import './timetable.css'
 import { convertRemarks } from '@utils/parsers.ts'
 type Details = {
 	code: string

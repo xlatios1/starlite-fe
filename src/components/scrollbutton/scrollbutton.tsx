@@ -1,5 +1,5 @@
 import React from 'react'
-import '@styles/scrollbutton.css'
+import './scrollbutton.css'
 
 
 export default function ScrollButton({ display }) {

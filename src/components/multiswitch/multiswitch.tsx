@@ -1,5 +1,5 @@
 import React from 'react'
-import '@styles/multiswitch.css'
+import './multiswitch.css'
 
 type MultiSwitch = {
 	handleMultiSwitch: (text: string, option: string) => void

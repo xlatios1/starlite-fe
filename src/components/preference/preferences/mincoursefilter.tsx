@@ -46,7 +46,7 @@ export default function MinCourseFilter({
 		<div className="preference-options mincoursefilter">
 			<div className="preference-option-title-container">
 				<p className="preference-option-title">
-					Minimum Course Filter
+					Minimum Course Shown
 					<ToolTip text={tooltipHelperText.minCourseFilter} />
 				</p>
 				<span

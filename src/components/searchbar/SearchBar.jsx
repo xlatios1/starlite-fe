@@ -29,7 +29,7 @@ export default function SearchBar({
 	const [courses, setCourses] = useState([])
 	const searchBoxRef = useRef(null)
 	const [isFocused, setIsFocused] = useState(false)
-	const [shouldHandleBlur, setShouldHandleBlur] = useState(false)
+	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
 	const searchResultRef = useRef(null)
 	const [selectedIndex, setSelectedIndex] = useState(-1)
 	const [draggedItem, setDraggedItem] = useState(null)

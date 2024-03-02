@@ -9,10 +9,12 @@ export const SearchBarComponent = ({
 	shouldHandleBlur,
 }) => {
 	const handleFocus = () => {
+		console.log('FOCUSES')
 		setIsFocused(true)
 	}
 
 	const handleBlur = () => {
+		console.log('NOT')
 		if (shouldHandleBlur) setIsFocused(false)
 	}
 

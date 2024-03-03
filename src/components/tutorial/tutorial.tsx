@@ -1,30 +1,29 @@
 import React from 'react'
 import Button from '@mui/material/Button'
 import './tutorial.css'
+import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
+import { useDispatch } from 'react-redux'
 
-export default function TutorialButton({
-	isWalkThrough,
-	setisWalkThrough,
-	stepTwo,
-	stepThree,
-}) {
+export default function TutorialButton({ walkthrough, stepTwo, stepThree }) {
+	const dispatch = useDispatch()
 	const handleTutorial = () => {
-		if (!isWalkThrough) {
+		console.log(walkthrough)
+		if (!walkthrough) {
 			if (stepThree) {
-				setisWalkThrough(3)
+				dispatch(setWalkthough(3))
 			} else if (stepTwo) {
-				setisWalkThrough(2)
+				dispatch(setWalkthough(2))
 			} else {
-				setisWalkThrough(1)
+				dispatch(setWalkthough(1))
 			}
 		} else {
-			setisWalkThrough(0)
+			dispatch(setWalkthough(0))
 		}
 	}
 
 	return (
 		<>
-			{isWalkThrough ? <div className="overlay"></div> : <></>}
+			{walkthrough > 0 ? <div className="overlay"></div> : <></>}
 			<Button
 				variant="outlined"
 				sx={{
@@ -35,7 +34,7 @@ export default function TutorialButton({
 				}}
 				onClick={handleTutorial}
 			>
-				{isWalkThrough ? 'Skip walkthrough' : 'help'}
+				{walkthrough > 0 ? 'Skip walkthrough' : 'help'}
 			</Button>
 		</>
 	)

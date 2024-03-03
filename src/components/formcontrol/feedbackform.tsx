@@ -13,7 +13,7 @@ import { formSetup } from './feedbackform.utils.tsx'
 import Notification from '@components/notification/notification.tsx'
 
 import { useDispatch } from 'react-redux'
-import { loadingActions } from '@store/loading/loadingSlice.ts'
+import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 const _ = require('lodash')
 
 const FeedbackForm = () => {
@@ -22,7 +22,6 @@ const FeedbackForm = () => {
 	const formInputs = formSetup(register)
 
 	const dispatch = useDispatch()
-	const { openLoading, closeLoading } = loadingActions
 
 	const onSubmit = async (data: FormValues) => {
 		try {

@@ -1,4 +1,6 @@
 import { timeslotToInt, daysToInt } from '@utils/parsers.ts'
+import { addCourse } from '@store/timetable/timetableSlice.ts'
+import Notification from '@components/notification/notification.tsx'
 
 export type classinfo = {
 	type: string
@@ -31,64 +33,62 @@ export type CourseDetails = {
 export type ModifiedCourseDetails = { [courseCode: string]: classinfo[] }
 
 export async function FetchCourseDetails(
-	prevSearch: object[],
-	search: string
-): Promise<[] | Array<CourseDetails> | null> {
-	let prevCourse = prevSearch.map((obj) => Object.keys(obj)[0])
+	search: string,
+	prevCourses: ModifiedCourseDetails[],
+	dispatch,
+	getCourseDetails
+) {
+	const prevCourseCode = prevCourses.map((obj) => Object.keys(obj)[0])
+
 	const text_without_punctuation: string = search.replace(
 		/[.,/#!$%^&*;:{@+|}=\-_`~()]/g,
 		''
 	)
-
 	const valid_course = []
 	const courseRegex: RegExp = /\b\w{6}\b/g
 	let match
 	let matches = []
 	while ((match = courseRegex.exec(text_without_punctuation)) !== null) {
 		const course: string = match[0].toUpperCase()
-		if (!matches.includes(course) && !prevCourse.includes(course)) {
-			try {
-				const response = await fetch(
-					`${process.env.REACT_APP_COURSE_DETAIL_API}${course}/`
-				)
-				if (response?.ok) {
-					const results = await response.json()
-					if (results.detail !== 'Not found.') {
-						let {
-							name,
-							academic_units,
-							get_exam_schedule,
-							get_common_information,
-							indexes,
-						} = results
-						valid_course.push({
+		if (!matches.includes(course) && !prevCourseCode.includes(course)) {
+			await getCourseDetails(course)
+				.unwrap()
+				.then(async (data) => {
+					if (data.detail !== 'Not found.') {
+						const courseDetail = {
 							[course]: {
-								name: name,
+								name: data.name,
 								initialism:
 									'(' +
-									name
+									data.name
 										.split(' ')
 										.map((c) => c[0])
 										.join('') +
 									')',
-								academic_units: academic_units,
-								get_exam_schedule: get_exam_schedule,
-								get_common_information: get_common_information,
-								indexes: indexes,
+								academic_units: data.academic_units,
+								get_exam_schedule: data.get_exam_schedule,
+								get_common_information: data.get_common_information,
+								indexes: data.indexes,
 							},
-						})
-						matches.push(course)
+						}
+						await dispatch(addCourse(courseDetail))
+						valid_course.push(course)
 					}
-				} else {
-					console.log(`Unable to fetch course: ${course}`)
-				}
-			} catch (error) {
-				console.log('Error fetching data:', error)
-				return null
-			}
+				})
+				.catch((err) => {
+					console.log('Error fetching data:', err)
+				})
 		}
 	}
-	return valid_course
+	if (valid_course.length > 0) {
+		Notification(
+			'success',
+			`Successfully mapped course: ${valid_course.map((c) => c).join(', ')}`,
+			1000
+		)
+	} else {
+		Notification('info', 'No unique valid course found!', 1000)
+	}
 }
 
 // [[[],[],[],["cz3005","lec","2"],[]],   //mon

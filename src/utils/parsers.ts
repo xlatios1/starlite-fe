@@ -4,7 +4,7 @@ export const convertExamSchedule = (searched) => {
 		let examSchedule = obj[course].get_exam_schedule
 
 		if (!examSchedule) {
-			return `${course}: Not Applicable`
+			return `Exam Schedule: Not Applicable`
 		}
 		const { date, time } = examSchedule
 		const monthNames = [
@@ -30,7 +30,10 @@ export const convertExamSchedule = (searched) => {
 			''
 		)} hrs`
 
-		return `${course}: ${dd}-${
+		// return `${course}: ${dd}-${
+		// 	monthNames[parseInt(mm)]
+		// }-${yyyy} ${formattedTime}`
+		return `Exam Schedule: ${dd}-${
 			monthNames[parseInt(mm)]
 		}-${yyyy} ${formattedTime}`
 	})

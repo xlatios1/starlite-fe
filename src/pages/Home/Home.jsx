@@ -12,10 +12,13 @@ import { convertExamSchedule } from '@utils/parsers.ts'
 import { GenerateTimetable } from '@utils/generatetimetable.tsx'
 import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
 import { handlePreferences } from '@components/timetable/TimeTableCalc.tsx'
+import { TimetableHelper } from './TimetableHelper.tsx'
+import { TimetableTab } from './TimetableTab.tsx'
 import './home.css'
 
-import { loadingActions } from '@store/loading/loadingSlice.ts'
-import { useDispatch } from 'react-redux'
+import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
+import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
+import { useDispatch, useSelector } from 'react-redux'
 const _ = require('lodash')
 
 export default function Home() {
@@ -26,14 +29,12 @@ export default function Home() {
 	const [preferedData, setPreferedData] = useState(null) //timetable option datas
 	const [searched, setSearched] = useState([]) //searched courses
 	const [toggleCourseList, setToggleCourseList] = useState(true)
-	const [transformYValue, setTransformYValue] = useState(0)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [activeTab, setActiveTab] = useState('timetable')
-	const [isWalkThrough, setisWalkThrough] = useState(0)
 
 	const dispatch = useDispatch()
-	const { openLoading, closeLoading } = loadingActions
+	const walkthrough = useSelector((state) => state.walkthrough.walkthrough)
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -66,8 +67,8 @@ export default function Home() {
 				setToggleCourseList(false)
 				setActiveTab('combinations')
 				Notification('success', 'Search successful', 1000)
-				if (isWalkThrough) {
-					setisWalkThrough(3)
+				if (walkthrough > 0) {
+					dispatch(setWalkthough(3))
 				}
 			}
 			dispatch(closeLoading())
@@ -85,23 +86,6 @@ export default function Home() {
 		}
 	}, [preferedData])
 
-	useEffect(() => {
-		if (searchValidRef.current) {
-			const observer = new ResizeObserver((entries) => {
-				for (let entry of entries) {
-					if (entry.target === searchValidRef.current) {
-						setTransformYValue(entry.target.clientHeight)
-					}
-				}
-			})
-			observer.observe(searchValidRef.current)
-
-			return () => {
-				observer.disconnect()
-			}
-		}
-	}, [searchValidRef.current, transformYValue])
-
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
@@ -114,8 +98,8 @@ export default function Home() {
 			)
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
-			if (isWalkThrough !== 0) {
-				setisWalkThrough(4)
+			if (walkthrough > 0) {
+				dispatch(setWalkthough(4))
 			}
 		}, 1000)
 	}
@@ -126,15 +110,6 @@ export default function Home() {
 		}
 	}
 
-	const helperMessage = (tabName) => {
-		switch (tabName) {
-			case 'timetable':
-				return 'This tab shows the preview of fixed classes within the courses, preventing guarenteed conflicts from happening. This does not prevent conflicts from happening within changable indexes.'
-			case 'combinations':
-				return `This tab shows all possible course combinations. If the timetable matched less than the input course, it is likely due to all of that course indexes has conflicts within the combination.`
-		}
-	}
-
 	return (
 		<div className="homepage">
 			<div className="upper-detail-wrapper"></div>
@@ -142,62 +117,39 @@ export default function Home() {
 				{searched.length > 0 ? (
 					<div
 						className={`preference-wrap ${toggleCourseList ? '' : ' hidden '}${
-							isWalkThrough > 2 ? ' highlight-element' : ''
+							walkthrough > 2 ? ' highlight-element' : ''
 						}`}
 					>
 						<PreferenceLists
 							courses={searched.map((obj) => Object.keys(obj)[0])}
 							handleApplyPreference={handleApplyPreference}
-							isWalkThrough={isWalkThrough}
 						></PreferenceLists>
-						{isWalkThrough === 3 && helperText('showPreferenceTip')}
-						{isWalkThrough === 3 &&
-							helperText('showPreferenceButtonLocationTip')}
+						{walkthrough === 3 && helperText('showPreferenceTip')}
+						{walkthrough === 3 && helperText('showPreferenceButtonLocationTip')}
 					</div>
 				) : (
 					<div className="placeholder"></div>
 				)}
 				<div
 					className={`time-table-body ${
-						isWalkThrough > 1 ? ' highlight-element ' : ''
+						walkthrough > 1 ? ' highlight-element ' : ''
 					}`}
 				>
-					{isWalkThrough === 2 && helperText('searchPreviewTip')}
-					{isWalkThrough === 2 && helperText('showUnableToToggleTabTip')}
-					{isWalkThrough === 3 && helperText('showTimetableToggleTip')}
-					{isWalkThrough === 3 && helperText('showCombinationNoChangeTip')}
-					{isWalkThrough === 4 && helperText('showAfterPreferenceChangeTip')}
-					<div className="time-table-tab">
-						<div
-							className={`time-table-tab-option ${
-								activeTab === 'timetable' ? 'active' : ''
-							}`}
-							style={{ borderTopLeftRadius: '15px' }}
-							onClick={() => openTab('timetable')}
-						>
-							Timetable Preview
-						</div>
-						<div
-							className={`time-table-tab-option ${
-								activeTab === 'combinations' ? 'active' : ''
-							} ${preferedData ? '' : 'disabled'}`}
-							style={{ borderTopRightRadius: '15px' }}
-							onClick={() => openTab('combinations')}
-						>
-							Combinations
-						</div>
-					</div>
-					<div className="time-table-helper">
-						<i
-							className="fa fa-info-circle"
-							style={{ color: 'lightblue', margin: '0 10px' }}
-						></i>
-						{helperMessage(activeTab)}
-					</div>
+					{walkthrough === 2 && helperText('searchPreviewTip')}
+					{walkthrough === 2 && helperText('showUnableToToggleTabTip')}
+					{walkthrough === 3 && helperText('showTimetableToggleTip')}
+					{walkthrough === 3 && helperText('showCombinationNoChangeTip')}
+					{walkthrough === 4 && helperText('showAfterPreferenceChangeTip')}
+					<TimetableTab
+						activeTab={activeTab}
+						openTab={openTab}
+						isDisabled={Boolean(preferedData)}
+					/>
+					<TimetableHelper activeTab={activeTab} />
 					<div className="time-table-wrapper">
 						{activeTab === 'combinations' ? (
 							<>
-								{isWalkThrough === 3 && helperText('showCourseIndexTip')}
+								{walkthrough === 3 && helperText('showCourseIndexTip')}
 								{preferedData.map(({ timetable, info }, key) => {
 									return (
 										<div className="time-table-container" key={key}>
@@ -221,13 +173,13 @@ export default function Home() {
 				</div>
 				<div
 					className={`search-wrapper${
-						0 < isWalkThrough && isWalkThrough < 3 ? ' highlight-element' : ''
+						0 < walkthrough && walkthrough < 3 ? ' highlight-element' : ''
 					}`}
 				>
-					{preferedData ? (
+					{/* {preferedData ? (
 						<div
 							className={`exam-wrapper ${
-								isWalkThrough === 3 ? ' highlight-element ' : ''
+								walkthrough === 3 ? ' highlight-element ' : ''
 							}`}
 							// style={{
 							// 	transform: toggleCourseList
@@ -237,21 +189,20 @@ export default function Home() {
 							// }}
 						>
 							<ExamInfo exam_schedule={convertExamSchedule(searched)} />
-							{isWalkThrough === 3 && helperText('showExamScheduleTip')}
+							{walkthrough === 3 && helperText('showExamScheduleTip')}
 						</div>
 					) : (
 						<></>
-					)}
-					{isWalkThrough === 1 && helperText('searchTip')}
-					{isWalkThrough === 2 && helperText('dragNDropTip')}
+					)} */}
+					{walkthrough === 1 && helperText('searchTip')}
+					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
 						handleSearch={handleSearch}
 						setToggleCourseList={setToggleCourseList}
 						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}
 						setTimetablePreview={setTimetablePreview}
-						isWalkThrough={isWalkThrough}
-						setisWalkThrough={setisWalkThrough}
+						walkthrough={walkthrough}
 					></SearchBar>
 				</div>
 			</div>
@@ -266,8 +217,7 @@ export default function Home() {
 			>
 				<ScrollButton display={Boolean(preferedData)} />
 				<TutorialButton
-					isWalkThrough={isWalkThrough}
-					setisWalkThrough={setisWalkThrough}
+					walkthrough={walkthrough}
 					stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
 					stepThree={Boolean(preferedData)}
 				/>

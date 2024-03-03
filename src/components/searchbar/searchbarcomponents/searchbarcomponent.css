@@ -29,8 +29,7 @@
 .search-bar-container .search-bar-wrapper{
     position: absolute;
     top: 50px;
-    min-width: 250px;
-    max-width: 300px;
+    width: 100%;
 }
 
 .search-bar-wrapper .results-list {

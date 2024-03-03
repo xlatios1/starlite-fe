@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react'
 import Dropzone from '@components/dropzone/dropzone.tsx'
 
 import { useDispatch } from 'react-redux'
-import { loadingActions } from '@store/loading/loadingSlice.ts'
+import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 
 export default function Upload() {
 	const [currentTab, setCurrentTab] = useState('upload')
 	const dispatch = useDispatch()
-	const { openLoading, closeLoading } = loadingActions
+
 	useEffect(() => {
 		dispatch(openLoading())
 		setTimeout(() => {

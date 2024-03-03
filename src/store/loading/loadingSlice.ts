@@ -21,8 +21,5 @@ const loadingSlice = createSlice({
 	},
 })
 
-const loadingActions = loadingSlice.actions
-const loadingReducer = loadingSlice.reducer
-
 export default loadingSlice
-export { loadingActions, loadingReducer }
+export const { openLoading, closeLoading } = loadingSlice.actions

@@ -86,8 +86,9 @@
 			.valid-course-name {
 				position: relative;
 				display: flex;
-				width: 187px;
+				width: 205px;
 				align-items: center;
+				flex-direction: column;
 			}
 			.remove-course-name {
 				display: flex;

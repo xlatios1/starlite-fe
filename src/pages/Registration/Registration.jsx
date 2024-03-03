@@ -8,7 +8,7 @@ import { handleEmailChanges } from '@root/components/emailhandler/handleEmailCha
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
-import { loadingActions } from '@store/loading/loadingSlice.ts'
+import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 
 export default function Registration() {
 	const registerEmail = useRef(null)
@@ -22,9 +22,7 @@ export default function Registration() {
 	const [errorMessages, setErrorMessages] = useState([])
 	const { createUser, fetchUserInCache } = UserAuth()
 	const navigate = useNavigate()
-
 	const dispatch = useDispatch()
-	const { openLoading, closeLoading } = loadingActions
 
 	const curUser = fetchUserInCache()
 	useEffect(() => {

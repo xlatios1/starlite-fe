@@ -2,21 +2,22 @@ import React from 'react'
 import { SearchResult } from './SearchResult'
 
 export const SearchResultList = ({
-	results,
+	suggestions,
 	handleSelect,
 	setShouldHandleBlur,
 	selectedIndex,
 }) => {
 	return (
 		<div className="results-list">
-			{results.length > 0 ? (
-				results.map((result, id) => {
+			{suggestions.length > 0 ? (
+				suggestions.map((result, id) => {
 					return (
 						<SearchResult
-							result={result}
 							key={id}
+							result={result}
 							handleSelect={handleSelect}
 							setShouldHandleBlur={setShouldHandleBlur}
+							selectedIndex={selectedIndex === id}
 						/>
 					)
 				})

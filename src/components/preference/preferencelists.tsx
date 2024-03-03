@@ -11,7 +11,7 @@ import {
 } from '@components/preference/preferenceUtils.tsx'
 import './preferencelists.css'
 
-export default function PreferenceLists({ courses, handleApplyPreference, isWalkThrough }) {
+export default function PreferenceLists({ courses, handleApplyPreference }) {
 	const initialState = {
 		minCourseFilter: courses.length,
 		freeDay: [],
@@ -50,7 +50,7 @@ export default function PreferenceLists({ courses, handleApplyPreference, isWalk
 			value: initialState[preferenceType],
 		})
 	}
-	console.log(isWalkThrough)
+
 	return (
 		<div>
 			<div className="preference-container">

@@ -25,10 +25,10 @@ export default function FinalExams({
 	return (
 		<div className="preference-options finalexam">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">
+				<div className="preference-option-title">
 					Final Exams
 					<ToolTip text={tooltipHelperText.finalExams} />
-				</p>
+				</div>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('finalExam')}

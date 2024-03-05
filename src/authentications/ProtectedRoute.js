@@ -32,7 +32,7 @@ const ProtectedRoute = ({ path }) => {
 	return (
 		<>
 			<NavBar user={curUser?.email} active={path} />
-			{path === '/home' && <HomePage />}
+			{path === '/home' && <HomePage user={curUser} />}
 			{path === '/upload' && <Upload />}
 			{path === '/about' && <About />}
 			<FooterNavigation />

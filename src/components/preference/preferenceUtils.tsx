@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import MinCourseFilter from './preferences/mincoursefilter'
 
 export const days = [
 	'Monday',

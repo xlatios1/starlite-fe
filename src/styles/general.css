@@ -30,13 +30,8 @@
     --clr-green-dark: hsl(125, 67%, 44%);
     --clr-green-light: hsl(125, 71%, 66%);
     --clr-black: #222;
-    --transition: all 0.3s linear;
-    --spacing: 0.1rem;
-    --radius: 0.25rem;
     --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    --max-width: 1170px;
-    --fixed-width: 450px;
     --clr-orange-1: hsl(12, 83%, 98%);
     --clr-orange-2: hsl(14, 91%, 95%);
     --clr-orange-3: hsl(12, 89%, 89%);
@@ -65,5 +60,6 @@ body {
   line-height: 1.5;
   font-size: 0.875rem;
   min-width: 1000px;
+  width: 100%;
   min-height: fit-content;
 }

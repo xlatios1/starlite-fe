@@ -3,7 +3,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import FreeDay from '@components/preference/preferences/freeday.tsx'
 // import PriorityOfCourses from '@components/preference/preferences/priorityofcourses.tsx'
 import Timeslot from '@components/preference/preferences/timeslot.tsx'
-import FinalExams from '@components/preference/preferences/finalexams.tsx'
+// import FinalExams from '@components/preference/preferences/finalexams.tsx'
 import MinCourseFilter from '@components/preference/preferences/mincoursefilter.tsx'
 import {
 	days,
@@ -17,7 +17,7 @@ export default function PreferenceLists({ courses, handleApplyPreference }) {
 		freeDay: [],
 		// poc: initializeState(courses, 0),
 		timeslot: initializeState(days, 'Any Time'),
-		finalExam: 'Any Exams',
+		// finalExam: 'Any Exams',
 	}
 
 	const reducer = (state: typeof initialState, action) => {
@@ -76,12 +76,12 @@ export default function PreferenceLists({ courses, handleApplyPreference }) {
 					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 				/>
-				<FinalExams
+				{/* <FinalExams
 					finalExam={statePreference.finalExam}
 					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 					courses={courses}
-				/>
+				/> */}
 				<div className="preference-options setPreference">
 					<button
 						className="fetch-btn"

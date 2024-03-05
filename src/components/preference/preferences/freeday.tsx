@@ -21,10 +21,10 @@ export default function FreeDay({ freeDay, dispatchPreference, handleReset }) {
 	return (
 		<div className="preference-options freeday">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">
+				<div className="preference-option-title">
 					Free days
 					<ToolTip text={tooltipHelperText.freeDays} />
-				</p>
+				</div>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('freeDay')}

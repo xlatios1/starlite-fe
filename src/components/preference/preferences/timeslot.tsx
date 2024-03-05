@@ -23,10 +23,10 @@ export default function Timeslot({
 	return (
 		<div className="preference-options timeslot">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">
+				<div className="preference-option-title">
 					Timeslots
 					<ToolTip text={tooltipHelperText.timeSlot} />
-				</p>
+				</div>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('timeslot')}
@@ -42,6 +42,7 @@ export default function Timeslot({
 							text={day}
 							options={timeslotOptions}
 							check={timeslot[day]}
+							disabled={false}
 						></MultiSwitch>
 					</div>
 				)

@@ -45,10 +45,10 @@ export default function MinCourseFilter({
 	return (
 		<div className="preference-options mincoursefilter">
 			<div className="preference-option-title-container">
-				<p className="preference-option-title">
+				<div className="preference-option-title">
 					Minimum Course Shown
 					<ToolTip text={tooltipHelperText.minCourseFilter} />
-				</p>
+				</div>
 				<span
 					className="clear-filter-btn"
 					onClick={() => handleReset('minCourseFilter')}

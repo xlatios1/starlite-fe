@@ -1,20 +1,17 @@
-import type { TimetableClassData, classDetails } from './TimeTable.tsx'
-import { finalExamOptions } from '@components/preference/preferences/finalexams.tsx'
+import type { TimetableClassData, classDetails } from '../TimeTable.tsx'
 import { timeslotOptions } from '@components/preference/preferences/timeslot.tsx'
 import { days } from '@components/preference/preferenceUtils.tsx'
 
 export const handlePreferences = (
 	data: {
-		timetable: TimetableClassData[]
+		timetable_data: TimetableClassData[]
 		info: [string, string][]
 		rank: number
 	}[],
-	preferences,
-	examSchedule
+	preferences
 ) => {
 	const parsedPreferences = {
 		...preferences,
-		finalExam: finalExamOptions.indexOf(preferences.finalExam),
 		freeDay: preferences.freeDay.map((day: string) => days.indexOf(day)),
 		timeslot: Object.entries(preferences.timeslot).reduce(
 			(acc, [day, timeSlotValue]: [string, string]) => {
@@ -29,21 +26,15 @@ export const handlePreferences = (
 	}
 
 	const rankedData = data.map((item) => ({
-		timetable: [...item.timetable],
+		timetable: [...item.timetable_data],
 		info: [...item.info],
 		rank: item.rank,
 	}))
 
 	console.log('data', data)
 	console.log('rankedData', rankedData)
-	console.log('exam_schedule', examSchedule)
 	console.log('parsedPreferences', parsedPreferences)
 
-	const countOfNoExam = examSchedule.filter((exams: string) =>
-		exams.includes('Not Applicable')
-	).length
-	const countOfTotalExam = examSchedule.length
-	const KValue = 0.000001
 	const result = []
 	for (let i = 0; i < rankedData.length; i++) {
 		if (rankedData[i].info.length >= parsedPreferences.minCourseFilter) {
@@ -80,20 +71,6 @@ export const handlePreferences = (
 					}
 				}
 				rankedData[i].rank *= (end - start - count) / (end - start)
-			}
-			// Check for FinalExams, using laphase transform
-			if (parsedPreferences.finalExam !== 0) {
-				switch (parsedPreferences.finalExam) {
-					case 1: // With Exam
-						rankedData[i].rank *=
-							(countOfTotalExam - countOfNoExam + KValue) /
-							(countOfTotalExam + KValue)
-						break
-					case 2: // With No Exam
-						rankedData[i].rank *=
-							(countOfNoExam + KValue) / (countOfTotalExam + KValue)
-						break
-				}
 			}
 			result.push(rankedData[i])
 		}

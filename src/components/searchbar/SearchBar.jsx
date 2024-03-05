@@ -2,17 +2,18 @@ import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent'
 import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import SavedPlan from './searchbarcomponents/SavedPlan.tsx'
 import {
 	FetchCourseDetails,
-	generateCommonInfomationDetails,
-	GenerateTimetableFormat,
-} from '@utils/generatecommoninfo.ts'
+	// generateCommonInfomationDetails,
+	// GenerateTimetableFormat,
+} from '@components/searchbar/SearchBar.actions.ts'
+import { GenerateCommonTimetable } from '@components/timetable/generatetimetable.tsx'
 import IconButton from '@mui/material/IconButton'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { convertExamSchedule } from '@utils/parsers.ts'
 import './searchbar.css'
 import './searchbarcomponents/searchbarcomponent.css'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import {
@@ -35,6 +36,10 @@ export default function SearchBar({
 }) {
 	const [suggestions, setSuggestions] = useState([])
 	const [input, setInput] = useState('')
+	const [ordered, setOrdered] = useState({
+		bestChance: false,
+		noExams: 0,
+	})
 	const searchBoxRef = useRef(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
@@ -76,8 +81,7 @@ export default function SearchBar({
 	}
 
 	useEffect(() => {
-		const customCourses = generateCommonInfomationDetails(courses)
-		setTimetablePreview(GenerateTimetableFormat(customCourses).timetable)
+		setTimetablePreview(GenerateCommonTimetable(courses))
 	}, [courses])
 
 	const handleOnSearchValid = () => {
@@ -156,6 +160,7 @@ export default function SearchBar({
 			}
 		} else if (event.key === 'Escape') {
 			setSelectedIndex(-1)
+			searchBoxRef.current.blur()
 		}
 	}
 
@@ -186,6 +191,26 @@ export default function SearchBar({
 						}`}
 						ref={searchValidRef}
 					>
+						<SavedPlan />
+						<div className="search-bottom-wrappper">
+							<div className="search-bottom-checkbox">
+								<input
+									type="checkbox"
+									id={'sort'}
+									onChange={() =>
+										setOrdered((prev) => {
+											const previous = { ...prev }
+											previous.bestChance = !previous.bestChance
+											return previous
+										})
+									}
+									checked={ordered.bestChance}
+								/>
+								<label id={'sort'} htmlFor={'sort'}>
+									Recommended Sort
+								</label>
+							</div>
+						</div>
 						<p className="search-valid-helper">
 							<i
 								className="fa fa-info-circle"
@@ -216,7 +241,9 @@ export default function SearchBar({
 												course_code +
 												': ' +
 												c[course_code].name}
-											<br />
+											<hr
+												style={{ width: '100%', border: '0.5px solid black' }}
+											/>
 											<p
 												style={{
 													width: '100%',

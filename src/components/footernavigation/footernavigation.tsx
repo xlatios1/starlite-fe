@@ -13,6 +13,7 @@ const FooterNavigation = () => {
 				position: 'relative',
 				bottom: '0',
 				marginTop: '15px',
+				width: '100%',
 			}}
 		>
 			<Grid

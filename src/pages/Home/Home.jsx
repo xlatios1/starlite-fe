@@ -5,15 +5,13 @@ import TimeTable from '@components/timetable/TimeTable.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
-import ExamInfo from '@components/examinfo/examinfo.tsx'
+import { UserAuth } from '@authentications/AuthContext.js'
 import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
-import { convertExamSchedule } from '@utils/parsers.ts'
-import { GenerateTimetable } from '@utils/generatetimetable.tsx'
-import { GenerateTimetableFormat } from '@utils/generatecommoninfo.ts'
-import { handlePreferences } from '@components/timetable/TimeTableCalc.tsx'
-import { TimetableHelper } from './TimetableHelper.tsx'
-import { TimetableTab } from './TimetableTab.tsx'
+import { GenerateTimetable } from '@components/timetable/generatetimetable.tsx'
+import { handlePreferences } from '@components/timetable/timetableUtils/TimeTableCalc.tsx'
+import { TimetableHelper } from '@components/timetable/timetableUtils/TimetableHelper.tsx'
+import { TimetableTab } from '@components/timetable/timetableUtils/TimetableTab.tsx'
 import './home.css'
 
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
@@ -21,13 +19,14 @@ import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
 const _ = require('lodash')
 
-export default function Home() {
+export default function Home({ user }) {
 	const initializedTimetable = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-	const [originalData, setOriginalData] = useState(null) //timetable option datas
-	const [preferedData, setPreferedData] = useState(null) //timetable option datas
-	const [searched, setSearched] = useState([]) //searched courses
+
+	const { getFirebaseData, setFirebaseData } = UserAuth()
+	const [originalData, setOriginalData] = useState([]) //timetable option datas
+	const [preferedData, setPreferedData] = useState([]) //timetable option datas
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
@@ -41,7 +40,6 @@ export default function Home() {
 			minCourseFilter: search.length,
 			freeDay: [],
 			timeslot: [],
-			finalExam: 'Any Exams',
 		}
 
 		dispatch(openLoading())
@@ -51,19 +49,9 @@ export default function Home() {
 					'Error! Please resolve course conflict before search!'
 				Notification('error', errorMessage, 2000)
 			} else {
-				setSearched(search)
-				const compatibleTimetable = GenerateTimetable(search)
-				const data = compatibleTimetable.map(({ timetable_data, info }) =>
-					GenerateTimetableFormat(timetable_data, info)
-				)
+				const data = GenerateTimetable(search)
 				setOriginalData(data)
-				setPreferedData(
-					handlePreferences(
-						data,
-						initialPreferences,
-						convertExamSchedule(search)
-					)
-				)
+				setPreferedData(handlePreferences(data, initialPreferences))
 				setToggleCourseList(false)
 				setActiveTab('combinations')
 				Notification('success', 'Search successful', 1000)
@@ -89,13 +77,7 @@ export default function Home() {
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
-			setPreferedData(
-				handlePreferences(
-					originalData,
-					preference,
-					convertExamSchedule(searched)
-				)
-			)
+			setPreferedData(handlePreferences(originalData, preference))
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
 			if (walkthrough > 0) {
@@ -114,14 +96,14 @@ export default function Home() {
 		<div className="homepage">
 			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">
-				{searched.length > 0 ? (
+				{originalData.length > 0 ? (
 					<div
 						className={`preference-wrap ${toggleCourseList ? '' : ' hidden '}${
 							walkthrough > 2 ? ' highlight-element' : ''
 						}`}
 					>
 						<PreferenceLists
-							courses={searched.map((obj) => Object.keys(obj)[0])}
+							courses={originalData.map((obj) => Object.keys(obj)[0])}
 							handleApplyPreference={handleApplyPreference}
 						></PreferenceLists>
 						{walkthrough === 3 && helperText('showPreferenceTip')}
@@ -143,7 +125,7 @@ export default function Home() {
 					<TimetableTab
 						activeTab={activeTab}
 						openTab={openTab}
-						isDisabled={Boolean(preferedData)}
+						isDisabled={preferedData.length > 0}
 					/>
 					<TimetableHelper activeTab={activeTab} />
 					<div className="time-table-wrapper">
@@ -176,24 +158,6 @@ export default function Home() {
 						0 < walkthrough && walkthrough < 3 ? ' highlight-element' : ''
 					}`}
 				>
-					{/* {preferedData ? (
-						<div
-							className={`exam-wrapper ${
-								walkthrough === 3 ? ' highlight-element ' : ''
-							}`}
-							// style={{
-							// 	transform: toggleCourseList
-							// 		? ''
-							// 		: `translateY(-${transformYValue - 15}px)`,
-							// 	marginBottom: toggleCourseList ? '100px' : '',
-							// }}
-						>
-							<ExamInfo exam_schedule={convertExamSchedule(searched)} />
-							{walkthrough === 3 && helperText('showExamScheduleTip')}
-						</div>
-					) : (
-						<></>
-					)} */}
 					{walkthrough === 1 && helperText('searchTip')}
 					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar

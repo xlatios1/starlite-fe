@@ -178,3 +178,34 @@ span.fa {
 span.fa {
 	/* border-top: 1px solid #000; */
 }
+
+.search-valid-plan{
+	display:flex;
+	width: 100%;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.search-bottom-wrappper{
+	height: fit-content;
+	width: 100%;
+	display: flex;
+	position: relative;
+	align-items: center;
+	justify-content: start;
+	flex-direction: row;
+	margin: 0 5px 10px 15px;
+	.search-bottom-checkbox{
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+	input#sort{
+		width: fit-content;
+		margin: 0 5px 0 10px;
+	}
+	label#sort {
+		user-select: none;
+	}
+}

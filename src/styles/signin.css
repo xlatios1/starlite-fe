@@ -5,6 +5,7 @@
   height: 100vh;
   background: var(--clr-grey-10);
   color: var(--clr-grey-1);
+  width: 100%;
 }
 
 .login-initializer .form {

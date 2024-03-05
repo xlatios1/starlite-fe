@@ -3,7 +3,6 @@ import Registration from '@pages/Registration/Registration.jsx'
 import SignIn from '@pages/SignIn/SignIn.jsx'
 import NotFound from '@pages/NotFound/NotFound.jsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthContextProvider } from './authentications/AuthContext.js'
 import ProtectedRoute from './authentications/ProtectedRoute.js'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -16,7 +15,7 @@ export default function App() {
 		))
 
 	return (
-		<AuthContextProvider>
+		<>
 			<Loading />
 			<ToastContainer
 				position="top-center"
@@ -38,7 +37,7 @@ export default function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Router>
-			<div className="version-tag">Beta version: 2.16.5</div>
-		</AuthContextProvider>
+			<div className="version-tag">Beta version: 2.17.0</div>
+		</>
 	)
 }

@@ -84,6 +84,28 @@ export const AuthContextProvider = ({ children }) => {
 		})
 	}
 
+	const getFirebaseData = async (user) => {
+		console.log('getFirebaseData called!')
+		return await getDoc(doc(db, 'StarliteUserData', user.uid))
+			.then((data) => {
+				if (data.exists()) {
+					return data.data()
+				} else {
+					return null
+				}
+			})
+			.catch(() => {
+				throw new Error('Unable to retrieve firebase data.')
+			})
+	}
+
+	const setFirebaseData = async (user, payload) => {
+		console.log('setFirebaseData called!')
+		await setDoc(doc(db, 'StarliteUserData', user.uid), payload, {
+			merge: true,
+		})
+	}
+
 	const getFileData = async (user, fields = null) => {
 		console.log('getFileData called!')
 		function dataURLtoBlob(dataURL) {
@@ -169,6 +191,8 @@ export const AuthContextProvider = ({ children }) => {
 				setData,
 				getFileData,
 				rmData,
+				getFirebaseData,
+				setFirebaseData,
 			}}
 		>
 			{children}

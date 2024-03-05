@@ -19,7 +19,6 @@ type TimetableData = {
 }
 
 export default function TimeTable({ timetable_data, info }: TimetableData) {
-	const randID = useId()
 	const [isClicked, setIsClicked] = useState(false)
 	const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -96,7 +95,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 		}
 	}
 
-	for (let col of timetable_data) {
+	for (const col of timetable_data) {
 		for (let row = 0; row < 16; row++, unikey++) {
 			if ('duration' in col[row]) {
 				let classDetails = col[row] as classDetails

@@ -8,22 +8,24 @@ export const SearchResultList = ({
 	selectedIndex,
 }) => {
 	return (
-		<div className="results-list">
-			{suggestions.length > 0 ? (
-				suggestions.map((result, id) => {
-					return (
-						<SearchResult
-							key={id}
-							result={result}
-							handleSelect={handleSelect}
-							setShouldHandleBlur={setShouldHandleBlur}
-							selectedIndex={selectedIndex === id}
-						/>
-					)
-				})
-			) : (
-				<div className="search-result">No courses found.</div>
-			)}
+		<div className="search-bar-wrapper">
+			<div className="results-list">
+				{suggestions.length > 0 ? (
+					suggestions.map((result, id) => {
+						return (
+							<SearchResult
+								key={id}
+								result={result}
+								handleSelect={handleSelect}
+								setShouldHandleBlur={setShouldHandleBlur}
+								selectedIndex={selectedIndex === id}
+							/>
+						)
+					})
+				) : (
+					<div className="search-result">No courses found.</div>
+				)}
+			</div>
 		</div>
 	)
 }

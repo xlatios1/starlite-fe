@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-export default function SavedPlan({ plan, setPlan, setIsInitialRender }) {
+export default function SavedPlan({ plan, setPlan, setOrdered }) {
 	const handleChange = (event: SelectChangeEvent) => {
 		setPlan(+event.target.value)
+		setOrdered((prev) => {
+			const previous = { ...prev }
+			previous.bestChance = false
+			return previous
+		})
 	}
-
-	// useEffect(() => {
-	// 	setIsInitialRender(false)
-	// }, [setIsInitialRender])
 
 	return (
 		<FormControl
@@ -25,7 +26,10 @@ export default function SavedPlan({ plan, setPlan, setIsInitialRender }) {
 				value={plan.toString()}
 				onChange={handleChange}
 				displayEmpty
-				inputProps={{ 'aria-label': 'Without label' }}
+				inputProps={{
+					'aria-label': 'Without label',
+					MenuProps: { disableScrollLock: true },
+				}}
 				sx={{ width: '260px', height: '30px' }}
 			>
 				<MenuItem value={1}>Plan 1</MenuItem>

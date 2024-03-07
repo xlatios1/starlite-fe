@@ -4,9 +4,6 @@ import { SearchResultList } from './searchbarcomponents/SearchResultList'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
 import SavedPlan from './searchbarcomponents/SavedPlan.tsx'
 import { FetchCourseDetails } from '@components/searchbar/SearchBar.actions.ts'
-import IconButton from '@mui/material/IconButton'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import { convertExamSchedule } from '@utils/parsers.ts'
 import './searchbar.css'
 import './searchbarcomponents/searchbarcomponent.css'
 import { useDispatch } from 'react-redux'
@@ -16,7 +13,8 @@ import {
 	useLazyGetCourseDetailsQuery,
 } from '@store/course/courseApi.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
-import { removeCourse, reorderCourses } from '@store/course/courseSlice.ts'
+import { reorderCourses } from '@store/course/courseSlice.ts'
+import SearchCourseList from '@components/searchbar/SearchCourseList.tsx'
 
 export default function SearchBar({
 	courses,
@@ -37,7 +35,6 @@ export default function SearchBar({
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
 	const [selectedIndex, setSelectedIndex] = useState(-1)
-	const [draggedItem, setDraggedItem] = useState(null)
 
 	const dispatch = useDispatch()
 	const [findCourse] = useLazyFindCourseContainQuery()
@@ -67,6 +64,7 @@ export default function SearchBar({
 					}))
 				})
 				.then((data) => setSuggestions(data))
+				.catch((error) => console.log(error))
 		} else {
 			setSuggestions([])
 		}
@@ -106,37 +104,6 @@ export default function SearchBar({
 	// 	}
 	// }, [isFocused, input])
 
-	const handleDragStart = (e, course_code) => {
-		setDraggedItem(course_code)
-	}
-
-	const handleDragOver = (e) => {
-		e.preventDefault()
-	}
-
-	const handleDrop = (e, droppedCourse) => {
-		const updatedCourseList = [...courses]
-		const draggedCourseIndex = updatedCourseList.findIndex(
-			(course) => course === draggedItem
-		)
-		const droppedCourseIndex = updatedCourseList.findIndex(
-			(course) => course === droppedCourse
-		)
-		updatedCourseList.splice(draggedCourseIndex, 1)
-		updatedCourseList.splice(droppedCourseIndex, 0, draggedItem)
-		dispatch(reorderCourses(updatedCourseList))
-		setOrdered((prev) => {
-			const previous = { ...prev }
-			previous.bestChance = false
-			return previous
-		})
-		setDraggedItem(null)
-	}
-
-	const handleDragEnd = () => {
-		setDraggedItem(null)
-	}
-
 	const handleKeyDown = (event) => {
 		if (event.key === 'ArrowDown') {
 			setSelectedIndex((prevIndex) =>
@@ -162,7 +129,7 @@ export default function SearchBar({
 			const sortedCourse = [...courses].sort((a, b) => {
 				return (
 					b[Object.keys(b)[0]].indexes.length -
-					a[Object.keys(a)[0]].indexes.length 
+					a[Object.keys(a)[0]].indexes.length
 				)
 			})
 			dispatch(reorderCourses(sortedCourse))
@@ -179,14 +146,12 @@ export default function SearchBar({
 				shouldHandleBlur={shouldHandleBlur}
 			/>
 			{isFocused && input.split('')[input.split('').length - 1] !== ' ' && (
-				<div className="search-bar-wrapper">
-					<SearchResultList
-						suggestions={suggestions}
-						handleSelect={handleSelect}
-						setShouldHandleBlur={setShouldHandleBlur}
-						selectedIndex={selectedIndex}
-					/>
-				</div>
+				<SearchResultList
+					suggestions={suggestions}
+					handleSelect={handleSelect}
+					setShouldHandleBlur={setShouldHandleBlur}
+					selectedIndex={selectedIndex}
+				/>
 			)}
 			<div className="search-valid-wrapper">
 				<div
@@ -195,7 +160,7 @@ export default function SearchBar({
 					}`}
 					ref={searchValidRef}
 				>
-					<SavedPlan plan={plan} setPlan={setPlan} />
+					<SavedPlan plan={plan} setPlan={setPlan} setOrdered={setOrdered} />
 					{courses.length > 0 && (
 						<>
 							<div className="search-bottom-wrappper">
@@ -226,57 +191,11 @@ export default function SearchBar({
 							</p>
 						</>
 					)}
-					{courses.map((c, i) => {
-						const course_code = Object.keys(c)[0]
-						return (
-							<li
-								draggable
-								className={`valid-course-container ${
-									draggedItem === c ? 'dragging' : ''
-								}`}
-								key={i}
-								onDragStart={(e) => handleDragStart(e, c)}
-								onDragOver={(e) => handleDragOver(e)}
-								onDrop={(e) => handleDrop(e, c)}
-								onDragEnd={handleDragEnd}
-							>
-								<div className="details">
-									<div className="draggable-container">
-										<div className="uil--draggabledots"></div>
-									</div>
-									<ol className="valid-course-name">
-										{c[course_code].initialism +
-											course_code +
-											': ' +
-											c[course_code].name}
-										<hr
-											style={{ width: '100%', border: '0.5px solid black' }}
-										/>
-										<p
-											style={{
-												width: '100%',
-												fontSize: '10px',
-											}}
-										>
-											{convertExamSchedule([c])}
-										</p>
-									</ol>
-									<div className="remove-course-name">
-										<IconButton
-											onClick={() => dispatch(removeCourse(course_code))}
-											sx={{
-												height: '40px',
-												width: '40px',
-												color: 'black',
-											}}
-										>
-											<DeleteOutlinedIcon />
-										</IconButton>
-									</div>
-								</div>
-							</li>
-						)
-					})}
+					<SearchCourseList
+						courses={courses}
+						setOrdered={setOrdered}
+						dispatch={dispatch}
+					/>
 					<button className="fetch-btn" onClick={() => handleSearch(courses)}>
 						<span className="text">Search</span>
 					</button>

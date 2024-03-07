@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-export default function SavedPlan() {
-	const [plan, setPlan] = useState(1)
-
+export default function SavedPlan({ plan, setPlan, setIsInitialRender }) {
 	const handleChange = (event: SelectChangeEvent) => {
 		setPlan(+event.target.value)
 	}
+
+	// useEffect(() => {
+	// 	setIsInitialRender(false)
+	// }, [setIsInitialRender])
 
 	return (
 		<FormControl

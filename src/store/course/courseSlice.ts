@@ -36,8 +36,8 @@ const initialState: AllCourseDetails = {
 	courses: [],
 }
 
-const timetableSlice = createSlice({
-	name: 'timetableSlice',
+const courseSlice = createSlice({
+	name: 'courseSlice',
 	initialState,
 	reducers: {
 		addCourse: (
@@ -57,9 +57,15 @@ const timetableSlice = createSlice({
 		) => {
 			state.courses = actions.payload
 		},
+		setCourse: (
+			state: AllCourseDetails,
+			actions: PayloadAction<CourseDetails[]>
+		) => {
+			state.courses = actions.payload
+		},
 	},
 })
 
-export default timetableSlice
-export const { addCourse, removeCourse, reorderCourses } =
-	timetableSlice.actions
+export default courseSlice
+export const { addCourse, removeCourse, reorderCourses, setCourse } =
+	courseSlice.actions

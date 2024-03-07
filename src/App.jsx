@@ -37,7 +37,7 @@ export default function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Router>
-			<div className="version-tag">Beta version: 2.17.0</div>
+			<div className="version-tag">Beta version: 3.0.0</div>
 		</>
 	)
 }

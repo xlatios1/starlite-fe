@@ -12,8 +12,10 @@ import { GenerateTimetable } from '@components/timetable/generatetimetable.tsx'
 import { handlePreferences } from '@components/timetable/timetableUtils/TimeTableCalc.tsx'
 import { TimetableHelper } from '@components/timetable/timetableUtils/TimetableHelper.tsx'
 import { TimetableTab } from '@components/timetable/timetableUtils/TimetableTab.tsx'
+import { GenerateCommonTimetable } from '@components/timetable/generatetimetable.tsx'
 import './home.css'
 
+import { setCourse } from '@store/course/courseSlice.ts'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,17 +25,39 @@ export default function Home({ user }) {
 	const initializedTimetable = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-
 	const { getFirebaseData, setFirebaseData } = UserAuth()
-	const [originalData, setOriginalData] = useState([]) //timetable option datas
-	const [preferedData, setPreferedData] = useState([]) //timetable option datas
-	const [toggleCourseList, setToggleCourseList] = useState(true)
+	const [plan, setPlan] = useState(1)
+	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [activeTab, setActiveTab] = useState('timetable')
+	const [isInitialRender, setIsInitialRender] = useState(true)
 
 	const dispatch = useDispatch()
 	const walkthrough = useSelector((state) => state.walkthrough.walkthrough)
+	const courses = useSelector((state) => state.course.courses)
+
+	useEffect(() => {
+		dispatch(openLoading())
+		getFirebaseData(user)
+			.then((data) => {
+				if (data.hasOwnProperty(`plan ${plan}`)) {
+					dispatch(setCourse(data[`plan ${plan}`]))
+				} else {
+					dispatch(setCourse([]))
+				}
+				dispatch(closeLoading())
+			})
+			.then(() => setIsInitialRender(false))
+	}, [plan])
+
+	//TODO BBUG THAT WILL RESET THE FIRST INITIAL RENDER.
+	useEffect(() => {
+		if (!isInitialRender) {
+			setFirebaseData(user, { [`plan ${plan}`]: courses })
+		}
+		setTimetablePreview(GenerateCommonTimetable(courses))
+	}, [courses])
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -44,20 +68,22 @@ export default function Home({ user }) {
 
 		dispatch(openLoading())
 		setTimeout(async () => {
-			if (document.getElementsByClassName('conflict-message').length !== 0) {
-				const errorMessage =
-					'Error! Please resolve course conflict before search!'
-				Notification('error', errorMessage, 2000)
-			} else {
-				const data = GenerateTimetable(search)
-				setOriginalData(data)
-				setPreferedData(handlePreferences(data, initialPreferences))
-				setToggleCourseList(false)
-				setActiveTab('combinations')
-				Notification('success', 'Search successful', 1000)
-				if (walkthrough > 0) {
-					dispatch(setWalkthough(3))
+			if (search.length > 0) {
+				if (document.getElementsByClassName('conflict-message').length !== 0) {
+					const errorMessage =
+						'Error! Please resolve course conflict before search!'
+					Notification('error', errorMessage, 2000)
+				} else {
+					const data = GenerateTimetable(search)
+					setTimetableData(handlePreferences(data, initialPreferences))
+					setActiveTab('combinations')
+					Notification('success', 'Search successful', 1000)
+					if (walkthrough > 0) {
+						dispatch(setWalkthough(3))
+					}
 				}
+			} else {
+				Notification('info', 'Please add courses first!', 1000)
 			}
 			dispatch(closeLoading())
 		}, 1000)
@@ -65,19 +91,19 @@ export default function Home({ user }) {
 
 	useEffect(() => {
 		// Scroll only when there is data
-		if (preferedData) {
+		if (timetableData) {
 			window.scrollTo({
 				left: 0,
 				top: 40,
 				behavior: 'smooth',
 			})
 		}
-	}, [preferedData])
+	}, [timetableData])
 
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
-			setPreferedData(handlePreferences(originalData, preference))
+			setTimetableData(handlePreferences(timetableData, preference))
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
 			if (walkthrough > 0) {
@@ -87,7 +113,7 @@ export default function Home({ user }) {
 	}
 
 	const openTab = (tabName) => {
-		if (preferedData) {
+		if (timetableData) {
 			setActiveTab(tabName)
 		}
 	}
@@ -96,14 +122,14 @@ export default function Home({ user }) {
 		<div className="homepage">
 			<div className="upper-detail-wrapper"></div>
 			<div className="lower-detail-wrapper">
-				{originalData.length > 0 ? (
+				{timetableData.length > 0 ? (
 					<div
-						className={`preference-wrap ${toggleCourseList ? '' : ' hidden '}${
+						className={`preference-wrap ${
 							walkthrough > 2 ? ' highlight-element' : ''
 						}`}
 					>
 						<PreferenceLists
-							courses={originalData.map((obj) => Object.keys(obj)[0])}
+							courses={courses}
 							handleApplyPreference={handleApplyPreference}
 						></PreferenceLists>
 						{walkthrough === 3 && helperText('showPreferenceTip')}
@@ -125,19 +151,19 @@ export default function Home({ user }) {
 					<TimetableTab
 						activeTab={activeTab}
 						openTab={openTab}
-						isDisabled={preferedData.length > 0}
+						isDisabled={timetableData.length > 0}
 					/>
 					<TimetableHelper activeTab={activeTab} />
 					<div className="time-table-wrapper">
 						{activeTab === 'combinations' ? (
 							<>
 								{walkthrough === 3 && helperText('showCourseIndexTip')}
-								{preferedData.map(({ timetable, info }, key) => {
+								{timetableData.map(({ timetable_data, info }, key) => {
 									return (
 										<div className="time-table-container" key={key}>
 											<TimeTable
 												key={key + key}
-												timetable_data={timetable}
+												timetable_data={timetable_data}
 												info={info} //add in the course indexes informations {code: index}
 											/>
 										</div>
@@ -161,12 +187,12 @@ export default function Home({ user }) {
 					{walkthrough === 1 && helperText('searchTip')}
 					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
+						courses={courses}
 						handleSearch={handleSearch}
-						setToggleCourseList={setToggleCourseList}
-						toggleCourseList={toggleCourseList}
 						searchValidRef={searchValidRef}
-						setTimetablePreview={setTimetablePreview}
 						walkthrough={walkthrough}
+						plan={plan}
+						setPlan={setPlan}
 					></SearchBar>
 				</div>
 			</div>
@@ -179,57 +205,13 @@ export default function Home({ user }) {
 					bottom: '30px',
 				}}
 			>
-				<ScrollButton display={Boolean(preferedData)} />
+				<ScrollButton display={Boolean(timetableData)} />
 				<TutorialButton
 					walkthrough={walkthrough}
 					stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
-					stepThree={Boolean(preferedData)}
+					stepThree={Boolean(timetableData)}
 				/>
 			</Box>
 		</div>
 	)
 }
-
-// function popObject(obj) {
-// 	const keys = Object.keys(obj)
-// 	const lastKey = keys[keys.length - 1]
-// 	const popValue = obj[lastKey]
-// 	delete obj[lastKey]
-// 	return { [lastKey]: popValue }
-// }
-
-// const handleSearch = (search, topn = null) => {
-// 	setIsLoading(() => true)
-// 	setTimeout(async () => {
-// 		const API_URL = 'http://localhost:5000/get_timetable_plan'
-// 		const bodyParam = {
-// 			course_lists: search.join(' '),
-// 			...(topn !== null ? { topn } : {}),
-// 			debugged: true,
-// 		}
-// 		const [response_status, response_data] = await apiRequest(
-// 			API_URL,
-// 			bodyParam
-// 		)
-// 		if (response_status) {
-// 			const validCourses = popObject(response_data)
-// 			// if (notFound['Not Found'].length !== 0) {
-// 			// 	//TODO: handle not found, have a pop up.
-// 			// }
-// 			if (Object.keys(response_data).length !== 0) {
-// 				Notification('success', 'Successful matched!', 2000)
-// 				setData((prev) => response_data)
-// 				setSearched((prev) =>
-// 					validCourses.validCourses.map((course) => course.toUpperCase())
-// 				)
-// 				setToggleCourseList(false)
-// 			} else {
-// 				Notification('info', 'No course data found', 2000)
-// 				setData((prev) => null)
-// 			}
-// 		} else {
-// 			Notification('error', 'Error! Unable to fetch data!', 2000)
-// 		}
-// 		setIsLoading(() => false)
-// 	}, 1000)
-// }

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const timetableApi = createApi({
-	reducerPath: 'timetableApi',
+export const courseApi = createApi({
+	reducerPath: 'courseApi',
 	baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_COURSE_API }),
 	endpoints: (builder) => ({
 		findCourseContain: builder.query({
@@ -15,4 +15,4 @@ export const timetableApi = createApi({
 })
 
 export const { useLazyFindCourseContainQuery, useLazyGetCourseDetailsQuery } =
-	timetableApi
+	courseApi

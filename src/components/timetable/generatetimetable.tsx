@@ -4,11 +4,18 @@ import type {
 	ModifiedCourseDetails,
 	indexinfos,
 } from '@components/searchbar/SearchBar.actions.ts'
+import { TimetableClassData } from './TimeTable'
 
 type courseCombi = [courseCode: string, courseIndex: string]
 type combinations = [number, courseCombi[], string[], string[]] | []
-
-export function GenerateTimetable(timetable_data: CourseDetails[]): any[][] {
+type GenerateTimetableResult = {
+	timetable_data: TimetableClassData[]
+	info: [string, string][]
+	rank: number
+}[]
+export function GenerateTimetable(
+	timetable_data: CourseDetails[]
+): GenerateTimetableResult {
 	const new_timetable_data = [...timetable_data]
 
 	let allCombi = [] as combinations[] //holds all combinations

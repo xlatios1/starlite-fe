@@ -38,10 +38,66 @@ export const AuthContextProvider = ({ children }) => {
 		return authWrapper(signInWithEmailAndPassword, email, password)
 	}
 
+	const fetchUserInCache = () => {
+		return JSON.parse(localStorage.getItem('credentials'))
+	}
+
 	const logout = () => {
 		console.log('Logout CLICKED')
 		localStorage.removeItem('credentials')
 		return signOut(auth)
+	}
+
+	const getFileData = async (user, fields = null) => {
+		console.log('getFileData called!')
+		function dataURLtoBlob(dataURL) {
+			const byteString = atob(dataURL.split(',')[1])
+			const ab = new ArrayBuffer(byteString.length)
+			const ia = new Uint8Array(ab)
+			for (let i = 0; i < byteString.length; i++) {
+				ia[i] = byteString.charCodeAt(i)
+			}
+			return new Blob([ab], { type: 'application/pdf' })
+		}
+		const convertBase64ToFile = (dataField) => {
+			if (dataField && dataField instanceof Object) {
+				const blob = dataURLtoBlob(dataField.fileBase64)
+				return {
+					file: Object.assign(
+						new File([blob], dataField.fileName, { type: 'application/pdf' }),
+						{ preview: URL.createObjectURL(blob) }
+					),
+					courses: dataField.courses,
+				}
+			}
+			return dataField
+		}
+
+		const data = await getDoc(doc(db, 'StarliteUserData', user.uid))
+		if (data.exists()) {
+			const documentData = data.data()
+			// Return all fields in the documentData
+			const result = {}
+			Object.keys(documentData).forEach((fieldName) => {
+				if (fields && fields.includes(fieldName)) {
+					result[fieldName] = convertBase64ToFile(documentData[fieldName])
+				} else if (!fields) {
+					result[fieldName] = convertBase64ToFile(
+						fieldName,
+						documentData[fieldName]
+					)
+				}
+			})
+			return result
+		}
+		return null
+	}
+
+	const rmData = async (user, field) => {
+		console.log('rmData called!')
+		const updateData = {}
+		updateData[field] = deleteField()
+		await updateDoc(doc(db, 'StarliteUserData', user.uid), updateData)
 	}
 
 	const setData = async (user, file = null, coursesLeft = null) => {
@@ -106,58 +162,6 @@ export const AuthContextProvider = ({ children }) => {
 		})
 	}
 
-	const getFileData = async (user, fields = null) => {
-		console.log('getFileData called!')
-		function dataURLtoBlob(dataURL) {
-			const byteString = atob(dataURL.split(',')[1])
-			const ab = new ArrayBuffer(byteString.length)
-			const ia = new Uint8Array(ab)
-			for (let i = 0; i < byteString.length; i++) {
-				ia[i] = byteString.charCodeAt(i)
-			}
-			return new Blob([ab], { type: 'application/pdf' })
-		}
-		const convertBase64ToFile = (dataField) => {
-			if (dataField && dataField instanceof Object) {
-				const blob = dataURLtoBlob(dataField.fileBase64)
-				return {
-					file: Object.assign(
-						new File([blob], dataField.fileName, { type: 'application/pdf' }),
-						{ preview: URL.createObjectURL(blob) }
-					),
-					courses: dataField.courses,
-				}
-			}
-			return dataField
-		}
-
-		const data = await getDoc(doc(db, 'StarliteUserData', user.uid))
-		if (data.exists()) {
-			const documentData = data.data()
-			// Return all fields in the documentData
-			const result = {}
-			Object.keys(documentData).forEach((fieldName) => {
-				if (fields && fields.includes(fieldName)) {
-					result[fieldName] = convertBase64ToFile(documentData[fieldName])
-				} else if (!fields) {
-					result[fieldName] = convertBase64ToFile(
-						fieldName,
-						documentData[fieldName]
-					)
-				}
-			})
-			return result
-		}
-		return null
-	}
-
-	const rmData = async (user, field) => {
-		console.log('rmData called!')
-		const updateData = {}
-		updateData[field] = deleteField()
-		await updateDoc(doc(db, 'StarliteUserData', user.uid), updateData)
-	}
-
 	useEffect(() => {
 		const login = onAuthStateChanged(auth, (currentUser) => {
 			if (
@@ -176,10 +180,6 @@ export const AuthContextProvider = ({ children }) => {
 			login()
 		}
 	}, [])
-
-	const fetchUserInCache = () => {
-		return JSON.parse(localStorage.getItem('credentials'))
-	}
 
 	return (
 		<UserContext.Provider

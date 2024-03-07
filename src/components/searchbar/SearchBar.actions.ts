@@ -1,4 +1,4 @@
-import { addCourse } from '@store/timetable/timetableSlice.ts'
+import { addCourse } from '@store/course/courseSlice.ts'
 import Notification from '@components/notification/notification.tsx'
 
 export type classinfo = {
@@ -46,10 +46,9 @@ export async function FetchCourseDetails(
 	const valid_course = []
 	const courseRegex: RegExp = /\b\w{6}\b/g
 	let match
-	let matches = []
 	while ((match = courseRegex.exec(text_without_punctuation)) !== null) {
 		const course: string = match[0].toUpperCase()
-		if (!matches.includes(course) && !prevCourseCode.includes(course)) {
+		if (!prevCourseCode.includes(course)) {
 			await getCourseDetails(course)
 				.unwrap()
 				.then(async (data) => {
@@ -72,6 +71,7 @@ export async function FetchCourseDetails(
 						}
 						await dispatch(addCourse(courseDetail))
 						valid_course.push(course)
+						prevCourseCode.push(course)
 					}
 				})
 				.catch((err) => {

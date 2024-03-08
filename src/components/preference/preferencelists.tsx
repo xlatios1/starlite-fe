@@ -4,7 +4,7 @@ import FreeDay from '@components/preference/preferences/freeday.tsx'
 // import PriorityOfCourses from '@components/preference/preferences/priorityofcourses.tsx'
 import Timeslot from '@components/preference/preferences/timeslot.tsx'
 // import FinalExams from '@components/preference/preferences/finalexams.tsx'
-import MinCourseFilter from '@components/preference/preferences/mincoursefilter.tsx'
+// import MinCourseFilter from '@components/preference/preferences/mincoursefilter.tsx'
 import {
 	days,
 	initializeState,
@@ -13,11 +13,8 @@ import './preferencelists.css'
 
 export default function PreferenceLists({ courses, handleApplyPreference }) {
 	const initialState = {
-		minCourseFilter: courses.length,
 		freeDay: [],
-		// poc: initializeState(courses, 0),
 		timeslot: initializeState(days, 'Any Time'),
-		// finalExam: 'Any Exams',
 	}
 
 	const reducer = (state: typeof initialState, action) => {
@@ -54,12 +51,12 @@ export default function PreferenceLists({ courses, handleApplyPreference }) {
 	return (
 		<div>
 			<div className="preference-container">
-				<MinCourseFilter
+				{/* <MinCourseFilter
 					minCourseFilter={statePreference.minCourseFilter}
 					dispatchPreference={dispatchPreference}
 					handleReset={handleReset}
 					courses={courses}
-				/>
+				/> */}
 				<FreeDay
 					freeDay={statePreference.freeDay}
 					dispatchPreference={dispatchPreference}

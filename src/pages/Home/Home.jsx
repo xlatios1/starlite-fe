@@ -8,14 +8,17 @@ import PreferenceLists from '@components/preference/preferencelists.tsx'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
-import { GenerateTimetable } from '@components/timetable/generatetimetable.tsx'
-import { handlePreferences } from '@components/timetable/timetableUtils/TimeTableCalc.tsx'
-import { TimetableHelper } from '@components/timetable/timetableUtils/TimetableHelper.tsx'
-import { TimetableTab } from '@components/timetable/timetableUtils/TimetableTab.tsx'
-import { GenerateCommonTimetable } from '@components/timetable/generatetimetable.tsx'
+import { applyPreferences } from '@components/timetable/utils/TimeTableCalc.tsx'
+import { TimetableHelper } from '@components/timetable/utils/TimetableHelper.tsx'
+import { TimetableTab } from '@components/timetable/utils/TimetableTab.tsx'
+import {
+	MatchCommonTimetable,
+	MatchTimetable,
+} from '@components/timetable/MatchTimetable.tsx'
 import './home.css'
 
 import { setCourse } from '@store/course/courseSlice.ts'
+import { setPreviewTimetable } from '@store/preview/previewSlice.ts'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
@@ -48,20 +51,18 @@ export default function Home({ user }) {
 				}
 				dispatch(closeLoading())
 			})
-			.then(() => setIsInitialRender(false))
+			.finally(() => setIsInitialRender(false))
 	}, [plan])
 
-	//TODO BBUG THAT WILL RESET THE FIRST INITIAL RENDER.
 	useEffect(() => {
 		if (!isInitialRender) {
 			setFirebaseData(user, { [`plan ${plan}`]: courses })
 		}
-		setTimetablePreview(GenerateCommonTimetable(courses))
+		setTimetablePreview(MatchCommonTimetable(courses))
 	}, [courses])
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
-			minCourseFilter: search.length,
 			freeDay: [],
 			timeslot: [],
 		}
@@ -70,12 +71,14 @@ export default function Home({ user }) {
 		setTimeout(async () => {
 			if (search.length > 0) {
 				if (document.getElementsByClassName('conflict-message').length !== 0) {
-					const errorMessage =
-						'Error! Please resolve course conflict before search!'
-					Notification('error', errorMessage, 2000)
+					Notification(
+						'error',
+						'Error! Please resolve course conflict before search!',
+						2000
+					)
 				} else {
-					const data = GenerateTimetable(search)
-					setTimetableData(handlePreferences(data, initialPreferences))
+					const data = MatchTimetable(search)
+					setTimetableData(applyPreferences(data, initialPreferences))
 					setActiveTab('combinations')
 					Notification('success', 'Search successful', 1000)
 					if (walkthrough > 0) {
@@ -103,7 +106,7 @@ export default function Home({ user }) {
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
-			setTimetableData(handlePreferences(timetableData, preference))
+			setTimetableData(applyPreferences(timetableData, preference))
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
 			if (walkthrough > 0) {
@@ -158,11 +161,10 @@ export default function Home({ user }) {
 						{activeTab === 'combinations' ? (
 							<>
 								{walkthrough === 3 && helperText('showCourseIndexTip')}
-								{timetableData.map(({ timetable_data, info }, key) => {
+								{timetableData.map(({ timetable_data, info }, index) => {
 									return (
-										<div className="time-table-container" key={key}>
+										<div className="time-table-container" key={index}>
 											<TimeTable
-												key={key + key}
 												timetable_data={timetable_data}
 												info={info} //add in the course indexes informations {code: index}
 											/>
@@ -171,11 +173,7 @@ export default function Home({ user }) {
 								})}
 							</>
 						) : (
-							<TimeTable
-								key={'default_table'}
-								timetable_data={timetablePreview}
-								info={null}
-							/>
+							<TimeTable timetable_data={timetablePreview} info={null} />
 						)}
 					</div>
 				</div>

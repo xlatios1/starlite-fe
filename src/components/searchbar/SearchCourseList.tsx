@@ -1,7 +1,7 @@
 import { IconButton } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { removeCourse, reorderCourses } from '@store/course/courseSlice.ts'
-import { convertExamSchedule } from '@utils/parsers.ts'
+import { convertExamSchedule } from '@components/timetable/utils/timetableUtils.ts'
 import React, { useState } from 'react'
 
 export default function SearchCourseList({ courses, setOrdered, dispatch }) {

@@ -1,8 +1,11 @@
-import type { TimetableClassData, classDetails } from '../TimeTable.tsx'
+import type {
+	TimetableClassData,
+	ClassDetails,
+} from '../types/timetableTypes.ts'
 import { timeslotOptions } from '@components/preference/preferences/timeslot.tsx'
 import { days } from '@components/preference/preferenceUtils.tsx'
 
-export const handlePreferences = (
+export const applyPreferences = (
 	data: {
 		timetable_data: TimetableClassData[]
 		info: [string, string][]
@@ -13,7 +16,6 @@ export const handlePreferences = (
 	data.map((timetable) => (timetable.rank = 1))
 
 	const parsedPreferences = {
-		...preferences,
 		freeDay: preferences.freeDay.map((day: string) => days.indexOf(day)),
 		timeslot: Object.entries(preferences.timeslot).reduce(
 			(acc, [day, timeSlotValue]: [string, string]) => {
@@ -66,7 +68,7 @@ export const handlePreferences = (
 			let count = 0
 			for (let i = start; i < end; i++) {
 				if (!Array.isArray(tempdayta[i])) {
-					let classDetail = tempdayta[i] as classDetails
+					let classDetail = tempdayta[i] as ClassDetails
 					i += classDetail.duration - 1
 					count += classDetail.duration
 				}
@@ -76,6 +78,5 @@ export const handlePreferences = (
 		result.push(rankedData[i])
 	}
 	result.sort((a, b) => b.rank - a.rank)
-	console.log('result:', result)
 	return result
 }

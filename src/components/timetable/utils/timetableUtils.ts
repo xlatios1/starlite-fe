@@ -1,3 +1,24 @@
+import { ClassDetails } from '../types/timetableTypes'
+
+export const timeArr = [
+	'0800-0830', //0
+	'0830-0930', //1
+	'0930-1030', //2
+	'1030-1130', //3
+	'1130-1230', //4
+	'1230-1330', //5
+	'1330-1430', //6
+	'1430-1530', //7
+	'1530-1630', //8
+	'1630-1730', //9
+	'1730-1830', //10
+	'1830-1930', //11
+	'1930-2030', //12
+	'2030-2130', //13
+	'2130-2230', //14
+	'2230-2330', //15
+]
+
 export const convertExamSchedule = (searched) => {
 	const examSchedule = searched.map((obj) => {
 		const course = Object.keys(obj)[0]
@@ -83,4 +104,21 @@ export const convertRemarks = (remark: string): Array<number> => {
 		}
 	}
 	return defaultRemark
+}
+
+export const checkConflictWeeks = (classDetails: ClassDetails): boolean => {
+	let elementsSet = new Set()
+	for (const slot of classDetails.classDetails) {
+		let remarks = convertRemarks(slot.remark)
+		for (let i = 0; i < slot.time.duration; i++) {
+			for (const wk of remarks) {
+				let newEle = `${slot.time.start}${i}${wk}`
+				if (elementsSet.has(newEle)) {
+					return true
+				}
+				elementsSet.add(newEle) // Add the element to the set
+			}
+		}
+	}
+	return false
 }

@@ -10,7 +10,7 @@ export function TimetableTab({ activeTab, openTab, isDisabled }) {
 				style={{ borderTopLeftRadius: '15px' }}
 				onClick={() => openTab('timetable')}
 			>
-				Timetable Preview
+				Fixed Slot
 			</div>
 			<div
 				className={`time-table-tab-option ${

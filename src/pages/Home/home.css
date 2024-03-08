@@ -1,6 +1,10 @@
 .homepage{
-    height: fit-content;
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
     min-height: calc(100vh - 60px);
+    flex-direction: column;
 }
 
 .upper-detail-wrapper{
@@ -14,8 +18,9 @@
     flex-direction: row;
     justify-content: center;
     margin: auto;
-    height: fit-content;
+    height: 100%;
     width: fit-content;
+    margin-bottom: 140px;
 }
 
 .search-wrapper{
@@ -23,7 +28,7 @@
     position: relative;
     margin-left: 10px; 
     flex-direction: column;
-    height: min-content;
+    height: fit-content;
     /* margin-bottom: 100px; */
 }
 

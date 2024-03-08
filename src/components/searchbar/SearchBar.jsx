@@ -128,8 +128,8 @@ export default function SearchBar({
 		if (ordered.bestChance) {
 			const sortedCourse = [...courses].sort((a, b) => {
 				return (
-					b[Object.keys(b)[0]].indexes.length -
-					a[Object.keys(a)[0]].indexes.length
+					a[Object.keys(a)[0]].indexes.length -
+					b[Object.keys(b)[0]].indexes.length
 				)
 			})
 			dispatch(reorderCourses(sortedCourse))
@@ -187,7 +187,7 @@ export default function SearchBar({
 									className="fa fa-info-circle"
 									style={{ color: 'lightblue', margin: '0 5px' }}
 								></i>
-								Course priority based on top to bottom.
+								Matching order from top to bottom.
 							</p>
 						</>
 					)}

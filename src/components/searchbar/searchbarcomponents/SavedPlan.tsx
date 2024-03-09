@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { useDispatch } from 'react-redux'
+import { UserAuth } from '@authentications/AuthContext.js'
+import { closeLoading, openLoading } from '@store/loading/loadingSlice.ts'
+import { setCourse } from '@store/course/courseSlice.ts'
+import { MatchCommonTimetable } from '@components/timetable/MatchTimetable.tsx'
 
-export default function SavedPlan({ plan, setPlan, setOrdered }) {
+export default function SavedPlan({ courses, setOrdered, setTimetablePreview }) {
+	const [plan, setPlan] = useState(1)
+	const [isInitialRender, setIsInitialRender] = useState(true)
+	const { getFirebaseData, setFirebaseData, fetchUserInCache } = UserAuth()
+	
+	const user = fetchUserInCache()
+	const dispatch = useDispatch()
 	const handleChange = (event: SelectChangeEvent) => {
 		setPlan(+event.target.value)
 		setOrdered((prev) => {
@@ -12,6 +23,27 @@ export default function SavedPlan({ plan, setPlan, setOrdered }) {
 			return previous
 		})
 	}
+
+	useEffect(() => {
+		dispatch(openLoading())
+		getFirebaseData(user)
+			.then((data) => {
+				if (data.hasOwnProperty(`plan ${plan}`)) {
+					dispatch(setCourse(data[`plan ${plan}`]))
+				} else {
+					dispatch(setCourse([]))
+				}
+				dispatch(closeLoading())
+			})
+			.finally(() => setIsInitialRender(false))
+	}, [plan])
+
+	useEffect(() => {
+		if (!isInitialRender) {
+			setFirebaseData(user, { [`plan ${plan}`]: courses })
+		}
+		setTimetablePreview(MatchCommonTimetable(courses))
+	}, [courses])
 
 	return (
 		<FormControl

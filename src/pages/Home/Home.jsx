@@ -1,65 +1,34 @@
-/* eslint-disable default-case */
 import { useState, useEffect, useRef } from 'react'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
-import { UserAuth } from '@authentications/AuthContext.js'
 import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { applyPreferences } from '@components/timetable/utils/TimeTableCalc.tsx'
 import { TimetableHelper } from '@components/timetable/utils/TimetableHelper.tsx'
 import { TimetableTab } from '@components/timetable/utils/TimetableTab.tsx'
-import {
-	MatchCommonTimetable,
-	MatchTimetable,
-} from '@components/timetable/MatchTimetable.tsx'
+import { MatchTimetable } from '@components/timetable/MatchTimetable.tsx'
 import './home.css'
-
-import { setCourse } from '@store/course/courseSlice.ts'
-import { setPreviewTimetable } from '@store/preview/previewSlice.ts'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
 const _ = require('lodash')
 
-export default function Home({ user }) {
+export default function Home() {
 	const initializedTimetable = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)
-	const { getFirebaseData, setFirebaseData } = UserAuth()
-	const [plan, setPlan] = useState(1)
+
 	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [activeTab, setActiveTab] = useState('timetable')
-	const [isInitialRender, setIsInitialRender] = useState(true)
 
 	const dispatch = useDispatch()
 	const walkthrough = useSelector((state) => state.walkthrough.walkthrough)
 	const courses = useSelector((state) => state.course.courses)
-
-	useEffect(() => {
-		dispatch(openLoading())
-		getFirebaseData(user)
-			.then((data) => {
-				if (data.hasOwnProperty(`plan ${plan}`)) {
-					dispatch(setCourse(data[`plan ${plan}`]))
-				} else {
-					dispatch(setCourse([]))
-				}
-				dispatch(closeLoading())
-			})
-			.finally(() => setIsInitialRender(false))
-	}, [plan])
-
-	useEffect(() => {
-		if (!isInitialRender) {
-			setFirebaseData(user, { [`plan ${plan}`]: courses })
-		}
-		setTimetablePreview(MatchCommonTimetable(courses))
-	}, [courses])
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -115,12 +84,6 @@ export default function Home({ user }) {
 		}, 1000)
 	}
 
-	const openTab = (tabName) => {
-		if (timetableData) {
-			setActiveTab(tabName)
-		}
-	}
-
 	return (
 		<div className="homepage">
 			<div className="upper-detail-wrapper"></div>
@@ -153,7 +116,7 @@ export default function Home({ user }) {
 					{walkthrough === 4 && helperText('showAfterPreferenceChangeTip')}
 					<TimetableTab
 						activeTab={activeTab}
-						openTab={openTab}
+						setActiveTab={setActiveTab}
 						isDisabled={timetableData.length > 0}
 					/>
 					<TimetableHelper activeTab={activeTab} />
@@ -189,17 +152,17 @@ export default function Home({ user }) {
 						handleSearch={handleSearch}
 						searchValidRef={searchValidRef}
 						walkthrough={walkthrough}
-						plan={plan}
-						setPlan={setPlan}
+						setTimetablePreview={setTimetablePreview}
 					></SearchBar>
 				</div>
 			</div>
 			<Box
 				sx={{
-					width: '100%',
+					width: 'fit-content',
 					display: 'flex',
 					justifyContent: 'end',
 					position: 'sticky',
+					left: '100%',
 					bottom: '30px',
 				}}
 			>

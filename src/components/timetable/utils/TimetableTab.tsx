@@ -1,6 +1,12 @@
 import React from 'react'
 
-export function TimetableTab({ activeTab, openTab, isDisabled }) {
+export function TimetableTab({ activeTab, setActiveTab, isDisabled }) {
+	const openTab = (tabName) => {
+		if (isDisabled) {
+			setActiveTab(tabName)
+		}
+	}
+
 	return (
 		<div className="time-table-tab">
 			<div

@@ -16,7 +16,7 @@ export function MatchTimetable(timetable_data: CourseDetails[]): {
 	rank: number
 }[] {
 	const new_timetable_data = [...timetable_data]
-
+	console.log("data in:", new_timetable_data)
 	let allCombi = [] as Combinations[] //holds all combinations
 	for (const course of new_timetable_data) {
 		let courseCode = Object.keys(course)[0]
@@ -60,11 +60,11 @@ export function MatchTimetable(timetable_data: CourseDetails[]): {
 				}
 				if (!conflict) {
 					new_combi.push([
-						baseCombi[0] + allCombi[c][0],
-						baseCombi[1].concat(allCombi[c][1]),
-						baseCombi[2].concat(allCombi[c][2]),
-						baseCombi[3].concat(allCombi[c][3]),
-						baseCombi[4].concat(allCombi[c][4]),
+						allCombi[c][0] + baseCombi[0],
+						allCombi[c][1].concat(baseCombi[1]),
+						allCombi[c][2].concat(baseCombi[2]),
+						allCombi[c][3].concat(baseCombi[3]),
+						allCombi[c][4].concat(baseCombi[4]),
 					])
 				}
 			}
@@ -79,25 +79,30 @@ export function MatchTimetable(timetable_data: CourseDetails[]): {
 	let uniqueSetCombi = [] as Combinations[]
 	const maxMatched = allCombi[0][0]
 	for (const combi of allCombi) {
+		// optimistic approach, all maximum combi are not a subset of each other.
 		if (combi[0] === maxMatched && uniqueSetCombi.length < 1000) {
 			uniqueSetCombi.push(combi)
 		} else {
-			break
+			// for any other courses < maxMatch, find uniques, limit to max 100
+			if (uniqueSetCombi.length < 100) {
+				for (const combi of allCombi) {
+					let isSubset = false
+					for (const uniqueCombi of uniqueSetCombi) {
+						isSubset = combi[2].every((item) => uniqueCombi[2].includes(item))
+						if (isSubset) {
+							break
+						}
+					}
+					if (!isSubset) {
+						uniqueSetCombi.push(combi)
+					}
+				}
+			} else {
+				break
+			}
 		}
 	}
 
-	// for (const combi of allCombi) {
-	// 	let isSubset = false
-	// 	for (const uniqueCombi of uniqueSetCombi) {
-	// 		isSubset = combi[3].every((item) => uniqueCombi[3].includes(item))
-	// 		if (isSubset) {
-	// 			break
-	// 		}
-	// 	}
-	// 	if (!isSubset) {
-	// 		uniqueSetCombi.push(combi)
-	// 	}
-	// }
 	console.log('uniqueSetCombi', uniqueSetCombi)
 	let finalResult = []
 

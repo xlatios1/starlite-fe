@@ -21,8 +21,7 @@ export default function SearchBar({
 	handleSearch,
 	searchValidRef,
 	walkthrough,
-	plan,
-	setPlan,
+	setTimetablePreview
 }) {
 	const [suggestions, setSuggestions] = useState([])
 	const [input, setInput] = useState('')
@@ -160,7 +159,7 @@ export default function SearchBar({
 					}`}
 					ref={searchValidRef}
 				>
-					<SavedPlan plan={plan} setPlan={setPlan} setOrdered={setOrdered} />
+					<SavedPlan courses={courses} setOrdered={setOrdered} setTimetablePreview={setTimetablePreview} />
 					{courses.length > 0 && (
 						<>
 							<div className="search-bottom-wrappper">

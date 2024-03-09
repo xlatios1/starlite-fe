@@ -5,6 +5,7 @@ import { courseApi } from '@store/course/courseApi.ts'
 import courseSlice from './course/courseSlice.ts'
 import walkthroughSlice from './walkthrough/walkthroughSlice.ts'
 import previewSlice from './preview/previewSlice.ts'
+import timetableSlice from './timetable/timetableSlice.ts'
 export type RootState = ReturnType<typeof store.getState>
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
 		loading: loadingSlice.reducer,
 		course: courseSlice.reducer,
 		preview: previewSlice.reducer,
+		timetable: timetableSlice.reducer,
 		walkthrough: walkthroughSlice.reducer,
 		[courseApi.reducerPath]: courseApi.reducer,
 	},

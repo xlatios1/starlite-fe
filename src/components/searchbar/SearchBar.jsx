@@ -131,6 +131,7 @@ export default function SearchBar({
 					b[Object.keys(b)[0]].indexes.length
 				)
 			})
+			console.log('sortedCourse', sortedCourse)
 			dispatch(reorderCourses(sortedCourse))
 		}
 	}, [ordered])

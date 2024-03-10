@@ -140,19 +140,27 @@ export const AuthContextProvider = ({ children }) => {
 		})
 	}
 
-	const getFirebaseData = async (user) => {
-		console.log('getFirebaseData called!')
-		return await getDoc(doc(db, 'StarliteUserData', user.uid))
-			.then((data) => {
-				if (data.exists()) {
-					return data.data()
-				} else {
-					return null
-				}
-			})
-			.catch(() => {
-				throw new Error('Unable to retrieve firebase data.')
-			})
+	const getFirebaseData = async (user, count = 3) => {
+		console.log('getFirebaseData called!', count)
+		return new Promise((resolve) => {
+			setTimeout(async () => {
+				await getDoc(doc(db, 'StarliteUserData', user.uid))
+					.then((data) => {
+						if (data.exists()) {
+							resolve(data.data())
+						} else {
+							if (count > 0) {
+								return getFirebaseData(user, count - 1)
+							} else {
+								resolve(null)
+							}
+						}
+					})
+					.catch(() => {
+						throw new Error('Unable to retrieve firebase data.')
+					})
+			}, 1000)
+		})
 	}
 
 	const setFirebaseData = async (user, payload) => {

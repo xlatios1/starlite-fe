@@ -4,6 +4,7 @@ import TimeTable from '@components/timetable/TimeTable.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
 import PreferenceLists from '@components/preference/preferencelists.tsx'
+import Paginations from '@components/pagination/pagination.tsx'
 import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { applyPreferences } from '@components/timetable/utils/TimeTableCalc.tsx'
@@ -24,6 +25,7 @@ export default function Home() {
 	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
+	const [currentPage, setCurrentPage] = useState(1)
 	const [activeTab, setActiveTab] = useState('timetable')
 
 	const dispatch = useDispatch()
@@ -84,6 +86,11 @@ export default function Home() {
 		}, 1000)
 	}
 
+	const getPaginationPage = (_, page) => {
+		console.log(page)
+		setCurrentPage(page)
+	}
+
 	return (
 		<div className="homepage">
 			<div className="upper-detail-wrapper"></div>
@@ -124,7 +131,7 @@ export default function Home() {
 						{activeTab === 'combinations' ? (
 							<>
 								{walkthrough === 3 && helperText('showCourseIndexTip')}
-								{timetableData.map(({ timetable_data, info }, index) => {
+								{/* {timetableData.map(({ timetable_data, info }, index) => {
 									return (
 										<div className="time-table-container" key={index}>
 											<TimeTable
@@ -133,11 +140,23 @@ export default function Home() {
 											/>
 										</div>
 									)
-								})}
+								})} */}
+								<div className="time-table-container">
+									<TimeTable
+										timetable_data={
+											timetableData[currentPage - 1].timetable_data
+										}
+										info={timetableData[currentPage - 1].info} //add in the course indexes informations {code: index}
+									/>
+								</div>
 							</>
 						) : (
 							<TimeTable timetable_data={timetablePreview} info={null} />
 						)}
+						<Paginations
+							total={timetableData.length}
+							getPaginationPage={getPaginationPage}
+						/>
 					</div>
 				</div>
 				<div

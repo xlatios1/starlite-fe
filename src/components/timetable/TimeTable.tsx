@@ -2,15 +2,16 @@ import React, { useState } from 'react'
 import './timetable.css'
 import { TimetableData } from './types/timetableTypes.ts'
 import { GenerateTimetable } from './GenerateTimetable.tsx'
-import { Box, Button, Paper } from '@mui/material'
+import { Box, Button } from '@mui/material'
+import TimetableDashboard from './TimetableDashboard.tsx'
 
 export default function TimeTable({ timetable_data, info }: TimetableData) {
 	const [isClicked, setIsClicked] = useState(false)
 	const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 	const handleClick = (e) => {
-		e.preventDefault()
-		if (info) setIsClicked((prev) => !prev)
+		// e.preventDefault()
+		// if (info) setIsClicked((prev) => !prev)
 	}
 
 	const { timetable, hasConflict } = GenerateTimetable(timetable_data)
@@ -34,6 +35,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							Please resolve the course conflict!
 						</p>
 					)}
+
 					<table
 						onClick={handleClick}
 						className={`table ${isClicked ? 'blurred' : ''}`}
@@ -60,6 +62,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							})}
 						</tbody>
 					</table>
+					{info ? <TimetableDashboard info={info} /> : <></>}
 					{info ? (
 						<div className={`table-info ${isClicked ? 'shown' : ''}`}>
 							<div className="table-wrapper">

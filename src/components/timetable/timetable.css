@@ -10,7 +10,6 @@
     border-radius: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
     margin-bottom: 20px; 
-    cursor: pointer;
     overflow: hidden;
     
 	&::before {
@@ -47,6 +46,7 @@ table.table{
     filter: none; 
     transition: filter ease-in-out;
     user-select:none;
+    cursor: pointer;
 }
 
 table.table.blurred {

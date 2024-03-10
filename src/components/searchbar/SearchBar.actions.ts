@@ -53,6 +53,7 @@ export async function FetchCourseDetails(
 				.unwrap()
 				.then(async (data) => {
 					if (data.detail !== 'Not found.') {
+						console.log(course, data)
 						const courseDetail = {
 							[course]: {
 								name: data.name,

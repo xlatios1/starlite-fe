@@ -1,44 +1,24 @@
-import { addCourse } from '@store/course/courseSlice.ts'
+import {
+	addCourse,
+	ColorPalette,
+	CourseDetails,
+	FavoriteTimetable,
+	updateCourseColorPalette,
+} from '@store/course/courseSlice.ts'
 import Notification from '@components/notification/notification.tsx'
-
-export type classinfo = {
-	type: string
-	group: string
-	day: string
-	time: string
-	venue: string
-	remark: string
-}
-
-export type indexinfos = {
-	id: string
-	index: string
-	get_information: classinfo[]
-	get_filtered_information: classinfo[] | []
-	schedule: string
-}
-
-export type CourseDetails = {
-	[courseCode: string]: {
-		name: string
-		initialism: string
-		academic_units: number
-		get_exam_schedule: { date: string; time: string; timecode: string }
-		get_common_information: classinfo[] | []
-		indexes: indexinfos[]
-	}
-}
-
-export type ModifiedCourseDetails = { [courseCode: string]: classinfo[] }
 
 export async function FetchCourseDetails(
 	search: string,
-	prevCourses: ModifiedCourseDetails[],
+	courseData: {
+		courses: CourseDetails[]
+		favorite: FavoriteTimetable
+		CourseColorPalette: ColorPalette[]
+	},
 	dispatch,
 	getCourseDetails
 ) {
-	const prevCourseCode = prevCourses.map((obj) => Object.keys(obj)[0])
-
+	const palette = [...courseData.CourseColorPalette]
+	const prevCourseCode = courseData.courses.map((obj) => Object.keys(obj)[0])
 	const text_without_punctuation: string = search.replace(
 		/[.,/#!$%^&*;:{@+|}=\-_`~()]/g,
 		''
@@ -53,7 +33,11 @@ export async function FetchCourseDetails(
 				.unwrap()
 				.then(async (data) => {
 					if (data.detail !== 'Not found.') {
-						console.log(course, data)
+						let color = palette.splice(
+							Math.floor(Math.random() * palette.length),
+							1
+						)[0]
+						console.log(course, data, color)
 						const courseDetail = {
 							[course]: {
 								name: data.name,
@@ -68,6 +52,7 @@ export async function FetchCourseDetails(
 								get_exam_schedule: data.get_exam_schedule,
 								get_common_information: data.get_common_information,
 								indexes: data.indexes,
+								colorCode: color,
 							},
 						}
 						await dispatch(addCourse(courseDetail))
@@ -76,6 +61,7 @@ export async function FetchCourseDetails(
 					}
 				})
 				.catch((err) => {
+					console.log('err', err)
 					Notification(
 						'error',
 						'An unexpected error has occured (search)',
@@ -84,6 +70,7 @@ export async function FetchCourseDetails(
 				})
 		}
 	}
+	await dispatch(updateCourseColorPalette(palette))
 	if (valid_course.length > 0) {
 		Notification(
 			'success',

@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { removeCourse, setCourse } from '@store/course/courseSlice.ts'
 import { convertExamSchedule } from '@components/timetable/utils/timetableUtils.ts'
@@ -59,10 +59,20 @@ export default function SearchCourseList({ courses, setOrdered, dispatch }) {
 								<div className="uil--draggabledots"></div>
 							</div>
 							<ol className="valid-course-name">
-								{c[course_code].initialism +
-									course_code +
-									': ' +
-									c[course_code].name}
+								<div>
+									<Box
+										sx={{
+											width: '12px',
+											height: '12px',
+											backgroundColor: `var(${c[course_code].colorCode})`,
+											display: 'inline-block',
+										}}
+									></Box>{' '}
+									{c[course_code].initialism +
+										course_code +
+										': ' +
+										c[course_code].name}
+								</div>
 								<hr style={{ width: '100%', border: '0.5px solid black' }} />
 								<p
 									style={{

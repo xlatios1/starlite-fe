@@ -10,7 +10,7 @@ const TimetableDashboard = ({ info }: TimetableDashboardProp) => {
 		<Paper
 			elevation={0}
 			sx={{
-				mt: '10px',
+				mb: '10px',
 				padding: '10px',
 				backgroundColor: 'rgb(149, 217, 240)',
 				border: '1px solid black',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import SearchBar from '@components/searchbar/SearchBar'
+import SearchBar from '@components/searchbar/SearchBar.tsx'
 import TimeTable from '@components/timetable/TimeTable.tsx'
 import Notification from '@components/notification/notification.tsx'
 import ScrollButton from '@components/scrollbutton/scrollbutton.tsx'
@@ -16,6 +16,7 @@ import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/store'
+import { AllPlans } from '@store/course/courseSlice'
 const _ = require('lodash')
 
 export default function Home() {
@@ -36,7 +37,9 @@ export default function Home() {
 	const currentPlan = useSelector(
 		(state: RootState) => state.course.currentPlan
 	)
-	const AllCourses = useSelector((state: RootState) => state.course.planData)
+	const AllCourses = useSelector(
+		(state: RootState) => state.course.planData
+	) as AllPlans
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -172,7 +175,7 @@ export default function Home() {
 					{walkthrough === 1 && helperText('searchTip')}
 					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
-						courses={AllCourses[currentPlan].courses}
+						courseData={AllCourses[currentPlan]}
 						handleSearch={handleSearch}
 						searchValidRef={searchValidRef}
 						walkthrough={walkthrough}

@@ -6,14 +6,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { closeLoading, openLoading } from '@store/loading/loadingSlice.ts'
 import {
+	CourseColorPalette,
+	CourseDetails,
 	loadInitialCourse,
 	setCourse,
 	setPlan,
+	updateCourseColorPalette,
 } from '@store/course/courseSlice.ts'
 import { MatchCommonTimetable } from '@components/timetable/MatchTimetable.tsx'
 import { RootState } from '@store/store'
 import { Button } from '@mui/material'
 import Notification from '@components/notification/notification.tsx'
+const _ = require('lodash')
 
 export default function SavedPlan({
 	courses,
@@ -43,7 +47,7 @@ export default function SavedPlan({
 		dispatch(openLoading())
 		getFirebaseData(user)
 			.then((data) => {
-				if (data) {
+				if (Object.keys(data).length > 0) {
 					dispatch(loadInitialCourse(data))
 				}
 			})
@@ -55,7 +59,6 @@ export default function SavedPlan({
 
 	useEffect(() => {
 		if (!isInitialRender) {
-			// setFirebaseData(user, planData)
 			dispatch(setCourse(courses))
 		}
 		setTimetablePreview(MatchCommonTimetable(courses))
@@ -63,14 +66,34 @@ export default function SavedPlan({
 
 	const handleSave = async () => {
 		dispatch(openLoading())
-		await setFirebaseData(user, { [currentPlan]: planData[currentPlan] })
+		const data = _.cloneDeep(planData[currentPlan])
+		let missingPalette
+		if (
+			data.CourseColorPalette.length + data.courses.length !==
+			CourseColorPalette.length
+		) {
+			let curPalette = [
+				...data.CourseColorPalette,
+				...planData[currentPlan].courses.map(
+					(c: CourseDetails) => Object.values(c)[0].colorCode
+				),
+			]
+			missingPalette = _.difference([...CourseColorPalette], curPalette)
+			data.CourseColorPalette = [...data.CourseColorPalette, ...missingPalette]
+			dispatch(
+				updateCourseColorPalette([
+					...data.CourseColorPalette,
+					...missingPalette,
+				])
+			)
+		}
+		await setFirebaseData(user, { [currentPlan]: data })
 			.then(() => {
 				Notification('success', `Successfully saved ${currentPlan}!`, 1000)
 			})
 			.catch(() => {
 				Notification('error', 'An unexpected error has occured (Save)', 3000)
 			})
-
 			.finally(() => {
 				dispatch(closeLoading())
 				setIsInitialRender(false)

@@ -35,7 +35,7 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							Please resolve the course conflict!
 						</p>
 					)}
-
+					{info ? <TimetableDashboard info={info} /> : <></>}
 					<table
 						onClick={handleClick}
 						className={`table ${isClicked ? 'blurred' : ''}`}
@@ -62,7 +62,6 @@ export default function TimeTable({ timetable_data, info }: TimetableData) {
 							})}
 						</tbody>
 					</table>
-					{info ? <TimetableDashboard info={info} /> : <></>}
 					{info ? (
 						<div className={`table-info ${isClicked ? 'shown' : ''}`}>
 							<div className="table-wrapper">

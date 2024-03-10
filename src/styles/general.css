@@ -42,6 +42,17 @@
     --clr-orange-8: hsl(13, 74%, 33%);
     --clr-orange-9: hsl(13, 73%, 25%);
     --clr-orange-10: hsl(13, 73%, 16%);
+    /* color palette - used for course codes */
+    --orange: #ffb480;
+    --yellow: #f8f38d;
+    --green: #42d6a4;
+    --lightblue: #08cad1;
+    --blue: #59adf6;
+    --violet: #9d94ff;
+    --purple: #c780e8;
+    --pink: #F8C8DC;
+    --darkred: #900C3F;
+    --brown: #964B00;
   }
 
 *,

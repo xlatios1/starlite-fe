@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import SearchBar from '@components/searchbar/SearchBar'
 import TimeTable from '@components/timetable/TimeTable.tsx'
 import Notification from '@components/notification/notification.tsx'
@@ -15,22 +15,28 @@ import './home.css'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@store/store'
 const _ = require('lodash')
 
 export default function Home() {
-	const initializedTimetable = Array.from({ length: 7 }, () =>
-		Array.from({ length: 16 }, () => [])
+	const initializedTimetable: any[][] = Array.from({ length: 7 }, () =>
+		Array.from({ length: 11 }, () => [])
 	)
 
-	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const searchValidRef = useRef(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
+	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const [currentPage, setCurrentPage] = useState(1)
 	const [activeTab, setActiveTab] = useState('timetable')
 
 	const dispatch = useDispatch()
-	const walkthrough = useSelector((state) => state.walkthrough.walkthrough)
-	const courses = useSelector((state) => state.course.courses)
+	const walkthrough = useSelector(
+		(state: RootState) => state.walkthrough.walkthrough
+	)
+	const currentPlan = useSelector(
+		(state: RootState) => state.course.currentPlan
+	)
+	const AllCourses = useSelector((state: RootState) => state.course.planData)
 
 	const handleSearch = (search) => {
 		const initialPreferences = {
@@ -87,7 +93,6 @@ export default function Home() {
 	}
 
 	const getPaginationPage = (_, page) => {
-		console.log(page)
 		setCurrentPage(page)
 	}
 
@@ -102,7 +107,7 @@ export default function Home() {
 						}`}
 					>
 						<PreferenceLists
-							courses={courses}
+							courses={AllCourses[currentPlan].courses}
 							handleApplyPreference={handleApplyPreference}
 						></PreferenceLists>
 						{walkthrough === 3 && helperText('showPreferenceTip')}
@@ -149,14 +154,14 @@ export default function Home() {
 										info={timetableData[currentPage - 1].info} //add in the course indexes informations {code: index}
 									/>
 								</div>
+								<Paginations
+									total={timetableData.length}
+									getPaginationPage={getPaginationPage}
+								/>
 							</>
 						) : (
 							<TimeTable timetable_data={timetablePreview} info={null} />
 						)}
-						<Paginations
-							total={timetableData.length}
-							getPaginationPage={getPaginationPage}
-						/>
 					</div>
 				</div>
 				<div
@@ -167,7 +172,7 @@ export default function Home() {
 					{walkthrough === 1 && helperText('searchTip')}
 					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
-						courses={courses}
+						courses={AllCourses[currentPlan].courses}
 						handleSearch={handleSearch}
 						searchValidRef={searchValidRef}
 						walkthrough={walkthrough}

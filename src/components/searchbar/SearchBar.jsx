@@ -13,7 +13,7 @@ import {
 	useLazyGetCourseDetailsQuery,
 } from '@store/course/courseApi.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
-import { reorderCourses } from '@store/course/courseSlice.ts'
+import { setCourse } from '@store/course/courseSlice.ts'
 import SearchCourseList from '@components/searchbar/SearchCourseList.tsx'
 
 export default function SearchBar({
@@ -21,7 +21,7 @@ export default function SearchBar({
 	handleSearch,
 	searchValidRef,
 	walkthrough,
-	setTimetablePreview
+	setTimetablePreview,
 }) {
 	const [suggestions, setSuggestions] = useState([])
 	const [input, setInput] = useState('')
@@ -132,7 +132,7 @@ export default function SearchBar({
 				)
 			})
 			console.log('sortedCourse', sortedCourse)
-			dispatch(reorderCourses(sortedCourse))
+			dispatch(setCourse(sortedCourse))
 		}
 	}, [ordered])
 
@@ -160,7 +160,11 @@ export default function SearchBar({
 					}`}
 					ref={searchValidRef}
 				>
-					<SavedPlan courses={courses} setOrdered={setOrdered} setTimetablePreview={setTimetablePreview} />
+					<SavedPlan
+						courses={courses}
+						setOrdered={setOrdered}
+						setTimetablePreview={setTimetablePreview}
+					/>
 					{courses.length > 0 && (
 						<>
 							<div className="search-bottom-wrappper">

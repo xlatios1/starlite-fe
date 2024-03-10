@@ -12,7 +12,15 @@ import type {
 export const GenerateTimetable = (
 	timetable_data: Array<TimetableClassData>
 ) => {
-	let timetable = Array.from({ length: 16 }, (_, i) => [
+	let length = 16
+	for (; length > 11; length--) {
+		const sliced = timetable_data.map((col) => col.slice(length - 1, length))
+		if (!sliced.flat().every((data) => Array.isArray(data))) {
+			break
+		}
+	}
+
+	let timetable = Array.from({ length }, (_, i) => [
 		<td key={`time ${timeArr[i]}`}>{timeArr[i]}</td>,
 	])
 
@@ -50,7 +58,7 @@ export const GenerateTimetable = (
 	}
 
 	for (const col of timetable_data) {
-		for (let row = 0; row < 16; row++, unikey++) {
+		for (let row = 0; row < length; row++, unikey++) {
 			if ('duration' in col[row]) {
 				let classDetails = col[row] as ClassDetails
 				let innerConflict = false

@@ -75,7 +75,11 @@ export async function FetchCourseDetails(
 					}
 				})
 				.catch((err) => {
-					console.log('Error fetching data:', err)
+					Notification(
+						'error',
+						'An unexpected error has occured (search)',
+						3000
+					)
 				})
 		}
 	}

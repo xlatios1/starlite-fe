@@ -2,21 +2,36 @@ import React, { useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { closeLoading, openLoading } from '@store/loading/loadingSlice.ts'
-import { setCourse } from '@store/course/courseSlice.ts'
+import {
+	loadInitialCourse,
+	setCourse,
+	setPlan,
+} from '@store/course/courseSlice.ts'
 import { MatchCommonTimetable } from '@components/timetable/MatchTimetable.tsx'
+import { RootState } from '@store/store'
+import { Button } from '@mui/material'
+import Notification from '@components/notification/notification.tsx'
 
-export default function SavedPlan({ courses, setOrdered, setTimetablePreview }) {
-	const [plan, setPlan] = useState(1)
+export default function SavedPlan({
+	courses,
+	setOrdered,
+	setTimetablePreview,
+}) {
 	const [isInitialRender, setIsInitialRender] = useState(true)
 	const { getFirebaseData, setFirebaseData, fetchUserInCache } = UserAuth()
-	
+
 	const user = fetchUserInCache()
 	const dispatch = useDispatch()
+	const planData = useSelector((state: RootState) => state.course.planData)
+	const currentPlan = useSelector(
+		(state: RootState) => state.course.currentPlan
+	)
+
 	const handleChange = (event: SelectChangeEvent) => {
-		setPlan(+event.target.value)
+		dispatch(setPlan(event.target.value as 'Plan 1' | 'Plan 2' | 'Plan 3'))
 		setOrdered((prev) => {
 			const previous = { ...prev }
 			previous.bestChance = false
@@ -28,46 +43,68 @@ export default function SavedPlan({ courses, setOrdered, setTimetablePreview }) 
 		dispatch(openLoading())
 		getFirebaseData(user)
 			.then((data) => {
-				if (data.hasOwnProperty(`plan ${plan}`)) {
-					dispatch(setCourse(data[`plan ${plan}`]))
-				} else {
-					dispatch(setCourse([]))
+				if (data) {
+					dispatch(loadInitialCourse(data))
 				}
+			})
+			.finally(() => {
+				setIsInitialRender(false)
 				dispatch(closeLoading())
 			})
-			.finally(() => setIsInitialRender(false))
-	}, [plan])
+	}, [])
 
 	useEffect(() => {
 		if (!isInitialRender) {
-			setFirebaseData(user, { [`plan ${plan}`]: courses })
+			// setFirebaseData(user, planData)
+			dispatch(setCourse(courses))
 		}
 		setTimetablePreview(MatchCommonTimetable(courses))
 	}, [courses])
+
+	const handleSave = async () => {
+		dispatch(openLoading())
+		await setFirebaseData(user, { [currentPlan]: planData[currentPlan] })
+			.then(() => {
+				Notification('success', `Successfully saved ${currentPlan}!`, 1000)
+			})
+			.catch(() => {
+				Notification('error', 'An unexpected error has occured (Save)', 3000)
+			})
+
+			.finally(() => {
+				dispatch(closeLoading())
+				setIsInitialRender(false)
+			})
+	}
 
 	return (
 		<FormControl
 			sx={{
 				m: 1,
 				display: 'flex',
-				justifyContent: 'center',
+				width: '100%',
+				justifyContent: 'space-around',
 				alignItems: 'center',
+				flexDirection: 'row',
 			}}
 		>
 			<Select
-				value={plan.toString()}
+				value={currentPlan}
 				onChange={handleChange}
 				displayEmpty
 				inputProps={{
 					'aria-label': 'Without label',
 					MenuProps: { disableScrollLock: true },
 				}}
-				sx={{ width: '260px', height: '30px' }}
+				sx={{ width: '180px', height: '30px' }}
 			>
-				<MenuItem value={1}>Plan 1</MenuItem>
-				<MenuItem value={2}>Plan 2</MenuItem>
-				<MenuItem value={3}>Plan 3</MenuItem>
+				<MenuItem value={'Plan 1'}>Plan 1</MenuItem>
+				<MenuItem value={'Plan 2'}>Plan 2</MenuItem>
+				<MenuItem value={'Plan 3'}>Plan 3</MenuItem>
 			</Select>
+			<Button variant="contained" size="small" onClick={handleSave}>
+				Save
+			</Button>
 		</FormControl>
 	)
 }

@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 export default function Notification(
 	toastType: string,
 	message: string,
-	duration: number = 3000
+	duration: number = 1000
 ) {
 	const toastConfig: ToastOptions<{}> = {
 		position: 'top-center',

@@ -147,6 +147,7 @@ export const AuthContextProvider = ({ children }) => {
 				await getDoc(doc(db, 'StarliteUserData', user.uid))
 					.then((data) => {
 						if (data.exists()) {
+							console.log('resolve', data.data())
 							resolve(data.data())
 						} else {
 							if (count > 0) {

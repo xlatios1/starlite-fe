@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './timetable.css'
 import { TimetableData } from './types/timetableTypes.ts'
 import { GenerateTimetable } from './GenerateTimetable.tsx'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Paper } from '@mui/material'
 
 export default function TimeTable({ timetable_data, info }: TimetableData) {
 	const [isClicked, setIsClicked] = useState(false)

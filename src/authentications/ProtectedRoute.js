@@ -3,7 +3,7 @@ import { UserAuth } from '../authentications/AuthContext.js'
 import FooterNavigation from '@components/footernavigation/footernavigation.tsx'
 import Notification from '@components/notification/notification.tsx'
 import NavBar from '@components/navbar/navbar.tsx'
-import HomePage from '@pages/Home/Home.jsx'
+import HomePage from '@pages/Home/Home.tsx'
 import Upload from '@pages/Upload/Upload.jsx'
 import About from '@pages/About/About.tsx'
 

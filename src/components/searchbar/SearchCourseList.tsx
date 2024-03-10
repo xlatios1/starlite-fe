@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import { removeCourse, reorderCourses } from '@store/course/courseSlice.ts'
+import { removeCourse, setCourse } from '@store/course/courseSlice.ts'
 import { convertExamSchedule } from '@components/timetable/utils/timetableUtils.ts'
 import React, { useState } from 'react'
 
@@ -25,7 +25,7 @@ export default function SearchCourseList({ courses, setOrdered, dispatch }) {
 		)
 		updatedCourseList.splice(draggedCourseIndex, 1)
 		updatedCourseList.splice(droppedCourseIndex, 0, draggedItem)
-		dispatch(reorderCourses(updatedCourseList))
+		dispatch(setCourse(updatedCourseList))
 		setOrdered((prev) => {
 			const previous = { ...prev }
 			previous.bestChance = false

@@ -44,7 +44,6 @@ export default function Signin() {
 		setErrorMessages(Array.from(new Set(errMsg)))
 		if (errMsg.length === 0) {
 			const isSignIn = await signIn(login.email, login.password)
-			console.log('isSignIn', isSignIn)
 			if (isSignIn === true) {
 				Notification('success', 'Login successful!', 1000)
 				navigate('/home')

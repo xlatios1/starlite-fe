@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import React from 'react'
 
 export type classinfo = {
 	type: string
@@ -28,44 +29,99 @@ export type CourseDetails = {
 	}
 }
 
-export type AllCourseDetails = {
-	courses: CourseDetails[]
+export type FavoriteTimetable = React.JSX.Element[][]
+
+export type AllPlans = {
+	'Plan 1': {
+		courses: CourseDetails[]
+		favorite: FavoriteTimetable
+	}
+	'Plan 2': {
+		courses: CourseDetails[]
+		favorite: FavoriteTimetable
+	}
+	'Plan 3': {
+		courses: CourseDetails[]
+		favorite: FavoriteTimetable
+	}
 }
 
-const initialState: AllCourseDetails = {
-	courses: [],
+export type AllPlanDetails = {
+	currentPlan: string
+	planData: AllPlans
+	isDirtyValue: boolean
+}
+
+export const ExistingPlans = ['Plan 1', 'Plan 2', 'Plan 3']
+
+const initialState: AllPlanDetails = {
+	currentPlan: 'Plan 1',
+	planData: {
+		'Plan 1': { courses: [], favorite: [] },
+		'Plan 2': { courses: [], favorite: [] },
+		'Plan 3': { courses: [], favorite: [] },
+	},
+	isDirtyValue: false,
 }
 
 const courseSlice = createSlice({
 	name: 'courseSlice',
 	initialState,
 	reducers: {
+		loadInitialCourse: (
+			state: AllPlanDetails,
+			actions: PayloadAction<AllPlans>
+		) => {
+			console.log('SET INITIAL DATA AS: ', actions.payload)
+			state.planData = actions.payload
+			state.isDirtyValue = false
+		},
 		addCourse: (
-			state: AllCourseDetails,
+			state: AllPlanDetails,
 			actions: PayloadAction<CourseDetails>
 		) => {
-			state.courses.push(actions.payload)
+			state.planData[state.currentPlan].courses.push(actions.payload)
+			state.isDirtyValue = true
 		},
-		removeCourse: (state: AllCourseDetails, actions: PayloadAction<string>) => {
-			state.courses = state.courses.filter(
-				(course) => Object.keys(course)[0] !== actions.payload
+		removeCourse: (state: AllPlanDetails, actions: PayloadAction<string>) => {
+			state.planData[state.currentPlan].courses = state.planData[
+				state.currentPlan
+			].courses.filter(
+				(course: string) => Object.keys(course)[0] !== actions.payload
 			)
+			state.isDirtyValue = true
 		},
-		reorderCourses: (
-			state: AllCourseDetails,
-			actions: PayloadAction<CourseDetails[]>
+		setPlan: (
+			state: AllPlanDetails,
+			actions: PayloadAction<'Plan 1' | 'Plan 2' | 'Plan 3'>
 		) => {
-			state.courses = actions.payload
+			if (ExistingPlans.includes(actions.payload)) {
+				state.currentPlan = actions.payload
+			}
 		},
 		setCourse: (
-			state: AllCourseDetails,
+			state: AllPlanDetails,
 			actions: PayloadAction<CourseDetails[]>
 		) => {
-			state.courses = actions.payload
+			state.planData[state.currentPlan].courses = actions.payload
+			state.isDirtyValue = true
+		},
+		setFavorite: (
+			state: AllPlanDetails,
+			actions: PayloadAction<FavoriteTimetable>
+		) => {
+			state.planData[state.currentPlan].favorite = actions.payload
+			state.isDirtyValue = true
 		},
 	},
 })
 
 export default courseSlice
-export const { addCourse, removeCourse, reorderCourses, setCourse } =
-	courseSlice.actions
+export const {
+	loadInitialCourse,
+	addCourse,
+	removeCourse,
+	setPlan,
+	setCourse,
+	setFavorite,
+} = courseSlice.actions

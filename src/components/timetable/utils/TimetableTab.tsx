@@ -25,7 +25,7 @@ export function TimetableTab({ activeTab, setActiveTab, isDisabled }) {
 				style={{ borderTopRightRadius: '15px' }}
 				onClick={() => openTab('combinations')}
 			>
-				Combinations
+				Timetables
 			</div>
 		</div>
 	)

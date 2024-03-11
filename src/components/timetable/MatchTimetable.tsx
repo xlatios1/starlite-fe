@@ -4,19 +4,19 @@ import {
 	convertRemarks,
 } from '@components/timetable/utils/timetableUtils.ts'
 import type {
-	CourseDetails,
-	ModifiedCourseDetails,
-	indexinfos,
-} from '@components/searchbar/SearchBar.actions.ts'
-import type { Combinations, TimetableClassData } from './types/timetableTypes'
+	Combinations,
+	TimetableClassData,
+} from './types/timetableTypes.ts'
+import { CourseDetails, indexinfos } from '@store/course/courseSlice.ts'
 
 export function MatchTimetable(timetable_data: CourseDetails[]): {
 	timetable_data: TimetableClassData[]
 	info: [string, string][]
 	rank: number
 }[] {
+	console.log('WAOITARFNEHWJKAN FKCJENWSDBKFVCNK<EN ', timetable_data)
 	const new_timetable_data = [...timetable_data]
-	console.log("data in:", new_timetable_data)
+	console.log('data in:', new_timetable_data)
 	let allCombi = [] as Combinations[] //holds all combinations
 	for (const course of new_timetable_data) {
 		let courseCode = Object.keys(course)[0]
@@ -38,7 +38,7 @@ export function MatchTimetable(timetable_data: CourseDetails[]): {
 			}
 			baseClass.push([
 				1,
-				[[courseCode, indexes[i].index]],
+				[[courseCode, indexes[i].index, course[courseCode].colorCode]],
 				[courseCode.toString() + indexes[i].index.toString()],
 				hours,
 				wks,
@@ -136,7 +136,7 @@ export function MatchCommonTimetable(search: Array<CourseDetails>): any[][] {
 	return MatchTimetableFormat(commonTimetable)
 }
 
-export function MatchTimetableFormat(search: ModifiedCourseDetails[]) {
+export function MatchTimetableFormat(search) {
 	let timetable_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)

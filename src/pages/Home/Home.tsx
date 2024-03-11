@@ -139,22 +139,13 @@ export default function Home() {
 						{activeTab === 'combinations' ? (
 							<>
 								{walkthrough === 3 && helperText('showCourseIndexTip')}
-								{/* {timetableData.map(({ timetable_data, info }, index) => {
-									return (
-										<div className="time-table-container" key={index}>
-											<TimeTable
-												timetable_data={timetable_data}
-												info={info} //add in the course indexes informations {code: index}
-											/>
-										</div>
-									)
-								})} */}
 								<div className="time-table-container">
 									<TimeTable
 										timetable_data={
 											timetableData[currentPage - 1].timetable_data
 										}
 										info={timetableData[currentPage - 1].info} //add in the course indexes informations {code: index}
+										showDashboard={true}
 									/>
 								</div>
 								<Paginations
@@ -163,7 +154,14 @@ export default function Home() {
 								/>
 							</>
 						) : (
-							<TimeTable timetable_data={timetablePreview} info={null} />
+							<TimeTable
+								timetable_data={timetablePreview}
+								info={AllCourses[currentPlan].courses.reduce((acc, cur) => {
+									const course = Object.keys(cur)[0]
+									return acc.concat([[course, '', cur[course].colorCode]])
+								}, [])}
+								showDashboard={false}
+							/>
 						)}
 					</div>
 				</div>

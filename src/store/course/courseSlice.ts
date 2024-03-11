@@ -26,7 +26,7 @@ export type ColorPalette =
 	| '--violet'
 	| '--purple'
 	| '--pink'
-	| '--darkred'
+	| '--limegreen'
 	| '--brown'
 
 export type CourseDetails = {
@@ -77,7 +77,7 @@ export const CourseColorPalette = [
 	'--violet',
 	'--purple',
 	'--pink',
-	'--darkred',
+	'--limegreen',
 	'--brown',
 ] as ColorPalette[]
 

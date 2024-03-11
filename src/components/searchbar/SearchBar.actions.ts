@@ -1,10 +1,10 @@
 import {
 	addCourse,
 	ColorPalette,
-	CourseDetails,
 	FavoriteTimetable,
 	updateCourseColorPalette,
 } from '@store/course/courseSlice.ts'
+import type { CourseDetails } from '@store/course/courseSlice.ts'
 import Notification from '@components/notification/notification.tsx'
 
 export async function FetchCourseDetails(
@@ -26,7 +26,10 @@ export async function FetchCourseDetails(
 	const valid_course = []
 	const courseRegex: RegExp = /\b\w{6}\b/g
 	let match
-	while ((match = courseRegex.exec(text_without_punctuation)) !== null) {
+	while (
+		(match = courseRegex.exec(text_without_punctuation)) !== null &&
+		prevCourseCode.length < 10
+	) {
 		const course: string = match[0].toUpperCase()
 		if (!prevCourseCode.includes(course)) {
 			await getCourseDetails(course)
@@ -70,6 +73,13 @@ export async function FetchCourseDetails(
 				})
 		}
 	}
+	if (match && (match.length > 0 || prevCourseCode.length > 10)) {
+		Notification(
+			'error',
+			'Hit the limit of 10 courses only! Are you a god?',
+			3000
+		)
+	}
 	await dispatch(updateCourseColorPalette(palette))
 	if (valid_course.length > 0) {
 		Notification(
@@ -81,3 +91,5 @@ export async function FetchCourseDetails(
 		Notification('info', 'No unique valid course found!', 1000)
 	}
 }
+
+export { CourseDetails }

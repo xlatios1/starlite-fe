@@ -87,6 +87,14 @@ export const timeslotToInt = (
 	return { start: start, duration: end - start }
 }
 
+export const intToTimeslot = (start: number, duration: number): string => {
+	const starting = (start * 100 + 730).toString()
+	const ending = ((start + duration) * 100 + 730).toString()
+	return `${starting.length === 3 ? `0${starting}` : `${starting}`}-${
+		ending.length === 3 ? `0${ending}` : `${ending}`
+	}`
+}
+
 export const convertRemarks = (remark: string): Array<number> => {
 	const defaultRemark = Array.from({ length: 15 }, (_, index) => index)
 	if (remark.slice(0, 8) === 'Teaching') {

@@ -59,11 +59,11 @@ export default function Registration() {
 				registration.newEmail,
 				registration.newPassword
 			)
-			if (isCreated === true) {
+			if (isCreated.status === 200) {
 				Notification('success', 'Account creation successful!', 2000)
 				navigate('/home')
 			} else {
-				Notification('error', isCreated.message.split(': ')[1], 3000)
+				Notification('error', isCreated.message, 2000)
 			}
 			dispatch(closeLoading())
 		}

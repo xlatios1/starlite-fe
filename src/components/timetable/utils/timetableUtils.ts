@@ -55,9 +55,10 @@ export const convertExamSchedule = (searched) => {
 		// 	monthNames[parseInt(mm)]
 		// }-${yyyy} ${formattedTime}`
 		return `Exam Schedule: ${dd}-${
-			monthNames[parseInt(mm)]
+			monthNames[parseInt(mm) - 1]
 		}-${yyyy} ${formattedTime}`
 	})
+	console.log(searched, examSchedule)
 	examSchedule.sort((a, b) => a.localeCompare(b))
 	return examSchedule
 }

@@ -5,24 +5,23 @@ import { UserAuth } from '@authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
 import './navbar.css'
 
-type NavBar = {
+type NavBarProp = {
 	user: string
 	active: string
 }
 
-export default function NavBar({ user, active }: NavBar) {
+export default function NavBar({ user, active }: NavBarProp) {
 	const [isMenuClick, setIsMenuClick] = useState(true)
 	const { logout } = UserAuth()
 	const navigate = useNavigate()
 
 	const handleLogout = async () => {
-		try {
-			await logout()
+		const isLogout = await logout()
+		if (isLogout.status === 200) {
 			navigate('/')
 			Notification('success', 'Logout successful!', 1000)
-		} catch (e) {
-			Notification('error', 'An unexpected error has occured (Logout)', 3000)
-			console.log(e.message)
+		} else {
+			Notification('error', isLogout.message, 3000)
 		}
 	}
 

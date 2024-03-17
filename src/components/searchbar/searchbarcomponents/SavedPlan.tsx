@@ -27,7 +27,6 @@ export default function SavedPlan({
 	const [isInitialRender, setIsInitialRender] = useState(true)
 	const { getFirebaseData, setFirebaseData, fetchUserInCache } = UserAuth()
 
-	const user = fetchUserInCache()
 	const dispatch = useDispatch()
 	const planData = useSelector((state: RootState) => state.course.planData)
 	const currentPlan = useSelector(
@@ -45,13 +44,28 @@ export default function SavedPlan({
 
 	useEffect(() => {
 		dispatch(openLoading())
-		getFirebaseData(user)
-			.then((data) => {
-				if (Object.keys(data).length > 0) {
-					dispatch(loadInitialCourse(data))
+		getFirebaseData(fetchUserInCache())
+			.then(({ status, data, message }) => {
+				console.log(status, data, message)
+				switch (status) {
+					case 200:
+						dispatch(loadInitialCourse(data))
+						break
+					case 304:
+						break
+					case 500:
+						Notification('error', message, 2000)
+						break
+					default:
+						break
 				}
 			})
+			.catch(() => {
+				console.log('AWDAWDF')
+				Notification('error', 'An unexpected error has occured (Load)', 2000)
+			})
 			.finally(() => {
+				console.log('EH?')
 				setIsInitialRender(false)
 				dispatch(closeLoading())
 			})
@@ -87,12 +101,12 @@ export default function SavedPlan({
 				])
 			)
 		}
-		await setFirebaseData(user, { [currentPlan]: data })
+		await setFirebaseData(fetchUserInCache(), { [currentPlan]: data })
 			.then(() => {
 				Notification('success', `Successfully saved ${currentPlan}!`, 1000)
 			})
 			.catch(() => {
-				Notification('error', 'An unexpected error has occured (Save)', 3000)
+				Notification('error', 'An unexpected error has occured (Save)', 2000)
 			})
 			.finally(() => {
 				dispatch(closeLoading())

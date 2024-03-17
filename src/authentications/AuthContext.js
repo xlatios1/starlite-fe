@@ -13,39 +13,56 @@ import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
 const UserContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-	const authWrapper = async (authFunction, email, password) => {
+	const authWrapper = async (
+		type,
+		authFunction,
+		email = null,
+		password = null
+	) => {
 		try {
-			await authFunction(auth, email, password).then((user) => {
-				setData(user.user)
-			})
-			return true
+			if (type === 'logout') {
+				localStorage.removeItem('credentials')
+				await authFunction(auth)
+			} else {
+				const response = await authFunction(auth, email, password)
+				if (type === 'create') {
+					setFirebaseData(response.user, {
+						createdAt: new Date().toLocaleString('en-SG', {
+							day: '2-digit',
+							month: 'short',
+							year: 'numeric',
+						}),
+					})
+				}
+			}
+			return { status: 200, message: '' }
 		} catch (error) {
-			return error
+			return { status: 500, message: error.message.split(':')[1] }
 		}
 	}
 
 	const createUser = async (email, password) => {
-		try {
-			console.log('Create user CLICKED')
-			return authWrapper(createUserWithEmailAndPassword, email, password)
-		} catch (e) {
-			return { message: 'Error: API request set user is unsuccessful' }
-		}
+		console.log('Create user CLICKED')
+		return authWrapper(
+			'create',
+			createUserWithEmailAndPassword,
+			email,
+			password
+		)
 	}
 
 	const signIn = (email, password) => {
 		console.log('Sign in CLICKED')
-		return authWrapper(signInWithEmailAndPassword, email, password)
-	}
-
-	const fetchUserInCache = () => {
-		return JSON.parse(localStorage.getItem('credentials'))
+		return authWrapper('login', signInWithEmailAndPassword, email, password)
 	}
 
 	const logout = () => {
 		console.log('Logout CLICKED')
-		localStorage.removeItem('credentials')
-		return signOut(auth)
+		return authWrapper('logout', signOut)
+	}
+
+	const fetchUserInCache = () => {
+		return JSON.parse(localStorage.getItem('credentials'))
 	}
 
 	const getFileData = async (user, fields = null) => {
@@ -142,29 +159,42 @@ export const AuthContextProvider = ({ children }) => {
 
 	const getFirebaseData = async (user, count = 3) => {
 		console.log('getFirebaseData called!', count)
-		return new Promise((resolve) => {
-			setTimeout(async () => {
-				await getDoc(doc(db, 'StarliteUserData', user.uid))
-					.then((data) => {
+		if (user) {
+			return new Promise((resolve) => {
+				setTimeout(async () => {
+					try {
+						const data = await getDoc(doc(db, 'StarliteUserData', user.uid))
 						if (data.exists()) {
-							console.log('resolve', data.data())
-							resolve(data.data())
+							resolve({ status: 200, data: data.data(), message: 'Successful' })
 						} else {
 							if (count > 0) {
-								return getFirebaseData(user, count - 1)
+								resolve(await getFirebaseData(user, count - 1))
 							} else {
-								resolve(null)
+								setFirebaseData(user, {
+									createdAt: new Date().toLocaleString('en-SG', {
+										day: '2-digit',
+										month: 'short',
+										year: 'numeric',
+									}),
+								})
+								resolve({ status: 304, data: null, message: 'Successful' })
 							}
 						}
-					})
-					.catch(() => {
-						throw new Error('Unable to retrieve firebase data.')
-					})
-			}, 1000)
-		})
+					} catch (error) {
+						resolve({
+							status: 500,
+							data: null,
+							message: 'Unable to retrieve firebase data.',
+						})
+					}
+				}, 1000)
+			})
+		} else {
+			return { status: 500, data: null, message: 'Invalid user found.' }
+		}
 	}
 
-	const setFirebaseData = async (user, payload) => {
+	const setFirebaseData = async (user, payload = {}) => {
 		console.log('setFirebaseData called!')
 		await setDoc(doc(db, 'StarliteUserData', user.uid), payload, {
 			merge: true,

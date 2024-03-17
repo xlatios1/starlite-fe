@@ -4,6 +4,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '@authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
 import './navbar.css'
+import { useDispatch } from 'react-redux'
 
 type NavBarProp = {
 	user: string
@@ -14,11 +15,13 @@ export default function NavBar({ user, active }: NavBarProp) {
 	const [isMenuClick, setIsMenuClick] = useState(true)
 	const { logout } = UserAuth()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	const handleLogout = async () => {
 		const isLogout = await logout()
 		if (isLogout.status === 200) {
 			navigate('/')
+			dispatch({ type: 'LOGOUT' })
 			Notification('success', 'Logout successful!', 1000)
 		} else {
 			Notification('error', isLogout.message, 3000)

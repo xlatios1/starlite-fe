@@ -74,23 +74,14 @@ export default function SearchCourseList({ courses, setOrdered, dispatch }) {
 										c[course_code].name}
 								</div>
 								<hr style={{ width: '100%', border: '0.5px solid black' }} />
-								<p
-									style={{
-										width: '100%',
-										fontSize: '10px',
-									}}
-								>
+								<p style={{ width: '100%', fontSize: '10px' }}>
 									{convertExamSchedule([c])}
 								</p>
 							</ol>
 							<div className="remove-course-name">
 								<IconButton
 									onClick={() => dispatch(removeCourse(course_code))}
-									sx={{
-										height: '40px',
-										width: '40px',
-										color: 'black',
-									}}
+									sx={{ height: '40px', width: '40px', color: 'black' }}
 								>
 									<DeleteOutlinedIcon />
 								</IconButton>

@@ -17,7 +17,7 @@ export default function TimeTable({
 
 	return (
 		<div className="conic">
-			{info || !hasConflict ? null : (
+			{hasConflict ? (
 				<p
 					className="conflict-message"
 					style={{
@@ -29,6 +29,8 @@ export default function TimeTable({
 				>
 					Please resolve the course conflict!
 				</p>
+			) : (
+				<></>
 			)}
 			<TimetableDashboard dashboardInfo={info} showDashboard={showDashboard} />
 			<table className="table">

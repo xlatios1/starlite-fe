@@ -41,14 +41,16 @@ export default function SearchBar({
 	const [getCourseDetails] = useLazyGetCourseDetailsQuery()
 
 	const handleSelect = (value) => {
-		const words = input.trim().split(' ')
-		words[words.length - 1] = value
-		const modifiedSentence = words.join(' ') + ' '
+		// const words = input.trim().split(' ')
+		// words[words.length - 1] = value
+		// const modifiedSentence = words.join(' ') + ' '
 
-		setInput(modifiedSentence)
-		setSuggestions([])
-		setSelectedIndex(-1)
-		FocusTextBox({ ref: searchBoxRef })
+		// setInput(modifiedSentence)
+		// setSuggestions([])
+		// setSelectedIndex(-1)
+		// FocusTextBox({ ref: searchBoxRef })
+		setIsFocused(false)
+		handleOnSearchValidCourses(value)
 	}
 
 	const handleInput = async (value = '') => {
@@ -70,12 +72,18 @@ export default function SearchBar({
 		}
 	}
 
-	const handleOnSearchValidCourses = () => {
+	const handleOnSearchValidCourses = (value?: string) => {
 		dispatch(openLoading())
 		setInput('')
 		setSuggestions([])
+		searchBoxRef.current.blur()
 		setTimeout(async () => {
-			await FetchCourseDetails(input, courseData, dispatch, getCourseDetails)
+			await FetchCourseDetails(
+				value || input,
+				courseData,
+				dispatch,
+				getCourseDetails
+			)
 			if (walkthrough) {
 				dispatch(setWalkthough(2))
 			}
@@ -116,13 +124,18 @@ export default function SearchBar({
 				handleSelect(suggestions[selectedIndex].code)
 			} else {
 				handleOnSearchValidCourses()
-				searchBoxRef.current.blur()
 			}
 		} else if (event.key === 'Escape') {
 			setSelectedIndex(-1)
 			searchBoxRef.current.blur()
 		}
 	}
+
+	useEffect(() => {
+		if (!isFocused) {
+			setSelectedIndex(-1)
+		}
+	}, [isFocused])
 
 	useEffect(() => {
 		if (ordered.bestChance) {

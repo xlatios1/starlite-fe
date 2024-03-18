@@ -4,7 +4,7 @@ export const handleEmailChanges = (input: string) => {
 	let newLetters = ''
 
 	try {
-		if (splitInput.length == 2) {
+		if (splitInput.length === 2) {
 			if (splitInput[1].length > 12) {
 				for (let i = 0, c = 0; i < splitInput[1].length && c < 13; i++) {
 					if (splitInput[1][i] === domain.substring(1)[c]) {

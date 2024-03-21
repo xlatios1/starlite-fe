@@ -8,7 +8,6 @@ import Paginations from '@components/pagination/pagination.tsx'
 import { Box } from '@mui/material'
 import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { applyPreferences } from '@components/timetable/utils/TimeTableCalc.tsx'
-import { TimetableHelper } from '@components/timetable/utils/TimetableHelper.tsx'
 import { TimetableTab } from '@components/timetable/utils/TimetableTab.tsx'
 import { MatchTimetable } from '@components/timetable/MatchTimetable.tsx'
 import './home.css'
@@ -24,7 +23,7 @@ export default function Home() {
 		Array.from({ length: 11 }, () => [])
 	)
 
-	const searchValidRef = useRef(null)
+	const searchValidRef = useRef<HTMLDivElement>(null)
 	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
 	const [timetableData, setTimetableData] = useState([]) //timetable option datas
 	const [currentPage, setCurrentPage] = useState(1)
@@ -134,7 +133,6 @@ export default function Home() {
 						setActiveTab={setActiveTab}
 						isDisabled={timetableData.length > 0}
 					/>
-					<TimetableHelper activeTab={activeTab} />
 					<div className="time-table-wrapper">
 						{activeTab === 'combinations' ? (
 							<>

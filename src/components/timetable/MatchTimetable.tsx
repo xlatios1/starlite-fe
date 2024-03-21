@@ -7,7 +7,11 @@ import type {
 	Combinations,
 	TimetableClassData,
 } from './types/timetableTypes.ts'
-import { CourseDetails, indexinfos } from '@store/course/courseSlice.ts'
+import {
+	classinfo,
+	CourseDetails,
+	indexinfos,
+} from '@store/course/courseSlice.ts'
 
 export function MatchTimetable(timetable_data: CourseDetails[]): {
 	timetable_data: TimetableClassData[]
@@ -136,7 +140,11 @@ export function MatchCommonTimetable(search: Array<CourseDetails>): any[][] {
 	return MatchTimetableFormat(commonTimetable)
 }
 
-export function MatchTimetableFormat(search) {
+export function MatchTimetableFormat(
+	search: {
+		[x: string]: [] | classinfo[]
+	}[]
+) {
 	let timetable_data: any[][] = Array.from({ length: 7 }, () =>
 		Array.from({ length: 16 }, () => [])
 	)

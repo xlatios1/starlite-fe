@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef, useEffect } from 'react'
+import React, { useLayoutEffect, useState, useRef, useEffect } from 'react'
 import '@styles/signin.css'
 import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
@@ -35,7 +35,7 @@ export default function Registration() {
 		}
 	}, [])
 
-	const handleCreateUser = async (e) => {
+	const handleCreateUser = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
 		let errMsg = []
 		if (registration.newEmail.length < 14) {

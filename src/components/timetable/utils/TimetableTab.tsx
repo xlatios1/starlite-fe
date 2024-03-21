@@ -1,19 +1,32 @@
+import { Paper } from '@mui/material'
 import React from 'react'
 
-export function TimetableTab({ activeTab, setActiveTab, isDisabled }) {
-	const openTab = (tabName) => {
+type TimetableTabProps = {
+	activeTab: string
+	setActiveTab: React.Dispatch<React.SetStateAction<string>>
+	isDisabled: boolean
+}
+
+export function TimetableTab({
+	activeTab,
+	setActiveTab,
+	isDisabled,
+}: TimetableTabProps) {
+	const openTab = (tabName: string) => {
 		if (isDisabled) {
 			setActiveTab(tabName)
 		}
 	}
 
 	return (
-		<div className="time-table-tab">
+		<Paper
+			elevation={0}
+			sx={{ flexDirection: 'row', display: 'flex', mb: '10px' }}
+		>
 			<div
 				className={`time-table-tab-option ${
 					activeTab === 'timetable' ? 'active' : ''
 				}`}
-				style={{ borderTopLeftRadius: '15px' }}
 				onClick={() => openTab('timetable')}
 			>
 				Fixed Slot
@@ -22,11 +35,10 @@ export function TimetableTab({ activeTab, setActiveTab, isDisabled }) {
 				className={`time-table-tab-option ${
 					activeTab === 'combinations' ? 'active' : ''
 				} ${isDisabled ? '' : 'disabled'}`}
-				style={{ borderTopRightRadius: '15px' }}
 				onClick={() => openTab('combinations')}
 			>
 				Timetables
 			</div>
-		</div>
+		</Paper>
 	)
 }

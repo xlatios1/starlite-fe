@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
-import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent.jsx'
-import { SearchResultList } from './searchbarcomponents/SearchResultList.jsx'
-import FocusTextBox from '@components/errorhandling/Focus.tsx'
+import { useState, useRef, useEffect, SetStateAction, Dispatch } from 'react'
+import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent.tsx'
+import { SearchResultList } from './searchbarcomponents/SearchResultList.tsx'
 import SavedPlan from './searchbarcomponents/SavedPlan.tsx'
 import { FetchCourseDetails } from '@components/searchbar/SearchBar.actions.ts'
 import './searchbar.css'
@@ -13,9 +12,26 @@ import {
 	useLazyGetCourseDetailsQuery,
 } from '@store/course/courseApi.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
-import { setCourse } from '@store/course/courseSlice.ts'
+import {
+	ColorPalette,
+	CourseDetails,
+	FavoriteTimetable,
+	setCourse,
+} from '@store/course/courseSlice.ts'
 import SearchCourseList from '@components/searchbar/SearchCourseList.tsx'
 import React from 'react'
+
+type SearchBarProps = {
+	courseData: {
+		courses: CourseDetails[]
+		favorite: FavoriteTimetable
+		CourseColorPalette: ColorPalette[]
+	}
+	handleSearch: (searched: CourseDetails[]) => void
+	searchValidRef: React.MutableRefObject<HTMLDivElement>
+	walkthrough: number
+	setTimetablePreview: Dispatch<SetStateAction<any[][]>>
+}
 
 export default function SearchBar({
 	courseData,
@@ -23,7 +39,7 @@ export default function SearchBar({
 	searchValidRef,
 	walkthrough,
 	setTimetablePreview,
-}) {
+}: SearchBarProps) {
 	const [suggestions, setSuggestions] = useState([])
 	const [input, setInput] = useState('')
 	const [ordered, setOrdered] = useState({

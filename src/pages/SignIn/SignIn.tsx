@@ -6,10 +6,11 @@ import FocusTextBox from '@components/errorhandling/Focus.tsx'
 import { handleEmailChanges } from '@root/components/emailhandler/handleEmailChanges.tsx'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { Link, useNavigate } from 'react-router-dom'
+import React from 'react'
 
 export default function Signin() {
-	const uemail = useRef()
-	const pass = useRef()
+	const uemail = useRef(null)
+	const pass = useRef(null)
 	const [login, setLogin] = useState({
 		email: '@e.ntu.edu.sg',
 		password: '',
@@ -53,7 +54,7 @@ export default function Signin() {
 		}
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		let value = e.target.value
 		if (e.target.name === 'email') {
 			value = handleEmailChanges(value)
@@ -66,10 +67,12 @@ export default function Signin() {
 
 	//runs synchronously before the repaint, eliminating the unintended blink.
 	useLayoutEffect(() => {
-		uemail.current.setSelectionRange(
-			login.email.length - 13,
-			login.email.length - 13
-		)
+		if (uemail.current) {
+			uemail.current.setSelectionRange(
+				login.email.length - 13,
+				login.email.length - 13
+			)
+		}
 	}, [login.email])
 
 	return (

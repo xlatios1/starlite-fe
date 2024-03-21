@@ -1,5 +1,5 @@
 import React from 'react'
-import { SearchResult } from './SearchResult'
+import { SearchResult } from './SearchResult.tsx'
 
 export const SearchResultList = ({
 	suggestions,

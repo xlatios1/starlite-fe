@@ -6,6 +6,7 @@ import {
 } from '@store/course/courseSlice.ts'
 import type { CourseDetails } from '@store/course/courseSlice.ts'
 import Notification from '@components/notification/notification.tsx'
+import { Dispatch, UnknownAction } from '@reduxjs/toolkit'
 
 export async function FetchCourseDetails(
 	search: string,
@@ -14,7 +15,7 @@ export async function FetchCourseDetails(
 		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	},
-	dispatch,
+	dispatch: Dispatch<UnknownAction>,
 	getCourseDetails
 ) {
 	const palette = [...courseData.CourseColorPalette]

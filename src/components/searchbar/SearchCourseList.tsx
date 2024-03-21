@@ -1,10 +1,30 @@
 import { Box, IconButton } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import { removeCourse, setCourse } from '@store/course/courseSlice.ts'
+import {
+	CourseDetails,
+	removeCourse,
+	setCourse,
+} from '@store/course/courseSlice.ts'
 import { convertExamSchedule } from '@components/timetable/utils/timetableUtils.ts'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
+import { UnknownAction } from '@reduxjs/toolkit'
 
-export default function SearchCourseList({ courses, setOrdered, dispatch }) {
+type SearchCourseListProps = {
+	courses: CourseDetails[]
+	setOrdered: Dispatch<
+		SetStateAction<{
+			bestChance: boolean
+			noExams: number
+		}>
+	>
+	dispatch: Dispatch<UnknownAction>
+}
+
+export default function SearchCourseList({
+	courses,
+	setOrdered,
+	dispatch,
+}: SearchCourseListProps) {
 	const [draggedItem, setDraggedItem] = useState(null)
 
 	const handleDragStart = (e, course_code) => {

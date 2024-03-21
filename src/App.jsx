@@ -1,7 +1,7 @@
 import '@styles/signin.css'
-import Registration from '@pages/Registration/Registration.jsx'
-import SignIn from '@pages/SignIn/SignIn.jsx'
-import NotFound from '@pages/NotFound/NotFound.jsx'
+import Registration from '@pages/Registration/Registration.tsx'
+import SignIn from '@pages/SignIn/SignIn.tsx'
+import NotFound from '@pages/NotFound/NotFound.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './authentications/ProtectedRoute.js'
 import { ToastContainer } from 'react-toastify'
@@ -37,7 +37,7 @@ export default function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Router>
-			<div className="version-tag">Beta version: 3.1.9</div>
+			<div className="version-tag">Beta version: 3.1.10</div>
 		</>
 	)
 }

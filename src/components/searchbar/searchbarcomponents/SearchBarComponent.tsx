@@ -1,5 +1,13 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { RiSearchLine } from 'react-icons/ri'
+
+type SearchBarComponentProps = {
+	handleInput: (value?: string) => Promise<void>
+	input: string
+	searchBoxRef: React.LegacyRef<HTMLInputElement>
+	setIsFocused: Dispatch<SetStateAction<boolean>>
+	shouldHandleBlur: boolean
+}
 
 export const SearchBarComponent = ({
 	handleInput,
@@ -7,7 +15,7 @@ export const SearchBarComponent = ({
 	searchBoxRef,
 	setIsFocused,
 	shouldHandleBlur,
-}) => {
+}: SearchBarComponentProps) => {
 	const handleFocus = () => {
 		setIsFocused(true)
 	}

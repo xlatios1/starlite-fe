@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
+
+type SearchResultProps = {
+	result: { code: string; name: string }
+	handleSelect: (value: string) => void
+	setShouldHandleBlur: Dispatch<SetStateAction<boolean>>
+	selectedIndex: boolean
+}
 
 export const SearchResult = ({
 	result,
 	handleSelect,
 	setShouldHandleBlur,
 	selectedIndex,
-}) => {
+}: SearchResultProps) => {
 	const handleOptionMouseDown = () => {
 		// Set the flag to indicate that the blur event should not be handled
 		setShouldHandleBlur(false)

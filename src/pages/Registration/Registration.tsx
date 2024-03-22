@@ -4,7 +4,7 @@ import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
 import { UserAuth } from '@authentications/AuthContext.js'
-import { handleEmailChanges } from '@root/components/emailhandler/handleEmailChanges.tsx'
+import { handleEmailChanges } from '@components/formcontrol/emailhandler/handleEmailChanges.tsx'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
@@ -26,10 +26,7 @@ export default function Registration() {
 
 	const curUser = fetchUserInCache()
 	useEffect(() => {
-		if (
-			curUser &&
-			curUser?.stsTokenManager?.expirationTime > new Date().getTime()
-		) {
+		if (curUser?.expirationTime > new Date().getTime()) {
 			console.log('Active user cache present, directing...', curUser)
 			navigate('/home')
 		}
@@ -60,10 +57,10 @@ export default function Registration() {
 				registration.newPassword
 			)
 			if (isCreated.status === 200) {
-				Notification('success', 'Account creation successful!', 2000)
-				navigate('/home')
+				Notification('success', 'Account creation successful!', 1000)
+				navigate('/verify')
 			} else {
-				Notification('error', isCreated.message, 2000)
+				Notification('error', isCreated.message, 1000)
 			}
 			dispatch(closeLoading())
 		}

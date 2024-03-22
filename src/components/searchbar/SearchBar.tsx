@@ -40,13 +40,16 @@ export default function SearchBar({
 	walkthrough,
 	setTimetablePreview,
 }: SearchBarProps) {
-	const [suggestions, setSuggestions] = useState([])
+	const [getCourseDetails] = useLazyGetCourseDetailsQuery()
+	const [suggestions, setSuggestions] = useState<
+		{ code: string; name: string }[]
+	>([])
 	const [input, setInput] = useState('')
 	const [ordered, setOrdered] = useState({
 		bestChance: false,
 		noExams: 0,
 	})
-	const searchBoxRef = useRef(null)
+	const searchBoxRef = useRef<HTMLInputElement>(null)
 	const [toggleCourseList, setToggleCourseList] = useState(true)
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
@@ -54,9 +57,8 @@ export default function SearchBar({
 
 	const dispatch = useDispatch()
 	const [findCourse] = useLazyFindCourseContainQuery()
-	const [getCourseDetails] = useLazyGetCourseDetailsQuery()
 
-	const handleSelect = (value) => {
+	const handleSelect = (value: string) => {
 		// const words = input.trim().split(' ')
 		// words[words.length - 1] = value
 		// const modifiedSentence = words.join(' ') + ' '
@@ -230,18 +232,20 @@ export default function SearchBar({
 						setOrdered={setOrdered}
 						dispatch={dispatch}
 					/>
-					<button
-						className="fetch-btn"
-						onClick={() => handleSearch(courseData.courses)}
-					>
-						<span className="text">Search</span>
-					</button>
-					<span
+					<div style={{ marginBottom: 10 }}>
+						<button
+							className="fetch-btn"
+							onClick={() => handleSearch(courseData.courses)}
+						>
+							<span className="text">Search</span>
+						</button>
+					</div>
+					{/* <span
 						className={`fa fa-angle-${toggleCourseList ? 'up' : 'down'}`}
 						onClick={() => {
 							setToggleCourseList((prev) => !prev)
 						}}
-					></span>
+					></span> */}
 				</div>
 			</div>
 		</div>

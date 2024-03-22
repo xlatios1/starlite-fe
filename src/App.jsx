@@ -1,6 +1,7 @@
 import '@styles/signin.css'
 import Registration from '@pages/Registration/Registration.tsx'
 import SignIn from '@pages/SignIn/SignIn.tsx'
+import VerificationPage from '@pages/Verification/VerificationPage.tsx'
 import NotFound from '@pages/NotFound/NotFound.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './authentications/ProtectedRoute.js'
@@ -33,6 +34,7 @@ export default function App() {
 				<Routes>
 					<Route path="/" element={<SignIn />} />
 					<Route path="/register" element={<Registration />} />
+					<Route path="/verify" element={<VerificationPage />} />
 					{renderProtectedPaths(['/home', '/upload', '/about'])}
 					<Route path="*" element={<NotFound />} />
 				</Routes>

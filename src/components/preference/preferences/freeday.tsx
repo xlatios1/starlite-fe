@@ -1,5 +1,5 @@
 import React from 'react'
-import Checkbox from '@components/checkbox/checkbox.tsx'
+import Checkbox from '@components/buttons/checkbox/checkbox.tsx'
 import {
 	ToolTip,
 	days,

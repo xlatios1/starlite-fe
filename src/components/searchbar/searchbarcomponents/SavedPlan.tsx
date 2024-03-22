@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
@@ -19,11 +19,17 @@ import { Button } from '@mui/material'
 import Notification from '@components/notification/notification.tsx'
 const _ = require('lodash')
 
+type SavedPlanProps = {
+	courses: CourseDetails[]
+	setOrdered: Dispatch<SetStateAction<{ bestChance: boolean; noExams: number }>>
+	setTimetablePreview: Dispatch<SetStateAction<any[][]>>
+}
+
 export default function SavedPlan({
 	courses,
 	setOrdered,
 	setTimetablePreview,
-}) {
+}: SavedPlanProps) {
 	const [isInitialRender, setIsInitialRender] = useState(true)
 	const { getFirebaseData, setFirebaseData, fetchUserInCache } = UserAuth()
 
@@ -51,7 +57,7 @@ export default function SavedPlan({
 					case 200:
 						dispatch(loadInitialCourse(data))
 						break
-					case 304:
+					case 204:
 						break
 					case 500:
 						Notification('error', message, 2000)

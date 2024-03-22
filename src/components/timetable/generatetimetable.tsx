@@ -114,7 +114,7 @@ export const GenerateTimetable = (
 								{intToTimeslot(details[0].time.start, details[0].time.duration)}
 							</div>
 						) : (
-							<div>
+							<div style={{ width: '100%', height: '100%' }}>
 								<table>
 									<tbody>{handleMultipleClass(details, innerConflict)}</tbody>
 								</table>

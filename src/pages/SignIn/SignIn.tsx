@@ -3,7 +3,7 @@ import { useLayoutEffect, useState, useRef, useEffect } from 'react'
 import Notification from '@components/notification/notification.tsx'
 import RenderAccountError from '@components/errorhandling/Errors.tsx'
 import FocusTextBox from '@components/errorhandling/Focus.tsx'
-import { handleEmailChanges } from '@root/components/emailhandler/handleEmailChanges.tsx'
+import { handleEmailChanges } from '@components/formcontrol/emailhandler/handleEmailChanges.tsx'
 import { UserAuth } from '@authentications/AuthContext.js'
 import { Link, useNavigate } from 'react-router-dom'
 import React from 'react'
@@ -21,10 +21,7 @@ export default function Signin() {
 	const curUser = fetchUserInCache()
 
 	useEffect(() => {
-		if (
-			curUser &&
-			curUser?.stsTokenManager?.expirationTime > new Date().getTime()
-		) {
+		if (curUser?.expirationTime > new Date().getTime()) {
 			console.log('Active user cache present, directing...', curUser)
 			navigate('/home')
 		}
@@ -45,11 +42,17 @@ export default function Signin() {
 		setErrorMessages(Array.from(new Set(errMsg)))
 		if (errMsg.length === 0) {
 			const isSignIn = await signIn(login.email, login.password)
-			if (isSignIn.status === 200) {
-				Notification('success', 'Login successful!', 1000)
-				navigate('/home')
-			} else {
-				Notification('error', isSignIn.message, 3000)
+			switch (isSignIn.status) {
+				case 200:
+					Notification('success', 'Login successful!', 1000)
+					navigate('/home')
+					break
+				case 401:
+					navigate('/verify')
+					break
+				case 500:
+					Notification('error', isSignIn.message, 3000)
+					break
 			}
 		}
 	}

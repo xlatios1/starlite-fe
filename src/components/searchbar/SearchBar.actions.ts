@@ -36,7 +36,7 @@ export async function FetchCourseDetails(
 			await getCourseDetails(course)
 				.unwrap()
 				.then(async (data) => {
-					if (data.detail !== 'Not found.') {
+					if (!('detail' in data)) {
 						let color = palette.splice(
 							Math.floor(Math.random() * palette.length),
 							1

@@ -6,6 +6,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	onAuthStateChanged,
+	sendEmailVerification,
 } from 'firebase/auth'
 
 import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
@@ -13,52 +14,64 @@ import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
 const UserContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-	const authWrapper = async (
-		type,
-		authFunction,
-		email = null,
-		password = null
-	) => {
+	const createUser = async (email, password) => {
+		console.log('Create user CLICKED')
 		try {
-			if (type === 'logout') {
-				localStorage.removeItem('credentials')
-				await authFunction(auth)
-			} else {
-				const response = await authFunction(auth, email, password)
-				if (type === 'create') {
-					setFirebaseData(response.user, {
-						createdAt: new Date().toLocaleString('en-SG', {
-							day: '2-digit',
-							month: 'short',
-							year: 'numeric',
-						}),
-					})
-				}
-			}
+			const userCred = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			)
+			const user = userCred.user
+			await sendEmailVerification(user)
+			setFirebaseData(userCred.user, {
+				createdAt: new Date().toLocaleString('en-SG', {
+					day: '2-digit',
+					month: 'short',
+					year: 'numeric',
+				}),
+			})
 			return { status: 200, message: '' }
 		} catch (error) {
 			return { status: 500, message: error.message.split(':')[1] }
 		}
 	}
 
-	const createUser = async (email, password) => {
-		console.log('Create user CLICKED')
-		return authWrapper(
-			'create',
-			createUserWithEmailAndPassword,
-			email,
-			password
-		)
+	const sendVerificationEmail = async () => {
+		try {
+			if (auth?.user) {
+				await sendEmailVerification(auth.user)
+				return { status: 200, message: '' }
+			}
+			return { status: 404, message: '' }
+		} catch (error) {
+			return { status: 500, message: error.message.split(':')[1] }
+		}
 	}
 
-	const signIn = (email, password) => {
+	const signIn = async (email, password) => {
 		console.log('Sign in CLICKED')
-		return authWrapper('login', signInWithEmailAndPassword, email, password)
+		try {
+			const credUser = await signInWithEmailAndPassword(auth, email, password)
+			if (credUser.user.emailVerified) {
+				return { status: 200, message: '' }
+			} else {
+				return { status: 401, message: '' }
+			}
+		} catch (error) {
+			return { status: 500, message: error.message.split(':')[1] }
+		}
 	}
 
-	const logout = () => {
+	const logout = async () => {
 		console.log('Logout CLICKED')
-		return authWrapper('logout', signOut)
+		try {
+			localStorage.removeItem('credentials')
+			await signOut(auth)
+			return { status: 200, message: '' }
+		} catch (error) {
+			return { status: 500, message: error.message.split(':')[1] }
+		}
 	}
 
 	const fetchUserInCache = () => {
@@ -177,7 +190,7 @@ export const AuthContextProvider = ({ children }) => {
 										year: 'numeric',
 									}),
 								})
-								resolve({ status: 304, data: null, message: 'Successful' })
+								resolve({ status: 204, data: null, message: 'Successful' })
 							}
 						}
 					} catch (error) {
@@ -202,14 +215,24 @@ export const AuthContextProvider = ({ children }) => {
 	}
 
 	useEffect(() => {
-		const login = onAuthStateChanged(auth, (currentUser) => {
-			if (
+		const login = onAuthStateChanged(auth, async (currentUser) => {
+			if (currentUser && !currentUser.emailVerified) {
+				localStorage.setItem(
+					'tempEmail',
+					JSON.stringify({ email: currentUser.email })
+				)
+			} else if (
 				currentUser &&
-				new Date().getTime() < currentUser?.stsTokenManager?.expirationTime
+				new Date().getTime() < currentUser.stsTokenManager.expirationTime
 			) {
+				localStorage.removeItem('tempEmail')
 				localStorage.setItem(
 					'credentials',
-					JSON.stringify(currentUser) //{ displayname: currentUser.providerData.0.displayName, uid: currentUser.uid, accessToken: currentUser.stsTokenManager.accessToken, expirationTime: currentUser.stsTokenManager.expirationTime }
+					JSON.stringify({
+						displayname: currentUser.providerData[0].displayName,
+						uid: currentUser.uid,
+						expirationTime: currentUser.stsTokenManager.expirationTime,
+					})
 				)
 			} else {
 				localStorage.removeItem('credentials')
@@ -225,6 +248,7 @@ export const AuthContextProvider = ({ children }) => {
 			value={{
 				fetchUserInCache,
 				createUser,
+				sendVerificationEmail,
 				signIn,
 				logout,
 				setData,

@@ -17,10 +17,9 @@
     top: 6rem;
     flex-direction: row;
     justify-content: center;
-    margin: auto;
+    margin: 0 auto 140px;
     height: 100%;
     width: fit-content;
-    margin-bottom: 140px;
 }
 
 .search-wrapper{

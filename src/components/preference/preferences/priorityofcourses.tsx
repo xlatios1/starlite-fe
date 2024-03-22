@@ -1,6 +1,6 @@
 import React from 'react'
 import { ToolTip } from '@components/preference/preferenceUtils.tsx'
-import RadioButton from '@components/radiobutton/radiobutton.tsx'
+import RadioButton from '@components/buttons/radiobutton/radiobutton.tsx'
 import '../preferencelists.css'
 
 export default function PriorityOfCourses({

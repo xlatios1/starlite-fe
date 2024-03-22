@@ -15,7 +15,10 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	overflow: hidden;
+
+	/* Changes of removal of arrow */
+	/* overflow: hidden; */
+	margin-top: 10px;
 }
 
 .search-valid-helper{

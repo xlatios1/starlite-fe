@@ -19,6 +19,7 @@ export default function NavBar({ user, active }: NavBarProp) {
 
 	const handleLogout = async () => {
 		const isLogout = await logout()
+		console.log('isLogout', isLogout)
 		if (isLogout.status === 200) {
 			navigate('/')
 			dispatch({ type: 'LOGOUT' })

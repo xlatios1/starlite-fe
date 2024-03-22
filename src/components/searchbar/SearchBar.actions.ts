@@ -41,7 +41,6 @@ export async function FetchCourseDetails(
 							Math.floor(Math.random() * palette.length),
 							1
 						)[0]
-						console.log(course, data, color)
 						const courseDetail = {
 							[course]: {
 								name: data.name,
@@ -65,7 +64,6 @@ export async function FetchCourseDetails(
 					}
 				})
 				.catch((err) => {
-					console.log('err', err)
 					Notification(
 						'error',
 						'An unexpected error has occured (search)',

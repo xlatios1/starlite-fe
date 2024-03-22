@@ -52,7 +52,6 @@ export default function SavedPlan({
 		dispatch(openLoading())
 		getFirebaseData(fetchUserInCache())
 			.then(({ status, data, message }) => {
-				console.log(status, data, message)
 				switch (status) {
 					case 200:
 						dispatch(loadInitialCourse(data))
@@ -67,11 +66,9 @@ export default function SavedPlan({
 				}
 			})
 			.catch(() => {
-				console.log('AWDAWDF')
 				Notification('error', 'An unexpected error has occured (Load)', 2000)
 			})
 			.finally(() => {
-				console.log('EH?')
 				setIsInitialRender(false)
 				dispatch(closeLoading())
 			})

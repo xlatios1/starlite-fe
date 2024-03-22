@@ -100,8 +100,7 @@ export default function Home() {
 
 	return (
 		<div className="homepage">
-			<div className="upper-detail-wrapper"></div>
-			<div className="lower-detail-wrapper">
+			<div className="detail-wrapper">
 				{timetableData.length > 0 ? (
 					<div
 						className={`preference-wrap ${

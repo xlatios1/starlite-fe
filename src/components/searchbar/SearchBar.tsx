@@ -54,7 +54,6 @@ export default function SearchBar({
 	const [isFocused, setIsFocused] = useState(false)
 	const [shouldHandleBlur, setShouldHandleBlur] = useState(true)
 	const [selectedIndex, setSelectedIndex] = useState(-1)
-
 	const dispatch = useDispatch()
 	const [findCourse] = useLazyFindCourseContainQuery()
 
@@ -163,7 +162,6 @@ export default function SearchBar({
 					b[Object.keys(b)[0]].indexes.length
 				)
 			})
-			console.log('sortedCourse', sortedCourse)
 			dispatch(setCourse(sortedCourse))
 		}
 	}, [ordered])

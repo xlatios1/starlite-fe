@@ -7,17 +7,13 @@
     flex-direction: column;
 }
 
-.upper-detail-wrapper{
-
-}
-
-.lower-detail-wrapper{
+.detail-wrapper{
     display: flex;
     position: relative;
     top: 6rem;
     flex-direction: row;
     justify-content: center;
-    margin: 0 auto 140px;
+    margin: 0 auto auto;
     height: 100%;
     width: fit-content;
 }
@@ -78,6 +74,7 @@
     display:flex;
     position:relative;
     flex-direction: column;
+    width: fit-content;
 }
 
 .placeholder{

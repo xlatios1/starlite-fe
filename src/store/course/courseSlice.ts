@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit'
 import React from 'react'
 
 export type classinfo = {
@@ -119,8 +119,12 @@ const courseSlice = createSlice({
 			state.isDirtyValue = true
 		},
 		removeCourse: (state: AllPlanDetails, actions: PayloadAction<string>) => {
+			const index = state.planData[state.currentPlan].courses.findIndex((c) => {
+				return Object.keys(current(c))[0] === actions.payload
+			})
 			state.planData[state.currentPlan].CourseColorPalette.push(
-				state.planData[state.currentPlan].courses[0][actions.payload].colorCode
+				state.planData[state.currentPlan].courses[index][actions.payload]
+					.colorCode
 			)
 			state.planData[state.currentPlan].courses = state.planData[
 				state.currentPlan

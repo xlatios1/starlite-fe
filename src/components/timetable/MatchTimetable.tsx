@@ -18,7 +18,6 @@ export function MatchTimetable(timetable_data: CourseDetails[]): {
 	info: [string, string][]
 	rank: number
 }[] {
-	console.log('WAOITARFNEHWJKAN FKCJENWSDBKFVCNK<EN ', timetable_data)
 	const new_timetable_data = [...timetable_data]
 	console.log('data in:', new_timetable_data)
 	let allCombi = [] as Combinations[] //holds all combinations

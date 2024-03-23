@@ -1,11 +1,10 @@
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext } from 'react'
 import { auth, db } from '@root/firebase'
-
+import FirebaseErrorUtil from '@components/errorhandling/FirebaseError.ts'
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 	signOut,
-	onAuthStateChanged,
 	sendEmailVerification,
 } from 'firebase/auth'
 
@@ -24,7 +23,8 @@ export const AuthContextProvider = ({ children }) => {
 			)
 			const user = userCred.user
 			await sendEmailVerification(user)
-			setFirebaseData(userCred.user, {
+			localStorage.setItem('tempInfo', JSON.stringify({ email: user.email }))
+			setFirebaseData(user, {
 				createdAt: new Date().toLocaleString('en-SG', {
 					day: '2-digit',
 					month: 'short',
@@ -33,19 +33,26 @@ export const AuthContextProvider = ({ children }) => {
 			})
 			return { status: 200, message: '' }
 		} catch (error) {
-			return { status: 500, message: error.message.split(':')[1] }
+			return {
+				status: 500,
+				message: FirebaseErrorUtil.getErrorMessage(error),
+			}
 		}
 	}
 
 	const sendVerificationEmail = async () => {
 		try {
-			if (auth?.user) {
-				await sendEmailVerification(auth.user)
+			if (auth?.currentUser) {
+				await sendEmailVerification(auth.currentUser)
 				return { status: 200, message: '' }
 			}
 			return { status: 404, message: '' }
 		} catch (error) {
-			return { status: 500, message: error.message.split(':')[1] }
+			console.log(error)
+			return {
+				status: 500,
+				message: FirebaseErrorUtil.getErrorMessage(error),
+			}
 		}
 	}
 
@@ -53,13 +60,30 @@ export const AuthContextProvider = ({ children }) => {
 		console.log('Sign in CLICKED')
 		try {
 			const credUser = await signInWithEmailAndPassword(auth, email, password)
-			if (credUser.user.emailVerified) {
+			const currentUser = credUser.user
+			if (currentUser.emailVerified) {
+				localStorage.setItem(
+					'credentials',
+					JSON.stringify({
+						displayname: currentUser.providerData[0].displayName,
+						uid: currentUser.uid,
+						expirationTime: currentUser.stsTokenManager.expirationTime,
+					})
+				)
+				localStorage.removeItem('tempInfo')
 				return { status: 200, message: '' }
 			} else {
+				localStorage.setItem(
+					'tempInfo',
+					JSON.stringify({ email: currentUser.email })
+				)
 				return { status: 401, message: '' }
 			}
 		} catch (error) {
-			return { status: 500, message: error.message.split(':')[1] }
+			return {
+				status: 500,
+				message: FirebaseErrorUtil.getErrorMessage(error),
+			}
 		}
 	}
 
@@ -70,12 +94,19 @@ export const AuthContextProvider = ({ children }) => {
 			await signOut(auth)
 			return { status: 200, message: '' }
 		} catch (error) {
-			return { status: 500, message: error.message.split(':')[1] }
+			return {
+				status: 500,
+				message: FirebaseErrorUtil.getErrorMessage(error),
+			}
 		}
 	}
 
 	const fetchUserInCache = () => {
 		return JSON.parse(localStorage.getItem('credentials'))
+	}
+
+	const fetchTempUserInCache = () => {
+		return JSON.parse(localStorage.getItem('tempInfo'))
 	}
 
 	const getFileData = async (user, fields = null) => {
@@ -214,39 +245,11 @@ export const AuthContextProvider = ({ children }) => {
 		})
 	}
 
-	useEffect(() => {
-		const login = onAuthStateChanged(auth, async (currentUser) => {
-			if (currentUser && !currentUser.emailVerified) {
-				localStorage.setItem(
-					'tempEmail',
-					JSON.stringify({ email: currentUser.email })
-				)
-			} else if (
-				currentUser &&
-				new Date().getTime() < currentUser.stsTokenManager.expirationTime
-			) {
-				localStorage.removeItem('tempEmail')
-				localStorage.setItem(
-					'credentials',
-					JSON.stringify({
-						displayname: currentUser.providerData[0].displayName,
-						uid: currentUser.uid,
-						expirationTime: currentUser.stsTokenManager.expirationTime,
-					})
-				)
-			} else {
-				localStorage.removeItem('credentials')
-			}
-		})
-		return () => {
-			login()
-		}
-	}, [])
-
 	return (
 		<UserContext.Provider
 			value={{
 				fetchUserInCache,
+				fetchTempUserInCache,
 				createUser,
 				sendVerificationEmail,
 				signIn,

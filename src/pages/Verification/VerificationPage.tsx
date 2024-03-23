@@ -21,14 +21,19 @@ const contentProps: SxProps<Theme> = {
 }
 
 const VerificationPage = () => {
-	const { fetchUserInCache, sendVerificationEmail } = UserAuth()
+	const { fetchUserInCache, sendVerificationEmail, fetchTempUserInCache } =
+		UserAuth()
 	const navigate = useNavigate()
 	const curUser = fetchUserInCache()
-	const email = JSON.parse(localStorage.getItem('tempEmail'))?.email
+	const email = fetchTempUserInCache()?.email
 
 	const sendEmail = async () => {
-		await sendVerificationEmail()
-		Notification('info', 'Email sent successfully.')
+		const response = await sendVerificationEmail()
+		if (response.status === 200) {
+			Notification('success', 'Email sent successfully.')
+		} else {
+			Notification('error', 'Please try again later.')
+		}
 	}
 
 	useEffect(() => {

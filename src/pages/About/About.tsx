@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
-import logo from '@images/logo.png'
-import zenaImage from '@images/zena.jpg'
+import logo from '@assets/logo.png'
+import zenaImage from '@assets/zena.jpg'
 import './about.css'
 import FeedbackForm from '@components/formcontrol/feedbackform.tsx'
 import { Box, Typography } from '@mui/material'

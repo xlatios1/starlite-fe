@@ -4,7 +4,7 @@ import {
 	days,
 	tooltipHelperText,
 } from '@components/preference/preferenceUtils.tsx'
-import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
+import MultiSwitch from '@components/buttons/multiswitch/multiswitch.tsx'
 import '../preferencelists.css'
 
 export const timeslotOptions = ['Any Time', 'Morning', 'Afternoon', 'Evening']

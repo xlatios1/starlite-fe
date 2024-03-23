@@ -51,7 +51,7 @@
 
 .bg {
   /* Full height */
-  background: url(../images/zena.jpg) no-repeat fixed center;
+  background: url(../assets/zena.jpg) no-repeat fixed center;
   height: 100vh;
   width: 100vw;
   /* Center and scale the image nicely */

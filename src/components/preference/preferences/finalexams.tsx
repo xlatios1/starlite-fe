@@ -3,7 +3,7 @@ import {
 	ToolTip,
 	tooltipHelperText,
 } from '@components/preference/preferenceUtils.tsx'
-import MultiSwitch from '@components/multiswitch/multiswitch.tsx'
+import MultiSwitch from '@components/buttons/multiswitch/multiswitch'
 import '../preferencelists.css'
 
 export const finalExamOptions = [

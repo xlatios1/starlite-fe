@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
 import logo from '@assets/logo.png'
 import zenaImage from '@assets/zena.jpg'
-import './about.css'
 import FeedbackForm from '@components/formcontrol/feedbackform.tsx'
 import { Box, Typography } from '@mui/material'
+import React from 'react'
+import './about.css'
 
 const About = () => {
 	return (

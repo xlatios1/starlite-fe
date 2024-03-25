@@ -1,12 +1,22 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
 import logo from '@assets/logo.png'
-import zenaImage from '@assets/zena.jpg'
+import selfImage from '@assets/me.jpg'
 import './about.css'
 import FeedbackForm from '@components/formcontrol/feedbackform.tsx'
 import { Box, Typography } from '@mui/material'
+import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
+import { useDispatch } from 'react-redux'
 
 const About = () => {
+	const dispatch = useDispatch()
+	dispatch(openLoading())
+	setTimeout(async () => {
+		dispatch(closeLoading())
+	}, 1000)
+
+	window.scrollTo({ top: 0, behavior: 'smooth' })
+
 	return (
 		<section className="aboutpage">
 			<div className="logo-container">
@@ -46,20 +56,20 @@ const About = () => {
 							>
 								Hi! I am Woon Yi Jun, a final year NTU student, studying
 								computer science as my passion and goal to be a Software
-								Architect one day. Before the start of every semester, we have
-								to sit down and wrack our minds to plan our curriculum. We have
-								all been through Star Wars, or are yet to. This planning process
-								is a stepping stone towards the day we don our graduation gown,
+								Architect. Before the start of every semester, we have to sit
+								down and wrack our minds to plan our curriculum. We have all
+								been through Star Wars, or are yet to. This planning process is
+								a stepping stone towards the day we don our graduation gown,
 								something to pat us on the back and say, 'I did it.' This
 								process should be something we should look forward to; however,
 								planning for it is not always the easiest thing to do.
 								<br />
 								<br />
 								Hence, I am thrilled to introduce Starlite, the first platform
-								ever designed to automate the way we approach timetable
-								planning. Starlite emerges from a deep understanding of the
-								challenges we students faced in curating our schedules, to mix
-								and match different indexes just to find that it is not
+								ever designed to automate the way we approach curriculum
+								timetable planning. Starlite emerges from a deep understanding
+								of the challenges we students faced in curating our schedules,
+								to mix and match different indexes just to find that it is not
 								compatible or ideal.
 							</Typography>
 							<Typography
@@ -163,14 +173,14 @@ const About = () => {
 								top: 'calc(50% - 200px)',
 								overflow: 'auto',
 								paddingLeft: '20px',
-								maxHeight: '410px',
+								maxHeight: '470px',
 							}}
 						>
 							<img
-								src={zenaImage}
+								src={selfImage}
 								style={{
 									width: '480px',
-									height: '400px',
+									height: '460px',
 								}}
 							/>
 						</Box>

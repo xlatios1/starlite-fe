@@ -230,14 +230,16 @@ export default function SearchBar({
 						setOrdered={setOrdered}
 						dispatch={dispatch}
 					/>
-					<div style={{ marginBottom: 10 }}>
-						<button
-							className="fetch-btn"
-							onClick={() => handleSearch(courseData.courses)}
-						>
-							<span className="text">Search</span>
-						</button>
-					</div>
+					{courseData.courses.length > 0 && (
+						<div style={{ marginBottom: 10 }}>
+							<button
+								className="fetch-btn"
+								onClick={() => handleSearch(courseData.courses)}
+							>
+								<span className="text">Search</span>
+							</button>
+						</div>
+					)}
 					{/* <span
 						className={`fa fa-angle-${toggleCourseList ? 'up' : 'down'}`}
 						onClick={() => {

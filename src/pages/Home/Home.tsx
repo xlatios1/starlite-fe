@@ -15,7 +15,7 @@ import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/store'
-import { AllPlans } from '@store/course/courseSlice'
+import { AllPlans, CourseDetails } from '@store/course/courseSlice'
 const _ = require('lodash')
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
 		(state: RootState) => state.course.planData
 	) as AllPlans
 
-	const handleSearch = (search) => {
+	const handleSearch = (search: CourseDetails[]) => {
 		const initialPreferences = {
 			freeDay: [],
 			timeslot: [],

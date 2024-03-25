@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { UserAuth } from '../authentications/AuthContext.js'
+import { UserAuth } from '@authentications/AuthContext.js'
 import FooterNavigation from '@components/navigations/footernavigation/footernavigation.tsx'
 import Notification from '@components/notification/notification.tsx'
 import NavBar from '@components/navigations/navbar/navbar.tsx'

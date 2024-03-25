@@ -1,7 +1,7 @@
 import React from 'react'
 import './timetable.css'
 import { TimetableData } from './types/timetableTypes.ts'
-import { GenerateTimetable } from './GenerateTimetable.tsx'
+import { GenerateTimetable } from './Generatetimetable.tsx'
 import TimetableDashboard from './TimetableDashboard.tsx'
 
 export default function TimeTable({

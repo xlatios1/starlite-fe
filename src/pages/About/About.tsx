@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
 import logo from '@assets/logo.png'
 import selfImage from '@assets/me.jpg'
 import './about.css'
@@ -7,6 +6,7 @@ import FeedbackForm from '@components/formcontrol/feedbackform.tsx'
 import { Box, Typography } from '@mui/material'
 import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 import { useDispatch } from 'react-redux'
+import React from 'react'
 
 const About = () => {
 	const dispatch = useDispatch()

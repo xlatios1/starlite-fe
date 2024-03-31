@@ -1,7 +1,7 @@
 import './error.css'
 import React from 'react'
 
-type RenderAccountError = {
+type RenderAccountErrorProp = {
 	errorMessages: string[]
 	name: string
 }
@@ -9,11 +9,12 @@ type RenderAccountError = {
 export default function RenderAccountError({
 	errorMessages,
 	name,
-}: RenderAccountError) {
+}: RenderAccountErrorProp) {
 	const errors = (name: string) => {
 		return {
-			loginEmail: 'email not found',
-			loginPassword: 'invalid password',
+			loginEmail: 'email not valid',
+			loginPassword: 'password not valid',
+			registerName: 'name cannot be blank',
 			registerEmail: 'email cannot be blank',
 			registerPassword: 'password invalid',
 			differentPassword: 'different password',

@@ -25,7 +25,7 @@ export default function Signin() {
 			console.log('Active user cache present, directing...', curUser)
 			navigate('/home')
 		}
-	}, [])
+	}, [curUser, navigate])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
@@ -80,13 +80,13 @@ export default function Signin() {
 
 	return (
 		<div className="login-initializer">
-			<form className="form">
-				<h3>Sign in to your account</h3>
+			<form className="form" onSubmit={handleSubmit}>
+				<h2>Sign in</h2>
 				<p>
 					Don't have an account yet? <Link to="/register">Sign up.</Link>
 				</p>
 				<div className="form-control">
-					<label htmlFor="email"> Email: </label>
+					<label htmlFor="email"> Email* </label>
 					<input
 						type="text"
 						id="email"
@@ -101,7 +101,7 @@ export default function Signin() {
 					name: 'loginEmail',
 				})}
 				<div className="form-control">
-					<label htmlFor="password"> Password: </label>
+					<label htmlFor="password"> Password* </label>
 					<input
 						type="password"
 						id="password"
@@ -115,8 +115,15 @@ export default function Signin() {
 					errorMessages: errorMessages,
 					name: 'loginPassword',
 				})}
-				<div>
-					<button type="submit" onClick={handleSubmit}>
+				<div className="form-action">
+					<button
+						type="button"
+						className="secondary-btn"
+						onClick={() => navigate('/forgot-password')}
+					>
+						Forgot password?
+					</button>
+					<button type="submit" className="primary-btn" onClick={handleSubmit}>
 						Login
 					</button>
 				</div>

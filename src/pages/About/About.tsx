@@ -198,14 +198,14 @@ const About = () => {
 					align="justify"
 				>
 					Summing it up, it has been a excellent one year project and journey.
-					This project taught me almost from zero to advance frontend frameworks
-					and best practices for React, TypeScript and all the complex
+					This project taught me from zero to advance frontend frameworks and
+					best practices for React, TypeScript and all the complex
 					hooks/libraries there is. I hope that Starlite will be a
 					Quality-of-Life improvement for future NTU students when it comes to
-					mapping courses. If you have any improvements or suggestions please
-					feel free to drop me any feedback!! Your insights are invaluable, and
-					it will aid in shaping the future of timetable planning at NTU. Cheers
-					and all the best for your future endeavor.
+					mapping courses. If you have any improvements, suggestions or features
+					please feel free to drop me any feedback!! Your insights are
+					invaluable, and it will aid in shaping the future of timetable
+					planning at NTU. Cheers and all the best for your future endeavor.
 				</Typography>
 			</Box>
 		</section>
@@ -213,30 +213,3 @@ const About = () => {
 }
 
 export default About
-
-// Motivation Statement for Starlite: Revolutionizing Timetable Planning at NTU
-
-// Dear NTU Students,
-
-// I am thrilled to introduce Starlite, a groundbreaking platform designed to transform the way we approach timetable planning and preferences at Nanyang Technological University. Starlite emerges from a deep understanding of the challenges students face in curating their schedules, aligning with their academic goals and personal preferences.
-
-// Empowering Student Choice:
-// Starlite is driven by the belief that every student's journey at NTU should be characterized by flexibility and empowerment. We understand that each student has unique preferences, academic pursuits, and personal commitments. Starlite empowers you to take control of your timetable, ensuring that it not only meets academic requirements but aligns seamlessly with your lifestyle and personal goals.
-
-// Efficiency through Automation:
-// Gone are the days of manually navigating through countless timetable combinations. Starlite employs cutting-edge automation to simplify the planning process. By incorporating your preferences, course requirements, and extracurricular commitments, Starlite streamlines the scheduling process, providing you with optimal timetable options effortlessly.
-
-// Maximizing Desirability:
-// Our commitment is to deliver timetables that resonate with your preferences and priorities. Starlite utilizes intelligent algorithms to analyze and prioritize your preferences, resulting in timetables that not only meet the academic requirements but also enhance your overall NTU experience. We strive to maximize the desirability of your timetable, allowing you to focus on your studies, pursuits, and personal well-being.
-
-// Continual Improvement:
-// Starlite is a dynamic platform that evolves with your feedback and changing needs. We are committed to continual improvement, incorporating new features and enhancements based on user experiences. Your insights are invaluable, shaping the future of timetable planning at NTU.
-
-// As we embark on this journey together, Starlite aims to redefine the way you engage with your academic life. Our mission is to empower you, the NTU student community, to make the most of your time on campus, ensuring that your timetable is not just a schedule but a reflection of your aspirations.
-
-// Welcome to Starlite, where your timetable becomes a personalized roadmap to success.
-
-// Sincerely,
-
-// [Your Name]
-// Founder, Starlite Platform

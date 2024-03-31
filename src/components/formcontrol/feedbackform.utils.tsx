@@ -1,7 +1,14 @@
-import { UseFormRegister, UseFormRegisterReturn } from 'react-hook-form'
+import {
+	UseFormRegister,
+	UseFormRegisterReturn,
+	UseFormSetValue,
+} from 'react-hook-form'
 import { FormValues } from './feedbackform.model.tsx'
 
-export const formSetup = (register: UseFormRegister<FormValues>) => {
+export const formSetup = (
+	register: UseFormRegister<FormValues>,
+	setValue: UseFormSetValue<FormValues>
+) => {
 	const formInputs = new Map<string, UseFormRegisterReturn<string>>()
 
 	formInputs.set('name', {

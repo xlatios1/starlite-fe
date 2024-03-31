@@ -6,6 +6,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	sendEmailVerification,
+	updateProfile,
 } from 'firebase/auth'
 
 import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
@@ -13,14 +14,15 @@ import { doc, setDoc, getDoc, updateDoc, deleteField } from 'firebase/firestore'
 const UserContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-	const createUser = async (email, password) => {
+	const createUser = async (credentials) => {
 		console.log('Create user CLICKED')
 		try {
 			const userCred = await createUserWithEmailAndPassword(
 				auth,
-				email,
-				password
+				credentials.newEmail,
+				credentials.newPassword
 			)
+			updateDisplayName(credentials.newName)
 			const user = userCred.user
 			await sendEmailVerification(user)
 			localStorage.setItem('tempInfo', JSON.stringify({ email: user.email }))
@@ -38,6 +40,12 @@ export const AuthContextProvider = ({ children }) => {
 				message: FirebaseErrorUtil.getErrorMessage(error),
 			}
 		}
+	}
+
+	const updateDisplayName = async (displayName) => {
+		updateProfile(auth.currentUser, { displayName }).catch((e) => {
+			console.error(e)
+		})
 	}
 
 	const sendVerificationEmail = async () => {

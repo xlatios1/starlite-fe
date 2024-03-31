@@ -60,13 +60,16 @@ export const GenerateTimetable = (
 										// })`,
 										backgroundColor: `var(${colorCodedInfo[class_.code]})`,
 										borderRadius: '3px',
+										minWidth: '70px',
 									}}
 								>
 									{class_.code}
 									<br /> {class_.type}
 									<br /> {class_.group}
 									<br /> {class_.remark}
+									{class_.remark !== '' && <br />}
 									<br />{' '}
+									{intToTimeslot(class_.time.start, class_.time.duration)}
 								</td>
 							)
 						})}
@@ -110,6 +113,7 @@ export const GenerateTimetable = (
 								<br /> {details[0].type}
 								<br /> {details[0].group}
 								<br /> {details[0].remark}
+								{details[0].remark !== '' && <br />}
 								<br />{' '}
 								{intToTimeslot(details[0].time.start, details[0].time.duration)}
 							</div>

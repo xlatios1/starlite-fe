@@ -8,6 +8,7 @@ import ProtectedRoute from './authentications/ProtectedRoute.js'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from '@components/loading/Loading.tsx'
+import FooterNavigation from '@components/navigations/footernavigation/footernavigation.tsx'
 
 export default function App() {
 	const renderProtectedPaths = (paths) =>
@@ -39,7 +40,8 @@ export default function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Router>
-			<div className="version-tag">Beta version: 3.2.3</div>
+			<FooterNavigation />
+			<div className="version-tag">Beta version: 3.3.0</div>
 		</>
 	)
 }

@@ -27,6 +27,7 @@ export function TimetableTab({
 				className={`time-table-tab-option ${
 					activeTab === 'timetable' ? 'active' : ''
 				}`}
+				style={{ borderRadius: '5px 0 0 5px' }}
 				onClick={() => openTab('timetable')}
 			>
 				Fixed Slot
@@ -35,6 +36,7 @@ export function TimetableTab({
 				className={`time-table-tab-option ${
 					activeTab === 'combinations' ? 'active' : ''
 				} ${isDisabled ? '' : 'disabled'}`}
+				style={{ borderRadius: '0 5px 5px 0' }}
 				onClick={() => openTab('combinations')}
 			>
 				Timetables

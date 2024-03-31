@@ -3,6 +3,7 @@ export default class FirebaseErrorUtil {
 
 	private static INVALID_CREDENTIALS =
 		'Firebase: Error (auth/invalid-login-credentials).'
+	private static MISSING_PASSWORD = 'Firebase: Error (auth/missing-password).'
 	private static EMAIL_USED = 'Firebase: Error (auth/email-already-in-use).'
 	private static WEAK_PASSWORD =
 		'Firebase: Password should be at least 6 characters (auth/weak-password).'
@@ -14,6 +15,8 @@ export default class FirebaseErrorUtil {
 		switch (errorMessage) {
 			case FirebaseErrorUtil.INVALID_CREDENTIALS:
 				return 'Wrong email or password!'
+			case FirebaseErrorUtil.MISSING_PASSWORD:
+				return 'Invalid password!'
 			case FirebaseErrorUtil.EMAIL_USED:
 				return 'Email is already in use.'
 			case FirebaseErrorUtil.WEAK_PASSWORD:

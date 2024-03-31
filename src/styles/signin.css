@@ -1,86 +1,119 @@
 .login-initializer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: var(--clr-grey-10);
-  color: var(--clr-grey-1);
-  width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: calc(100vh - 67px);
+	background: var(--clr-grey-10);
+	color: var(--clr-grey-1);
+	width: 100%;
+	min-height: 300px;
+	min-width: 700px;
 }
 
 .login-initializer .form {
-  background: white;
-  margin: 0 auto;
-  justify-content: center;
-  padding: 1rem 2rem;
-  border-radius: 1rem;
-  width: 30rem;
-  height: auto;
+	background: white;
+	margin: 0 auto;
+	justify-content: center;
+	padding: 1rem 2rem;
+	border-radius: 1rem;
+	width: 30rem;
+	height: auto;
 }
 
 .login-initializer .form input {
-  background: var(--clr-grey-10);
-  border-color: transparent;
-  border-radius: var(--radius);
-  padding: 0.25rem 0.5rem;
+	background: var(--clr-grey-10);
+	border-color: transparent;
+	border-radius: var(--radius);
+	padding: 0.25rem 0.5rem;
 }
 
 .login-initializer .form-control {
-  margin: 0.5rem 0;
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  align-items: center;
+	margin: 0.5rem 0;
+	display: flex;
+	/* grid-template-columns: 100px 1fr; */
+	/* align-items: center; */
+	height: 60px;
+	flex-direction: column;
+
+	label {
+		height: 60px;
+		font-size: medium;
+		padding-left: 5px;
+	}
+
+	input {
+		border-radius: 10px;
+		height: 60px;
+	}
 }
 
-.login-initializer .form button {
-  display: inline-block;
-  background: var(--clr-black);
-  color: var(--clr-white);
-  border-color: transparent;
-  margin-top: 1rem;
-  letter-spacing: var(--spacing);
-  padding: 0.5rem 1.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
+.login-initializer .form .form-action {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 1rem;
 
-.login-initializer .form button:hover {
-  background: rgb(0, 0, 0);
-  color: rgb(224, 224, 224)
+	button {
+		border-color: transparent;
+		padding: 0.5rem 5%;
+		cursor: pointer;
+		border-radius: 10px;
+		-webkit-user-select: none; /* Safari */
+		-ms-user-select: none; /* IE 10 and IE 11 */
+		user-select: none; /* Standard syntax */
+	}
+
+	button.primary-btn {
+		background: #308bd1;
+		color: var(--clr-white);
+	}
+	button.secondary-btn {
+		background: var(--clr-white);
+		color: var(--clr-primary-3);
+	}
+
+	button:hover.primary-btn {
+		background: #077bd4;
+		color: rgb(224, 224, 224);
+	}
+	button:hover.secondary-btn {
+		background: var(--clr-grey-10);
+	}
 }
 
 .bg {
-  /* Full height */
-  background: url(../assets/zena.jpg) no-repeat fixed center;
-  height: 100vh;
-  width: 100vw;
-  /* Center and scale the image nicely */
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	/* Full height */
+	background: url(../assets/zena.jpg) no-repeat fixed center;
+	height: 100vh;
+	width: 100vw;
+	/* Center and scale the image nicely */
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.version-tag{
-  bottom: 0px;
-  right: 5px;
-  opacity: 0.4;
-  position: fixed;
-  user-select: none;
+.version-tag {
+	bottom: 0px;
+	right: 5px;
+	opacity: 0.4;
+	position: fixed;
+	user-select: none;
 }
 
 .overlay {
-  position: fixed;
-  display: flex;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+	position: fixed;
+	display: flex;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
 }
 
 .highlight-element {
-  z-index: 1000;
-  opacity: 1; 
+	z-index: 1000;
+	opacity: 1;
 }

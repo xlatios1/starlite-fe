@@ -1,6 +1,5 @@
 import { Navigate } from 'react-router-dom'
 import { UserAuth } from '@authentications/AuthContext.js'
-import FooterNavigation from '@components/navigations/footernavigation/footernavigation.tsx'
 import Notification from '@components/notification/notification.tsx'
 import NavBar from '@components/navigations/navbar/navbar.tsx'
 import HomePage from '@pages/Home/Home.tsx'
@@ -26,14 +25,13 @@ const ProtectedRoute = ({ path }) => {
 		}
 		return <Navigate to="/" />
 	}
-	
+
 	return (
 		<>
-			<NavBar user={curUser?.email} active={path} />
+			<NavBar user={curUser.displayname || '5.0!'} active={path} />
 			{path === '/home' && <HomePage />}
 			{path === '/upload' && <Upload />}
 			{path === '/about' && <About />}
-			<FooterNavigation />
 		</>
 	)
 }

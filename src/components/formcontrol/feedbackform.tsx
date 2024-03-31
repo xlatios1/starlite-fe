@@ -17,9 +17,10 @@ import { openLoading, closeLoading } from '@store/loading/loadingSlice.ts'
 const _ = require('lodash')
 
 const FeedbackForm = () => {
-	const { register, handleSubmit, formState, reset } = useForm<FormValues>()
+	const { register, handleSubmit, formState, reset, setValue } =
+		useForm<FormValues>()
 	const { errors } = formState
-	const formInputs = formSetup(register)
+	const formInputs = formSetup(register, setValue)
 
 	const dispatch = useDispatch()
 

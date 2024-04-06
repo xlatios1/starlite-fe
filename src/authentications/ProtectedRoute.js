@@ -3,6 +3,7 @@ import { UserAuth } from '@authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
 import NavBar from '@components/navigations/navbar/navbar.tsx'
 import HomePage from '@pages/Home/Home.tsx'
+import Favourite from '@pages/Favourite/Favourite.tsx'
 import Upload from '@pages/Upload/Upload.jsx'
 import About from '@pages/About/About.tsx'
 
@@ -30,6 +31,7 @@ const ProtectedRoute = ({ path }) => {
 		<>
 			<NavBar user={curUser.displayname || '5.0!'} active={path} />
 			{path === '/home' && <HomePage />}
+			{path === '/favourite' && <Favourite />}
 			{path === '/upload' && <Upload />}
 			{path === '/about' && <About />}
 		</>

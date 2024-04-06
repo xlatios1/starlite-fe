@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './NotFound.module.css'
 import { UserAuth } from '@authentications/AuthContext'
+
 export default function NotFound() {
 	const Navigate = useNavigate()
 	const { fetchUserInCache } = UserAuth()

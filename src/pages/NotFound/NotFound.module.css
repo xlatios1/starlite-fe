@@ -7,7 +7,7 @@
 
 .errorPage {
 	width: 100vw;
-	height: 100vh;
+	height: calc(100vh - 52.016px);
     min-width: 400px;
 	display: flex;
 	justify-content: center;
@@ -53,6 +53,7 @@
 		.errorTitle {
 			font-size: 1.5rem;
 			font-weight: 700;
+			color: blue;
 			padding: 0.3%;
 			text-align: center;
 		}

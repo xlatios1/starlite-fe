@@ -6,7 +6,7 @@ export default function ScrollButton({ display }) {
 	const scrollFn = () => {
 		window.scrollTo({
 			left: 0,
-			top: 40,
+			top: 25,
 			behavior: 'smooth',
 		})
 	}

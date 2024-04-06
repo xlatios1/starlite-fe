@@ -36,12 +36,12 @@ export default function App() {
 					<Route path="/" element={<SignIn />} />
 					<Route path="/register" element={<Registration />} />
 					<Route path="/verify" element={<VerificationPage />} />
-					{renderProtectedPaths(['/home', '/upload', '/about'])}
+					{renderProtectedPaths(['/home', '/favourite', '/upload', '/about'])}
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Router>
 			<FooterNavigation />
-			<div className="version-tag">Beta version: 3.3.0</div>
+			<div className="version-tag">Beta version: 3.4.1</div>
 		</>
 	)
 }

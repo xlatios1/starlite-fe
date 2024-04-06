@@ -76,7 +76,7 @@ export default function Home() {
 		if (timetableData) {
 			window.scrollTo({
 				left: 0,
-				top: 40,
+				top: 25,
 				behavior: 'smooth',
 			})
 		}
@@ -186,6 +186,7 @@ export default function Home() {
 					position: 'sticky',
 					left: '100%',
 					bottom: '30px',
+					paddingBottom: '10px',
 				}}
 			>
 				<ScrollButton display={Boolean(timetableData)} />

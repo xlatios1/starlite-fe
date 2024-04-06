@@ -43,6 +43,14 @@ export default function NavBar({ user, active }: NavBarProp) {
 					</li>
 					<li>
 						<Link
+							className={active === '/favourite' ? 'active' : null}
+							to="/favourite"
+						>
+							Favourite
+						</Link>
+					</li>
+					<li>
+						<Link
 							className={active === '/upload' ? 'active' : null}
 							to="/upload"
 						>

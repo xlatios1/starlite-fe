@@ -10,7 +10,7 @@
 .detail-wrapper{
     display: flex;
     position: relative;
-    top: 6rem;
+    top: 80px;
     flex-direction: row;
     justify-content: center;
     margin: 0 auto auto;

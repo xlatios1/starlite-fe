@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice, current } from '@reduxjs/toolkit'
-import React from 'react'
 
 export type classinfo = {
 	type: string
@@ -17,6 +16,7 @@ export type indexinfos = {
 	get_filtered_information: classinfo[] | []
 	schedule: string
 }
+
 export type ColorPalette =
 	| '--orange'
 	| '--yellow'
@@ -41,22 +41,17 @@ export type CourseDetails = {
 	}
 }
 
-export type FavoriteTimetable = React.JSX.Element[][]
-
 export type AllPlans = {
 	'Plan 1': {
 		courses: CourseDetails[]
-		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	}
 	'Plan 2': {
 		courses: CourseDetails[]
-		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	}
 	'Plan 3': {
 		courses: CourseDetails[]
-		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	}
 }
@@ -65,6 +60,7 @@ export type AllPlanDetails = {
 	currentPlan: string
 	planData: AllPlans
 	isDirtyValue: boolean
+	isInitialRendered: boolean
 }
 
 export const ExistingPlans = ['Plan 1', 'Plan 2', 'Plan 3']
@@ -84,11 +80,12 @@ export const CourseColorPalette = [
 const initialState: AllPlanDetails = {
 	currentPlan: 'Plan 1',
 	planData: {
-		'Plan 1': { courses: [], favorite: [], CourseColorPalette },
-		'Plan 2': { courses: [], favorite: [], CourseColorPalette },
-		'Plan 3': { courses: [], favorite: [], CourseColorPalette },
+		'Plan 1': { courses: [], CourseColorPalette },
+		'Plan 2': { courses: [], CourseColorPalette },
+		'Plan 3': { courses: [], CourseColorPalette },
 	},
 	isDirtyValue: false,
+	isInitialRendered: false,
 }
 
 const courseSlice = createSlice({
@@ -99,10 +96,13 @@ const courseSlice = createSlice({
 			state: AllPlanDetails,
 			actions: PayloadAction<AllPlans>
 		) => {
-			for (const course in actions.payload) {
-				state.planData[course] = actions.payload[course]
+			if (!state.isInitialRendered) {
+				for (const course in actions.payload) {
+					state.planData[course] = actions.payload[course]
+				}
+				state.isDirtyValue = false
+				state.isInitialRendered = true
 			}
-			state.isDirtyValue = false
 		},
 		updateCourseColorPalette: (
 			state: AllPlanDetails,
@@ -148,13 +148,6 @@ const courseSlice = createSlice({
 			state.planData[state.currentPlan].courses = actions.payload
 			state.isDirtyValue = true
 		},
-		setFavorite: (
-			state: AllPlanDetails,
-			actions: PayloadAction<FavoriteTimetable>
-		) => {
-			state.planData[state.currentPlan].favorite = actions.payload
-			state.isDirtyValue = true
-		},
 	},
 })
 
@@ -166,5 +159,4 @@ export const {
 	removeCourse,
 	setPlan,
 	setCourse,
-	setFavorite,
 } = courseSlice.actions

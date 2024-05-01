@@ -41,7 +41,7 @@ export default function App() {
 				</Routes>
 			</Router>
 			<FooterNavigation />
-			<div className="version-tag">Beta version: 3.4.1</div>
+			<div className="version-tag">Beta version: 3.5.0</div>
 		</>
 	)
 }

@@ -10,6 +10,7 @@ import courseSlice from './course/courseSlice.ts'
 import walkthroughSlice from './walkthrough/walkthroughSlice.ts'
 import previewSlice from './preview/previewSlice.ts'
 import timetableSlice from './timetable/timetableSlice.ts'
+import favouriteSlice from './favourite/favouriteSlice.ts'
 
 const appReducer = combineReducers({
 	loading: loadingSlice.reducer,
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
 	preview: previewSlice.reducer,
 	timetable: timetableSlice.reducer,
 	walkthrough: walkthroughSlice.reducer,
+	favourite: favouriteSlice.reducer,
 	[courseApi.reducerPath]: courseApi.reducer,
 })
 
@@ -33,7 +35,10 @@ const rootReducer = (
 export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) => {
-		return getDefaultMiddleware().concat(courseApi.middleware)
+		return getDefaultMiddleware({
+			immutableCheck: false,
+			serializableCheck: false,
+		}).concat(courseApi.middleware)
 	},
 })
 

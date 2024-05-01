@@ -42,44 +42,58 @@ export const GenerateTimetable = (
 			beautify[details.time.start - baseTime].push(details)
 		)
 		let returnValue = []
+		let carryOver = 0
 		for (const classes of beautify) {
 			if (classes.length > 0) {
 				returnValue.push(
 					<tr
 						key={`details multi-row-${classes[0].time.start}-${classes[0].type}`}
 					>
-						{classes.map((class_, i) => {
-							return (
-								<td
-									key={`details multi-${i}-${class_.code}-${class_.type}-${class_.time.duration}`}
-									rowSpan={class_.time.duration}
-									style={{
-										color: innerConflict ? 'red' : '',
-										// border: `5px solid var(${
-										// 	colorCodedInfo[details[0].code]
-										// })`,
-										backgroundColor: `var(${colorCodedInfo[class_.code]})`,
-										borderRadius: '3px',
-										minWidth: '70px',
-									}}
-								>
-									{class_.code}
-									<br /> {class_.type}
-									<br /> {class_.group}
-									<br /> {class_.remark}
-									{class_.remark !== '' && <br />}
+						{
+							// eslint-disable-next-line no-loop-func
+							classes.map((class_, i) => {
+								carryOver = Math.max(carryOver, class_.time.duration)
+								return (
+									<td
+										key={`details multi-${i}-${class_.code}-${class_.type}-${class_.time.duration}`}
+										rowSpan={class_.time.duration}
+										style={{
+											color: innerConflict ? 'red' : '',
+											// border: `5px solid var(${
+											// 	colorCodedInfo[details[0].code]
+											// })`,
+											backgroundColor: `var(${colorCodedInfo[class_.code]})`,
+											borderRadius: '3px',
+											minWidth: '70px',
+										}}
+									>
+										{class_.code}
+										<br /> {class_.type}
+										<br /> {class_.group}
+										<br /> {class_.remark}
+										{/* {class_.remark !== '' && <br />}
 									<br />{' '}
-									{intToTimeslot(class_.time.start, class_.time.duration)}
-								</td>
-							)
-						})}
+									{intToTimeslot(class_.time.start, class_.time.duration)} */}
+									</td>
+								)
+							})
+						}
 					</tr>
 				)
+			} else {
+				// add an empty placeholder if required
+				if (carryOver !== 0) {
+					returnValue.push(
+						<tr key={`details multi-row-placeholder`}>
+							<td />
+						</tr>
+					)
+				}
 			}
+			carryOver -= 1
 		}
 		return returnValue
 	}
-
 	for (const col of timetable_data) {
 		for (let row = 0; row < length; row++, unikey++) {
 			if ('duration' in col[row]) {
@@ -113,9 +127,9 @@ export const GenerateTimetable = (
 								<br /> {details[0].type}
 								<br /> {details[0].group}
 								<br /> {details[0].remark}
-								{details[0].remark !== '' && <br />}
+								{/* {details[0].remark !== '' && <br />}
 								<br />{' '}
-								{intToTimeslot(details[0].time.start, details[0].time.duration)}
+								{intToTimeslot(details[0].time.start, details[0].time.duration)} */}
 							</div>
 						) : (
 							<div style={{ width: '100%', height: '100%' }}>

@@ -17,6 +17,7 @@ import { MatchCommonTimetable } from '@components/timetable/MatchTimetable.tsx'
 import { RootState } from '@store/store'
 import { Button } from '@mui/material'
 import Notification from '@components/notification/notification.tsx'
+import { loadInitialFavourites } from '@store/favourite/favouriteSlice.ts'
 const _ = require('lodash')
 
 type SavedPlanProps = {
@@ -35,6 +36,9 @@ export default function SavedPlan({
 
 	const dispatch = useDispatch()
 	const planData = useSelector((state: RootState) => state.course.planData)
+	const isCourseInitialRendered = useSelector(
+		(state: RootState) => state.course.isInitialRendered
+	)
 	const currentPlan = useSelector(
 		(state: RootState) => state.course.currentPlan
 	)
@@ -54,7 +58,8 @@ export default function SavedPlan({
 			.then(({ status, data, message }) => {
 				switch (status) {
 					case 200:
-						dispatch(loadInitialCourse(data))
+						const { favourites, ...plans } = data
+						if (!isCourseInitialRendered) dispatch(loadInitialCourse(plans))
 						break
 					case 204:
 						break

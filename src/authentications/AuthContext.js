@@ -51,6 +51,9 @@ export const AuthContextProvider = ({ children }) => {
 	const sendVerificationEmail = async () => {
 		try {
 			if (auth?.currentUser) {
+				if (auth.currentUser.emailVerified) {
+					return { status: 304, message: '' }
+				}
 				await sendEmailVerification(auth.currentUser)
 				return { status: 200, message: '' }
 			}
@@ -247,7 +250,7 @@ export const AuthContextProvider = ({ children }) => {
 	}
 
 	const setFirebaseData = async (user, payload = {}) => {
-		console.log('setFirebaseData called!')
+		console.log('setFirebaseData called!', payload)
 		await setDoc(doc(db, 'StarliteUserData', user.uid), payload, {
 			merge: true,
 		})
@@ -259,6 +262,7 @@ export const AuthContextProvider = ({ children }) => {
 				fetchUserInCache,
 				fetchTempUserInCache,
 				createUser,
+				updateDisplayName,
 				sendVerificationEmail,
 				signIn,
 				logout,

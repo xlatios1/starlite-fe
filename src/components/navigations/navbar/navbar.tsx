@@ -13,7 +13,7 @@ type NavBarProp = {
 
 export default function NavBar({ user, active }: NavBarProp) {
 	const [isMenuClick, setIsMenuClick] = useState(true)
-	const { logout } = UserAuth()
+	const { logout, updateDisplayName } = UserAuth()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 

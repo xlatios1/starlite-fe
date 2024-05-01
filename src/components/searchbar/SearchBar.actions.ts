@@ -1,7 +1,6 @@
 import {
 	addCourse,
 	ColorPalette,
-	FavoriteTimetable,
 	updateCourseColorPalette,
 } from '@store/course/courseSlice.ts'
 import type { CourseDetails } from '@store/course/courseSlice.ts'
@@ -12,7 +11,6 @@ export async function FetchCourseDetails(
 	search: string,
 	courseData: {
 		courses: CourseDetails[]
-		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	},
 	dispatch: Dispatch<UnknownAction>,

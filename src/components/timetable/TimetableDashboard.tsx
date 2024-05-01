@@ -60,6 +60,7 @@ const TimetableDashboard = ({
 									placement="top"
 									arrow
 									slotProps={tooltipStyle}
+									key={`${course}-${index}`}
 								>
 									<Chip
 										label={`${index}`}

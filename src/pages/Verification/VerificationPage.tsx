@@ -31,6 +31,13 @@ const VerificationPage = () => {
 		const response = await sendVerificationEmail()
 		if (response.status === 200) {
 			Notification('success', 'Email sent successfully.')
+		}
+		if (response.status === 304) {
+			Notification(
+				'info',
+				'Account has been successfully verified. Please proceed to login!',
+				3000
+			)
 		} else {
 			Notification('error', 'Please try again later.')
 		}

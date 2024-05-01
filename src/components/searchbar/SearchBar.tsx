@@ -15,7 +15,6 @@ import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import {
 	ColorPalette,
 	CourseDetails,
-	FavoriteTimetable,
 	setCourse,
 } from '@store/course/courseSlice.ts'
 import SearchCourseList from '@components/searchbar/SearchCourseList.tsx'
@@ -24,7 +23,6 @@ import React from 'react'
 type SearchBarProps = {
 	courseData: {
 		courses: CourseDetails[]
-		favorite: FavoriteTimetable
 		CourseColorPalette: ColorPalette[]
 	}
 	handleSearch: (searched: CourseDetails[]) => void

@@ -15,7 +15,7 @@ import {
 
 export function MatchTimetable(timetable_data: CourseDetails[]): {
 	timetable_data: TimetableClassData[]
-	info: [string, string][]
+	info: [string, string, string][]
 	rank: number
 }[] {
 	const new_timetable_data = [...timetable_data]

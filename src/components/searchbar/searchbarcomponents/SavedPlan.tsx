@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
@@ -9,42 +9,42 @@ import {
 	CourseColorPalette,
 	CourseDetails,
 	loadInitialCourse,
-	setCourse,
 	setPlan,
 	updateCourseColorPalette,
+	syncCourse,
 } from '@store/course/courseSlice.ts'
+import {
+	resetTimetable,
+	setTimetablePreview,
+} from '@store/timetable/timetableSlice.ts'
 import { MatchCommonTimetable } from '@components/timetable/MatchTimetable.tsx'
 import { RootState } from '@store/store'
 import { Button } from '@mui/material'
 import Notification from '@components/notification/notification.tsx'
-import { loadInitialFavourites } from '@store/favourite/favouriteSlice.ts'
+
 const _ = require('lodash')
 
 type SavedPlanProps = {
 	courses: CourseDetails[]
 	setOrdered: Dispatch<SetStateAction<{ bestChance: boolean; noExams: number }>>
-	setTimetablePreview: Dispatch<SetStateAction<any[][]>>
 }
 
-export default function SavedPlan({
-	courses,
-	setOrdered,
-	setTimetablePreview,
-}: SavedPlanProps) {
-	const [isInitialRender, setIsInitialRender] = useState(true)
+export default function SavedPlan({ courses, setOrdered }: SavedPlanProps) {
 	const { getFirebaseData, setFirebaseData, fetchUserInCache } = UserAuth()
 
 	const dispatch = useDispatch()
 	const planData = useSelector((state: RootState) => state.course.planData)
+
 	const isCourseInitialRendered = useSelector(
 		(state: RootState) => state.course.isInitialRendered
 	)
 	const currentPlan = useSelector(
 		(state: RootState) => state.course.currentPlan
-	)
+	) as 'Plan 1' | 'Plan 2' | 'Plan 3'
 
 	const handleChange = (event: SelectChangeEvent) => {
 		dispatch(setPlan(event.target.value as 'Plan 1' | 'Plan 2' | 'Plan 3'))
+		dispatch(resetTimetable())
 		setOrdered((prev) => {
 			const previous = { ...prev }
 			previous.bestChance = false
@@ -58,7 +58,7 @@ export default function SavedPlan({
 			.then(({ status, data, message }) => {
 				switch (status) {
 					case 200:
-						const { favourites, ...plans } = data
+						const { createdAt, favourites, ...plans } = data
 						if (!isCourseInitialRendered) dispatch(loadInitialCourse(plans))
 						break
 					case 204:
@@ -71,24 +71,24 @@ export default function SavedPlan({
 				}
 			})
 			.catch(() => {
-				Notification('error', 'An unexpected error has occured (Load)', 2000)
+				Notification(
+					'error',
+					'An unexpected error has occured (Load Plans)',
+					2000
+				)
 			})
 			.finally(() => {
-				setIsInitialRender(false)
 				dispatch(closeLoading())
 			})
 	}, [])
 
 	useEffect(() => {
-		if (!isInitialRender) {
-			dispatch(setCourse(courses))
-		}
-		setTimetablePreview(MatchCommonTimetable(courses))
+		dispatch(setTimetablePreview(MatchCommonTimetable(courses)))
 	}, [courses])
 
 	const handleSave = async () => {
 		dispatch(openLoading())
-		const data = _.cloneDeep(planData[currentPlan])
+		const { isDirty, ...data } = _.cloneDeep(planData[currentPlan])
 		let missingPalette
 		if (
 			data.CourseColorPalette.length + data.courses.length !==
@@ -111,6 +111,7 @@ export default function SavedPlan({
 		}
 		await setFirebaseData(fetchUserInCache(), { [currentPlan]: data })
 			.then(() => {
+				dispatch(syncCourse())
 				Notification('success', `Successfully saved ${currentPlan}!`, 1000)
 			})
 			.catch(() => {
@@ -118,7 +119,6 @@ export default function SavedPlan({
 			})
 			.finally(() => {
 				dispatch(closeLoading())
-				setIsInitialRender(false)
 			})
 	}
 
@@ -143,9 +143,15 @@ export default function SavedPlan({
 				}}
 				sx={{ width: '180px', height: '30px' }}
 			>
-				<MenuItem value={'Plan 1'}>Plan 1</MenuItem>
-				<MenuItem value={'Plan 2'}>Plan 2</MenuItem>
-				<MenuItem value={'Plan 3'}>Plan 3</MenuItem>
+				<MenuItem value={'Plan 1'}>{`Plan 1 ${
+					planData['Plan 1'].isDirty ? '(unsaved)' : ''
+				}`}</MenuItem>
+				<MenuItem value={'Plan 2'}>{`Plan 2 ${
+					planData['Plan 2'].isDirty ? '(unsaved)' : ''
+				}`}</MenuItem>
+				<MenuItem value={'Plan 3'}>{`Plan 3 ${
+					planData['Plan 3'].isDirty ? '(unsaved)' : ''
+				}`}</MenuItem>
 			</Select>
 			<Button variant="contained" size="small" onClick={handleSave}>
 				Save

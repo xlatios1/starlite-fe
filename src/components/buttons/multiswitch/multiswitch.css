@@ -44,7 +44,7 @@ z-index: 2;
 font-size: 10px;
 }
 
-.multi-switch-options .slide-container a {
+.multi-switch-options .slide-container div {
 position: absolute;
 left: 50%;
 z-index: 1;
@@ -60,25 +60,25 @@ Auto adjusting widths
 */
 .multi-switch-options label:nth-last-child(6),
 .multi-switch-options label:nth-last-child(6) ~ label,
-.multi-switch-options label:nth-last-child(6) ~ a {
+.multi-switch-options label:nth-last-child(6) ~ div {
 width: 33.3334%;
 }
 
 .multi-switch-options label:nth-last-child(8),
 .multi-switch-options label:nth-last-child(8) ~ label,
-.multi-switch-options label:nth-last-child(8) ~ a {
+.multi-switch-options label:nth-last-child(8) ~ div {
 width: 25%;
 }
 
 .multi-switch-options label:nth-last-child(10),
 .multi-switch-options label:nth-last-child(10) ~ label,
-.multi-switch-options label:nth-last-child(10) ~ a {
+.multi-switch-options label:nth-last-child(10) ~ div {
 width: 20%;
 }
 
 .multi-switch-options label:nth-last-child(12),
 .multi-switch-options label:nth-last-child(12) ~ label,
-.multi-switch-options label:nth-last-child(12) ~ a {
+.multi-switch-options label:nth-last-child(12) ~ div {
 width: 16.6667%;
 }
 
@@ -87,69 +87,69 @@ Slider
 */
 
 /* all options, first selected */
-.multi-switch-options input:checked ~ a {
+.multi-switch-options input:checked ~ div {
 left: 0;
 box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 /* 2 options, 2nd selected */
-.multi-switch-options label:nth-last-child(4) ~ input:nth-child(3):checked ~ a {
+.multi-switch-options label:nth-last-child(4) ~ input:nth-child(3):checked ~ div {
 left: 50%;
 }
 /* 3 options, 2nd selected */
-.multi-switch-options label:nth-last-child(6) ~ input:nth-child(3):checked ~ a {
+.multi-switch-options label:nth-last-child(6) ~ input:nth-child(3):checked ~ div {
 left: 33.3334%;
 }
 /* 3 options, 3rd selected */
-.multi-switch-options label:nth-last-child(6) ~ input:nth-child(5):checked ~ a {
+.multi-switch-options label:nth-last-child(6) ~ input:nth-child(5):checked ~ div {
 left: 66.6667%;
 }
 /* 4 options, 2nd selected */
-.multi-switch-options label:nth-last-child(8) ~ input:nth-child(3):checked ~ a {
+.multi-switch-options label:nth-last-child(8) ~ input:nth-child(3):checked ~ div {
 left: 25%;
 }
 /* 4 options, 3rd selected */
-.multi-switch-options label:nth-last-child(8) ~ input:nth-child(5):checked ~ a {
+.multi-switch-options label:nth-last-child(8) ~ input:nth-child(5):checked ~ div {
 left: 50%;
 }
 /* 4 options, 4th selected */
-.multi-switch-options label:nth-last-child(8) ~ input:nth-child(7):checked ~ a {
+.multi-switch-options label:nth-last-child(8) ~ input:nth-child(7):checked ~ div {
 left: 75%;
 }
 /* 5 options, 2nd selected */
-.multi-switch-options label:nth-last-child(10) ~ input:nth-child(3):checked ~ a {
+.multi-switch-options label:nth-last-child(10) ~ input:nth-child(3):checked ~ div {
 left: 20%;
 }
 /* 5 options, 3rd selected */
-.multi-switch-options label:nth-last-child(10) ~ input:nth-child(5):checked ~ a {
+.multi-switch-options label:nth-last-child(10) ~ input:nth-child(5):checked ~ div {
 left: 40%;
 }
 /* 5 options, 4th selected */
-.multi-switch-options label:nth-last-child(10) ~ input:nth-child(7):checked ~ a {
+.multi-switch-options label:nth-last-child(10) ~ input:nth-child(7):checked ~ div {
 left: 60%;
 }
 /* 5 options, 5th selected */
-.multi-switch-options label:nth-last-child(10) ~ input:nth-child(9):checked ~ a {
+.multi-switch-options label:nth-last-child(10) ~ input:nth-child(9):checked ~ div {
 left: 80%;
 }
 /* 6 options, 2nd selected */
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(3):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(3):checked ~ div {
 left: 16.6667%;
 }
 /* 6 options, 3rd selected */
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(5):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(5):checked ~ div {
 left: 33.3334%;
 }
 /* 6 options, 4th selected */
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(7):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(7):checked ~ div {
 left: 50%;
 }
 /* 6 options, 5th selected */
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(9):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(9):checked ~ div {
 left: 66.6667%;
 }
 /* 6 options, 6th selected */
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(11):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(11):checked ~ div {
 left: 83.3334%;
 }
 
@@ -157,7 +157,7 @@ left: 83.3334%;
 Slider shadows
 */
 /* middle spots */
-.multi-switch-options input:not(:first-child):checked ~ a {
+.multi-switch-options input:not(:first-child):checked ~ div {
 box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2),
             -1px 0 0 rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -167,7 +167,7 @@ box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2),
 .multi-switch-options label:nth-last-child(6) ~ input:nth-child(5):checked ~ a,
 .multi-switch-options label:nth-last-child(8) ~ input:nth-child(7):checked ~ a,
 .multi-switch-options label:nth-last-child(10) ~ input:nth-child(9):checked ~ a,
-.multi-switch-options label:nth-last-child(12) ~ input:nth-child(11):checked ~ a {
+.multi-switch-options label:nth-last-child(12) ~ input:nth-child(11):checked ~ div {
 box-shadow: -1px 0 0 rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -184,18 +184,18 @@ cursor: pointer;
 text-shadow: 0 1px 1px rgba(0, 0, 0, .4);
 }
 
-.multi-switch-options .slide-container a {
+.multi-switch-options .slide-container div {
 background: #31acbd;
 border: 1px solid #005f90;
 }
 
 /* Stoplight theme */
-.multi-switch-options[data-theme="stoplight"] .slide-container > a {
+.multi-switch-options[data-theme="stoplight"] .slide-container > div {
 background: #c00;
 border-color: #8a0000;
 }
 
-.multi-switch-options[data-theme="stoplight"] input:not(:first-child):checked ~ a {
+.multi-switch-options[data-theme="stoplight"] input:not(:first-child):checked ~ div {
 background: #ec7a08;
 border-color: #bc6106;
 }
@@ -204,7 +204,7 @@ border-color: #bc6106;
 .multi-switch-options[data-theme="stoplight"] label:nth-last-child(6) ~ input:nth-child(5):checked ~ a,
 .multi-switch-options[data-theme="stoplight"] label:nth-last-child(8) ~ input:nth-child(7):checked ~ a,
 .multi-switch-options[data-theme="stoplight"] label:nth-last-child(10) ~ input:nth-child(9):checked ~ a,
-.multi-switch-options[data-theme="stoplight"] label:nth-last-child(12) ~ input:nth-child(11):checked ~ a {
+.multi-switch-options[data-theme="stoplight"] label:nth-last-child(12) ~ input:nth-child(11):checked ~ div {
 background: #3f9c35;
 border-color: #307628;
 }
@@ -221,7 +221,7 @@ flex-wrap: wrap;
 /*
 Because a11y
 */
-.multi-switch-options input:focus ~ a {
+.multi-switch-options input:focus ~ div {
 outline: 2px solid #0088ce;
 }
 

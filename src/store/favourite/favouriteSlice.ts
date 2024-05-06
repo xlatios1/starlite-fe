@@ -72,6 +72,10 @@ const favouriteSlice = createSlice({
 			state.oldFavouriteArray = state.favouriteArray
 			state.isDirty = false
 		},
+		revertFavorite: (state: FavouriteState, actions: PayloadAction<null>) => {
+			state.favouriteArray = state.oldFavouriteArray
+			state.isDirty = false
+		},
 	},
 })
 
@@ -82,4 +86,5 @@ export const {
 	renameFavorite,
 	removeFavorite,
 	savedFavorite,
+	revertFavorite,
 } = favouriteSlice.actions

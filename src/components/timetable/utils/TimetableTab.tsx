@@ -1,20 +1,18 @@
 import { Paper } from '@mui/material'
+import { setActiveTab } from '@store/timetable/timetableSlice.ts'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 type TimetableTabProps = {
 	activeTab: string
-	setActiveTab: React.Dispatch<React.SetStateAction<string>>
 	isDisabled: boolean
 }
 
-export function TimetableTab({
-	activeTab,
-	setActiveTab,
-	isDisabled,
-}: TimetableTabProps) {
-	const openTab = (tabName: string) => {
+export function TimetableTab({ activeTab, isDisabled }: TimetableTabProps) {
+	const dispatch = useDispatch()
+	const openTab = (tabName: 'fixed slot' | 'timetables') => {
 		if (isDisabled) {
-			setActiveTab(tabName)
+			dispatch(setActiveTab(tabName))
 		}
 	}
 
@@ -25,19 +23,19 @@ export function TimetableTab({
 		>
 			<div
 				className={`time-table-tab-option ${
-					activeTab === 'timetable' ? 'active' : ''
+					activeTab === 'fixed slot' ? 'active' : ''
 				}`}
 				style={{ borderRadius: '5px 0 0 5px' }}
-				onClick={() => openTab('timetable')}
+				onClick={() => openTab('fixed slot')}
 			>
 				Fixed Slot
 			</div>
 			<div
 				className={`time-table-tab-option ${
-					activeTab === 'combinations' ? 'active' : ''
+					activeTab === 'timetables' ? 'active' : ''
 				} ${isDisabled ? '' : 'disabled'}`}
 				style={{ borderRadius: '0 5px 5px 0' }}
-				onClick={() => openTab('combinations')}
+				onClick={() => openTab('timetables')}
 			>
 				Timetables
 			</div>

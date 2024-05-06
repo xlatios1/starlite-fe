@@ -1,7 +1,6 @@
 import React from 'react'
 import {
 	checkConflictWeeks,
-	intToTimeslot,
 	timeArr,
 } from '@components/timetable/utils/timetableUtils.ts'
 import type {
@@ -64,7 +63,7 @@ export const GenerateTimetable = (
 											// })`,
 											backgroundColor: `var(${colorCodedInfo[class_.code]})`,
 											borderRadius: '3px',
-											minWidth: '70px',
+											minWidth: '60px',
 										}}
 									>
 										{class_.code}

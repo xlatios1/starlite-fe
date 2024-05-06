@@ -2,7 +2,7 @@ import { closeLoading, openLoading } from '@store/loading/loadingSlice.ts'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './Favourite.module.css'
-import { Box, IconButton, Paper, Typography } from '@mui/material'
+import { IconButton, Paper } from '@mui/material'
 import TimetableCart from './TimetableCart.tsx'
 import { RootState } from '@store/store.ts'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
@@ -11,6 +11,7 @@ import {
 	renameFavorite,
 	removeFavorite,
 	savedFavorite,
+	revertFavorite,
 } from '@store/favourite/favouriteSlice.ts'
 import { UserAuth } from '@authentications/AuthContext.js'
 import Notification from '@components/notification/notification.tsx'
@@ -120,7 +121,11 @@ const Favourite = () => {
 				}
 			})
 			.catch(() => {
-				Notification('error', 'An unexpected error has occured (Load)', 2000)
+				Notification(
+					'error',
+					'An unexpected error has occured (Load Favourite)',
+					2000
+				)
 			})
 			.finally(() => {
 				dispatch(closeLoading())
@@ -190,6 +195,12 @@ const Favourite = () => {
 						)}
 						{isDirty ? (
 							<div className={styles.actionButtonWrapper}>
+								<button
+									className="fetch-btn"
+									onClick={() => dispatch(revertFavorite())}
+								>
+									<span className="text">revertFavorite</span>
+								</button>
 								<button className="fetch-btn" onClick={() => handleUpdate()}>
 									<span className="text">Sync Favourites</span>
 								</button>

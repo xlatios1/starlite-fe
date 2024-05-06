@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, SetStateAction, Dispatch } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { SearchBarComponent } from './searchbarcomponents/SearchBarComponent.tsx'
 import { SearchResultList } from './searchbarcomponents/SearchResultList.tsx'
 import SavedPlan from './searchbarcomponents/SavedPlan.tsx'
@@ -28,7 +28,6 @@ type SearchBarProps = {
 	handleSearch: (searched: CourseDetails[]) => void
 	searchValidRef: React.MutableRefObject<HTMLDivElement>
 	walkthrough: number
-	setTimetablePreview: Dispatch<SetStateAction<any[][]>>
 }
 
 export default function SearchBar({
@@ -36,7 +35,6 @@ export default function SearchBar({
 	handleSearch,
 	searchValidRef,
 	walkthrough,
-	setTimetablePreview,
 }: SearchBarProps) {
 	const [getCourseDetails] = useLazyGetCourseDetailsQuery()
 	const [suggestions, setSuggestions] = useState<
@@ -188,11 +186,7 @@ export default function SearchBar({
 					}`}
 					ref={searchValidRef}
 				>
-					<SavedPlan
-						courses={courseData.courses}
-						setOrdered={setOrdered}
-						setTimetablePreview={setTimetablePreview}
-					/>
+					<SavedPlan courses={courseData.courses} setOrdered={setOrdered} />
 					{courseData.courses.length > 0 && (
 						<>
 							<div className="search-bottom-wrappper">

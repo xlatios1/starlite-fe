@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice, current } from '@reduxjs/toolkit'
+import _ from 'lodash'
 
 export type classinfo = {
 	type: string
@@ -45,21 +46,28 @@ export type AllPlans = {
 	'Plan 1': {
 		courses: CourseDetails[]
 		CourseColorPalette: ColorPalette[]
+		isDirty: boolean
 	}
 	'Plan 2': {
 		courses: CourseDetails[]
 		CourseColorPalette: ColorPalette[]
+		isDirty: boolean
 	}
 	'Plan 3': {
 		courses: CourseDetails[]
 		CourseColorPalette: ColorPalette[]
+		isDirty: boolean
 	}
 }
 
 export type AllPlanDetails = {
 	currentPlan: string
 	planData: AllPlans
-	isDirtyValue: boolean
+	oldPlanData: {
+		'Plan 1': { courses: CourseDetails[] }
+		'Plan 2': { courses: CourseDetails[] }
+		'Plan 3': { courses: CourseDetails[] }
+	}
 	isInitialRendered: boolean
 }
 
@@ -80,11 +88,15 @@ export const CourseColorPalette = [
 const initialState: AllPlanDetails = {
 	currentPlan: 'Plan 1',
 	planData: {
-		'Plan 1': { courses: [], CourseColorPalette },
-		'Plan 2': { courses: [], CourseColorPalette },
-		'Plan 3': { courses: [], CourseColorPalette },
+		'Plan 1': { courses: [], CourseColorPalette, isDirty: false },
+		'Plan 2': { courses: [], CourseColorPalette, isDirty: false },
+		'Plan 3': { courses: [], CourseColorPalette, isDirty: false },
 	},
-	isDirtyValue: false,
+	oldPlanData: {
+		'Plan 1': { courses: [] },
+		'Plan 2': { courses: [] },
+		'Plan 3': { courses: [] },
+	},
 	isInitialRendered: false,
 }
 
@@ -97,10 +109,11 @@ const courseSlice = createSlice({
 			actions: PayloadAction<AllPlans>
 		) => {
 			if (!state.isInitialRendered) {
-				for (const course in actions.payload) {
-					state.planData[course] = actions.payload[course]
+				for (const plan in actions.payload) {
+					state.planData[plan] = actions.payload[plan]
+					state.oldPlanData[plan] = { courses: actions.payload[plan].courses }
+					state.planData[plan].isDirty = false
 				}
-				state.isDirtyValue = false
 				state.isInitialRendered = true
 			}
 		},
@@ -109,14 +122,20 @@ const courseSlice = createSlice({
 			actions: PayloadAction<ColorPalette[]>
 		) => {
 			state.planData[state.currentPlan].CourseColorPalette = actions.payload
-			state.isDirtyValue = false
+			state.planData[state.currentPlan].isDirty = !_.isEqual(
+				state.planData[state.currentPlan].courses,
+				state.oldPlanData[state.currentPlan].courses
+			)
 		},
 		addCourse: (
 			state: AllPlanDetails,
 			actions: PayloadAction<CourseDetails>
 		) => {
 			state.planData[state.currentPlan].courses.push(actions.payload)
-			state.isDirtyValue = true
+			state.planData[state.currentPlan].isDirty = !_.isEqual(
+				state.planData[state.currentPlan].courses,
+				state.oldPlanData[state.currentPlan].courses
+			)
 		},
 		removeCourse: (state: AllPlanDetails, actions: PayloadAction<string>) => {
 			const index = state.planData[state.currentPlan].courses.findIndex((c) => {
@@ -131,7 +150,10 @@ const courseSlice = createSlice({
 			].courses.filter(
 				(course: string) => Object.keys(course)[0] !== actions.payload
 			)
-			state.isDirtyValue = true
+			state.planData[state.currentPlan].isDirty = !_.isEqual(
+				state.planData[state.currentPlan].courses,
+				state.oldPlanData[state.currentPlan].courses
+			)
 		},
 		setPlan: (
 			state: AllPlanDetails,
@@ -146,7 +168,16 @@ const courseSlice = createSlice({
 			actions: PayloadAction<CourseDetails[]>
 		) => {
 			state.planData[state.currentPlan].courses = actions.payload
-			state.isDirtyValue = true
+			state.planData[state.currentPlan].isDirty = !_.isEqual(
+				state.planData[state.currentPlan].courses,
+				state.oldPlanData[state.currentPlan].courses
+			)
+		},
+		syncCourse: (state: AllPlanDetails, actions: PayloadAction<null>) => {
+			state.oldPlanData[state.currentPlan] = {
+				courses: state.planData[state.currentPlan].courses,
+			}
+			state.planData[state.currentPlan].isDirty = false
 		},
 	},
 })
@@ -159,4 +190,5 @@ export const {
 	removeCourse,
 	setPlan,
 	setCourse,
+	syncCourse,
 } = courseSlice.actions

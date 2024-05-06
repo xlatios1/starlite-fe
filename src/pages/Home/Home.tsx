@@ -11,25 +11,25 @@ import TutorialButton, { helperText } from '@components/tutorial/tutorial.tsx'
 import { Box } from '@mui/material'
 import { AllPlans, CourseDetails } from '@store/course/courseSlice'
 import { closeLoading, openLoading } from '@store/loading/loadingSlice.ts'
+import {
+	setTimetableData,
+	setCurrentPage,
+	setActiveTab,
+} from '@store/timetable/timetableSlice.ts'
 import { RootState } from '@store/store'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './home.css'
-const _ = require('lodash')
 
 export default function Home() {
-	const initializedTimetable: any[][] = Array.from({ length: 7 }, () =>
-		Array.from({ length: 11 }, () => [])
-	)
-
 	const searchValidRef = useRef<HTMLDivElement>(null)
-	const [timetablePreview, setTimetablePreview] = useState(initializedTimetable)
-	const [timetableData, setTimetableData] = useState([]) //timetable option datas
-	const [currentPage, setCurrentPage] = useState(1)
-	const [activeTab, setActiveTab] = useState('timetable')
 
 	const dispatch = useDispatch()
+
+	const { activeTab, timetableData, currentPage, timetablePreview, totalPage } =
+		useSelector((state: RootState) => state.timetable)
+
 	const walkthrough = useSelector(
 		(state: RootState) => state.walkthrough.walkthrough
 	)
@@ -57,8 +57,8 @@ export default function Home() {
 					)
 				} else {
 					const data = MatchTimetable(search)
-					setTimetableData(applyPreferences(data, initialPreferences))
-					setActiveTab('combinations')
+					dispatch(setTimetableData(applyPreferences(data, initialPreferences)))
+					dispatch(setActiveTab('timetables'))
 					Notification('success', 'Search successful', 1000)
 					if (walkthrough > 0) {
 						dispatch(setWalkthough(3))
@@ -85,7 +85,7 @@ export default function Home() {
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
-			setTimetableData(applyPreferences(timetableData, preference))
+			dispatch(setTimetableData(applyPreferences(timetableData, preference)))
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
 			if (walkthrough > 0) {
@@ -95,13 +95,13 @@ export default function Home() {
 	}
 
 	const getPaginationPage = (_, page) => {
-		setCurrentPage(page)
+		dispatch(setCurrentPage(page))
 	}
 
 	return (
 		<div className="homepage">
 			<div className="detail-wrapper">
-				{timetableData.length > 0 ? (
+				{totalPage > 0 ? (
 					<div
 						className={`preference-wrap ${
 							walkthrough > 2 ? ' highlight-element' : ''
@@ -127,13 +127,9 @@ export default function Home() {
 					{walkthrough === 3 && helperText('showTimetableToggleTip')}
 					{walkthrough === 3 && helperText('showCombinationNoChangeTip')}
 					{walkthrough === 4 && helperText('showAfterPreferenceChangeTip')}
-					<TimetableTab
-						activeTab={activeTab}
-						setActiveTab={setActiveTab}
-						isDisabled={timetableData.length > 0}
-					/>
+					<TimetableTab activeTab={activeTab} isDisabled={totalPage > 0} />
 					<div className="time-table-wrapper">
-						{activeTab === 'combinations' ? (
+						{activeTab === 'timetables' ? (
 							<>
 								{walkthrough === 3 && helperText('showCourseIndexTip')}
 								<div className="time-table-container">
@@ -146,7 +142,7 @@ export default function Home() {
 									/>
 								</div>
 								<Paginations
-									total={timetableData.length}
+									total={totalPage}
 									getPaginationPage={getPaginationPage}
 								/>
 							</>
@@ -174,7 +170,6 @@ export default function Home() {
 						handleSearch={handleSearch}
 						searchValidRef={searchValidRef}
 						walkthrough={walkthrough}
-						setTimetablePreview={setTimetablePreview}
 					></SearchBar>
 				</div>
 			</div>
@@ -192,7 +187,7 @@ export default function Home() {
 				<ScrollButton display={Boolean(timetableData)} />
 				<TutorialButton
 					walkthrough={walkthrough}
-					stepTwo={!_.isEqual(timetablePreview, initializedTimetable)}
+					stepTwo={Boolean(timetablePreview.flat().flat().length === 0)}
 					stepThree={Boolean(timetableData)}
 				/>
 			</Box>

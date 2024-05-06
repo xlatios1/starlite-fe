@@ -1,7 +1,7 @@
 import React from 'react'
 import './multiswitch.css'
 
-type MultiSwitch = {
+type MultiSwitchProp = {
 	handleMultiSwitch: (text: string, option: string) => void
 	text: string
 	options: string[]
@@ -15,7 +15,7 @@ export default function MultiSwitch({
 	options,
 	check,
 	disabled,
-}: MultiSwitch) {
+}: MultiSwitchProp) {
 	return (
 		<div className="multi-switch-options" key={text}>
 			<div className="multi-switch-option" key={text}>
@@ -44,10 +44,10 @@ export default function MultiSwitch({
 						</React.Fragment>
 					)
 				})}
-				<a
+				<div
 					className={`slide${disabled ? ' disabled' : ''}`}
 					aria-hidden="true"
-				></a>
+				></div>
 			</div>
 		</div>
 	)

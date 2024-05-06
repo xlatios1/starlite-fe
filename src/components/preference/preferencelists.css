@@ -65,6 +65,14 @@
 	display: flex;
 }
 
+.preference-options.timeslot .preference-option-info {
+	font-size: 10px;
+	.preference-option-info-detail {
+		display:flex;
+		flex-direction: row;
+	}
+}
+
 .preference-options .preference-option-headers .preference-option-header.rank {
 	position: relative;
 	display: flex;

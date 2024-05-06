@@ -4,15 +4,17 @@ import type {
 } from '../types/timetableTypes.ts'
 import { timeslotOptions } from '@components/preference/preferences/timeslot.tsx'
 import { days } from '@components/preference/preferenceUtils.tsx'
+import _ from 'lodash'
 
 export const applyPreferences = (
-	data: {
+	timetableData: {
 		timetable_data: TimetableClassData[]
-		info: [string, string][]
+		info: [string, string, string][]
 		rank: number
 	}[],
 	preferences
 ) => {
+	const data = _.cloneDeep(timetableData)
 	data.map((timetable) => (timetable.rank = 1))
 
 	const parsedPreferences = {
@@ -77,6 +79,6 @@ export const applyPreferences = (
 		}
 		result.push(rankedData[i])
 	}
-	result.sort((a, b) => b.rank - a.rank)
+	result.sort((a, b) => b.rank - a.rank || b.info.length - a.info.length)
 	return result
 }

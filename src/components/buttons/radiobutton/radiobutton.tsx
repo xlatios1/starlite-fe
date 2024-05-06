@@ -1,7 +1,7 @@
 import React from 'react'
 import './radiobutton.css'
 
-type RadioButton = {
+type RadioButtonProp = {
 	handleRadioButton: (...args: any[]) => void
 	id: number
 	course_code: string
@@ -13,7 +13,7 @@ export default function RadioButton({
 	id,
 	course_code,
 	check,
-}: RadioButton) {
+}: RadioButtonProp) {
 	return (
 		<div className="radiobutton option">
 			<input

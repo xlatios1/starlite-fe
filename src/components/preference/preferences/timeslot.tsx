@@ -34,6 +34,17 @@ export default function Timeslot({
 					Reset filter
 				</span>
 			</div>
+			<div className="preference-option-info">
+				<div className="preference-option-info-detail">
+					<p style={{ width: 60 }}>Morning:</p> <p>8am-12.30pm</p>
+				</div>
+				<div className="preference-option-info-detail">
+					<p style={{ width: 60 }}>Afternoon:</p> <p>12.30pm-6.30pm</p>
+				</div>
+				<div className="preference-option-info-detail">
+					<p style={{ width: 60 }}>Evening:</p> <p>6.30pm-11.30pm</p>
+				</div>
+			</div>
 			{days.map((day) => {
 				return (
 					<div className="preference-option-timeslot" key={day}>

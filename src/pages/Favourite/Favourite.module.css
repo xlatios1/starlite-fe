@@ -1,147 +1,130 @@
-.favouritePage{
-    margin-top: 44px;
-    height: calc(100vh - 44px - 52.016px);
-    min-width: 720px;
+.favouritePage {
+    display: flex;
+	margin-top: 44px;
+	height: calc(100vh - 52.016px - 100px);
+	min-width: 720px;
+    flex-direction: row;
+    margin-top: 100px;
 
-    .upperDetail{
-        height: 200px;
-        width: 100vw;
-        min-width: 620px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+	.timetableList {
+        height: calc(100% - 100px);
+		width: 250px;
+		display: flex;
 
-        .favouriteTitle{
-            font-family: Georgia, serif;
-            font-size: 40px;
-        }
-    }
-    
-    .lowerDetail{
-        height: calc(100vh - 44px - 52.016px - 200px - 20px);
-        width: 100%;
-        display: flex;
-        justify-content: start;
-        flex-direction: row;
+		.timetableListWrapper {
+			margin: 40px;
+			width: 100%;
+			overflow-y: auto;
 
-        .timetableList{
-            width: 250px;
-            display: flex;
+			.timetableListNamesContainer {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				width: 100%;
+				height: 40px;
+				margin: 5px 0;
+				background-color: gainsboro;
+				border-radius: 20px;
 
-            .timetableListWrapper{
-                margin: 40px;
-                width: 100%;
-                overflow-y: auto;
+				.uilDraggableDots {
+					display: inline-block;
+					width: 1em;
+					height: 1em;
+					--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M8.5 10a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0 7a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7-10a2 2 0 1 0-2-2a2 2 0 0 0 2 2m-7-4a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7 14a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0-7a2 2 0 1 0 2 2a2 2 0 0 0-2-2'/%3E%3C/svg%3E");
+					background-color: currentColor;
+					-webkit-mask-image: var(--svg);
+					mask-image: var(--svg);
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					-webkit-mask-size: 100% 100%;
+					mask-size: 100% 100%;
+					cursor: grab;
+					padding-right: 30px;
+				}
 
-                .timetableListNamesContainer{
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    width: 100%;
-                    height: 40px;
-                    margin: 5px 0;
-                    background-color: gainsboro;
-                    border-radius: 20px;
+				.timetableListNames {
+					width: 100%;
+					height: 100%;
+					align-content: center;
+					/* font: 400 20px/28px "Google Sans Text"; */
+					cursor: pointer;
+					user-select: none;
+					background: transparent;
+					border: none;
+					outline: none;
+				}
+			}
 
-                    .uilDraggableDots {
-                        display: inline-block;
-                        width: 1em;
-                        height: 1em;
-                        --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M8.5 10a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0 7a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7-10a2 2 0 1 0-2-2a2 2 0 0 0 2 2m-7-4a2 2 0 1 0 2 2a2 2 0 0 0-2-2m7 14a2 2 0 1 0 2 2a2 2 0 0 0-2-2m0-7a2 2 0 1 0 2 2a2 2 0 0 0-2-2'/%3E%3C/svg%3E");
-                        background-color: currentColor;
-                        -webkit-mask-image: var(--svg);
-                        mask-image: var(--svg);
-                        -webkit-mask-repeat: no-repeat;
-                        mask-repeat: no-repeat;
-                        -webkit-mask-size: 100% 100%;
-                        mask-size: 100% 100%;
-                        cursor: grab;
-                        padding-right: 30px;
-                    }
-        
-                    .timetableListNames{
-                        width: 100%;
-                        height: 100%;
-                        align-content: center;
-                        /* font: 400 20px/28px "Google Sans Text"; */
-                        cursor: pointer;
-                        user-select: none;
-                        background: transparent;
-                        border: none;
-                        outline: none;
-                        
-                    }
-                }
+			.timetableListNamesContainer:hover {
+				background-color: lightblue;
+			}
+		}
+		.actionButtonWrapper {
+			margin-top: 20px;
 
-                .timetableListNamesContainer:hover{
-                    background-color: lightblue;
-                }
-            }
-            .actionButtonWrapper{
-                margin-top: 20px;
-                
-                button{
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    margin-bottom: 10px;
-                }
-            }
-        }
+			button {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				margin-bottom: 10px;
+			}
+		}
+	}
 
-        .timetableDetails{
-            height: 100%;
-            width: calc(100vw - 250px - 40px);
-            min-width: 330px;
-            background-color: white;
-            padding: 40px;
-            margin-right: 40px;
-            overflow-y: auto;
-            display: grid;
-            gap: 30px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+	.timetableDetails {
+		height: calc(100% - 100px);
+		width: calc(100vw - 250px - 40px);
+		min-width: 330px;
+		background-color: white;
+		padding: 40px;
+		margin-right: 40px;
+		overflow-y: auto;
+		display: grid;
+		gap: 30px;
+		grid-template: 200px / repeat(auto-fit, minmax(250px, 250px));
 
-            .timetableCartContainer{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
+		.timetableCartContainer {
+            height: 200px;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
 
-            .timetableCart{
-                width: 250px;
-                height: 200px;
-                background-color: white;
-                cursor: pointer;
-                justify-content: center;
-            }
-    
-            .timetableCart:hover{
-                height: 200px;
-                background-color: rgb(247, 247, 247);
-                cursor: pointer;
-            }
-    
-            .timetableCartTitle{
-                display: flex;
-                justify-content: center;
-                width: 100%;
-                background-color: lightblue;
-                .textTitle{
-                    padding: 10px;
-                    font-family: Georgia, serif;
-                    font-size: 16px;
-                }
-            }
-    
-            .timetableCartBody{
-                height: calc(200px - 24px - 20px - 10px);
-                overflow-y: scroll;
-                padding-top: 10px;
-                .textBody{
-                    padding-left: 20px;
-                }
-            }
-        }
-    }
+		.timetableCart {
+			width: 250px;
+			height: 200px;
+			background-color: white;
+			cursor: pointer;
+			justify-content: center;
+		}
+
+		.timetableCart:hover {
+			height: 200px;
+			background-color: rgb(247, 247, 247);
+			cursor: pointer;
+		}
+
+		.timetableCartTitle {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			background-color: lightblue;
+            height: 44px;
+			.textTitle {
+				padding: 10px;
+				font-family: Georgia, serif;
+				font-size: 16px;
+			}
+		}
+
+		.timetableCartBody {
+			height: calc(200px - 24px - 20px - 10px);
+			overflow-y: scroll;
+			padding-top: 10px;
+			.textBody {
+				padding-left: 20px;
+			}
+		}
+	}
 }

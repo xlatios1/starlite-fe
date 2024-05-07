@@ -67,9 +67,23 @@
 
 .preference-options.timeslot .preference-option-info {
 	font-size: 10px;
+	border: solid 1px;
+	flex-direction: column;
+
 	.preference-option-info-detail {
 		display:flex;
 		flex-direction: row;
+		justify-content: center;
+		background-color: lightblue;
+		
+		.preference-option-info-detail-text{
+			width: 60px;
+			font-weight: bold;
+		}
+		
+		.preference-option-info-detail-timing{
+			width: 100px;
+		}
 	}
 }
 

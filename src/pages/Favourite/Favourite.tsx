@@ -134,88 +134,84 @@ const Favourite = () => {
 
 	return (
 		<section className={styles.favouritePage}>
-			<div className={styles.upperDetail}>
-				<div className={styles.favouriteTitle}>Your Saved Timetables</div>
-			</div>
-			<div className={styles.lowerDetail}>
-				<aside className={styles.timetableList}>
-					<div className={styles.timetableListWrapper}>
-						{favouriteNames.length > 0 ? (
-							favouriteNames.map((name, i) => (
-								<div
-									key={`${i}-${name}`}
-									className={styles.timetableListNamesContainer}
-									onMouseEnter={() => handleHover(i)}
-									onMouseLeave={() => handleHover(null)}
-									style={{
-										backgroundColor: hoveredIndex === i ? 'lightblue' : '',
-									}}
-								>
-									<div className={styles.uilDraggableDots}></div>
-									{editingIndex === i ? (
-										<input
-											className={styles.timetableListNames}
-											type="text"
-											value={name}
-											onChange={(e) => handleSavedNameChange(i, e.target.value)}
-											onBlur={() => handleEditing(null)}
-											onKeyDown={(e) => {
-												if (e.key === 'Enter') handleEditing(null)
-											}}
-											autoFocus
-										/>
-									) : (
-										<div
-											className={styles.timetableListNames}
-											onClick={() => handleEditing(i)}
-										>
-											{name}
-										</div>
-									)}
-									{hoveredIndex === i ? (
-										<IconButton
-											onClick={() => dispatch(removeFavorite(i))}
-											sx={{
-												display: 'flex',
-												justifyContent: 'flex-end',
-												height: '40px',
-												width: '40px',
-												color: 'black',
-											}}
-										>
-											<DeleteOutlinedIcon />
-										</IconButton>
-									) : (
-										<></>
-									)}
-								</div>
-							))
-						) : (
-							<div></div>
-						)}
-						{isDirty ? (
-							<div className={styles.actionButtonWrapper}>
-								<button
-									className="fetch-btn"
-									onClick={() => dispatch(revertFavorite())}
-								>
-									<span className="text">revertFavorite</span>
-								</button>
-								<button className="fetch-btn" onClick={() => handleUpdate()}>
-									<span className="text">Sync Favourites</span>
-								</button>
+			<aside className={styles.timetableList}>
+				<div className={styles.timetableListWrapper}>
+					<p>Saved timetables:</p>
+					{favouriteNames.length > 0 ? (
+						favouriteNames.map((name, i) => (
+							<div
+								key={`${i}-${name}`}
+								className={styles.timetableListNamesContainer}
+								onMouseEnter={() => handleHover(i)}
+								onMouseLeave={() => handleHover(null)}
+								style={{
+									backgroundColor: hoveredIndex === i ? 'lightblue' : '',
+								}}
+							>
+								<div className={styles.uilDraggableDots}></div>
+								{editingIndex === i ? (
+									<input
+										className={styles.timetableListNames}
+										type="text"
+										value={name}
+										onChange={(e) => handleSavedNameChange(i, e.target.value)}
+										onBlur={() => handleEditing(null)}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') handleEditing(null)
+										}}
+										autoFocus
+									/>
+								) : (
+									<div
+										className={styles.timetableListNames}
+										onClick={() => handleEditing(i)}
+									>
+										{name}
+									</div>
+								)}
+								{hoveredIndex === i ? (
+									<IconButton
+										onClick={() => dispatch(removeFavorite(i))}
+										sx={{
+											display: 'flex',
+											justifyContent: 'flex-end',
+											height: '40px',
+											width: '40px',
+											color: 'black',
+										}}
+									>
+										<DeleteOutlinedIcon />
+									</IconButton>
+								) : (
+									<></>
+								)}
 							</div>
-						) : (
-							<></>
-						)}
-					</div>
-				</aside>
-				<Paper elevation={1} className={styles.timetableDetails}>
-					{courses.map((c, i) => (
-						<TimetableCart key={i} courses={c}></TimetableCart>
-					))}
-				</Paper>
-			</div>
+						))
+					) : (
+						<div></div>
+					)}
+					{isDirty ? (
+						<div className={styles.actionButtonWrapper}>
+							<button
+								className="fetch-btn"
+								onClick={() => dispatch(revertFavorite())}
+							>
+								<span className="text">revertFavorite</span>
+							</button>
+							<button className="fetch-btn" onClick={() => handleUpdate()}>
+								<span className="text">Sync Favourites</span>
+							</button>
+						</div>
+					) : (
+						<></>
+					)}
+				</div>
+			</aside>
+			<Paper elevation={1} className={styles.timetableDetails}>
+				{courses.map((c, i) => (
+					<TimetableCart key={i} courses={c} name={favouriteNames[i]}></TimetableCart>
+				))}
+			</Paper>
 		</section>
 	)
 }

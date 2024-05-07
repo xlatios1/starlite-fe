@@ -2,12 +2,12 @@ import { Box, Paper, Typography } from '@mui/material'
 import React from 'react'
 import styles from './Favourite.module.css'
 
-const TimetableCart = ({ courses }) => {
+const TimetableCart = ({ courses, name }) => {
 	return (
 		<Box className={styles.timetableCartContainer}>
 			<Paper elevation={1} className={styles.timetableCart} onClick={() => {}}>
 				<Box className={styles.timetableCartTitle}>
-					<Box className={styles.textTitle}>Courses</Box>
+					<Box className={styles.textTitle}>{name}</Box>
 				</Box>
 				<Box className={styles.timetableCartBody}>
 					{courses.map(({ course, index }) => {

@@ -13,6 +13,25 @@
     background-color: rgb(39, 16, 255);
 }   
 
+.introduction-helper {
+    text-align: center; 
+
+    .introduction-title{
+        padding: 10px 0;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    .introduction-body{
+        padding: 0 20px;
+        width: 400px;
+    }
+    .introduction-action{
+        display: flex;
+        padding: 20px;
+        justify-content: space-around;
+    }
+}
+
 .highlight-helper {
     position:absolute;
     z-index: 1060;

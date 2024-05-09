@@ -1,5 +1,7 @@
 import React from 'react'
 import './multiswitch.css'
+import { RootState } from '@store/store'
+import { useSelector } from 'react-redux'
 
 type MultiSwitchProp = {
 	handleMultiSwitch: (text: string, option: string) => void
@@ -16,6 +18,10 @@ export default function MultiSwitch({
 	check,
 	disabled,
 }: MultiSwitchProp) {
+	const walkthrough = useSelector(
+		(state: RootState) => state.walkthrough.walkthrough
+	)
+
 	return (
 		<div className="multi-switch-options" key={text}>
 			<div className="multi-switch-option" key={text}>
@@ -38,6 +44,7 @@ export default function MultiSwitch({
 								onClick={() => {
 									handleMultiSwitch(text, option)
 								}}
+								style={{ zIndex: walkthrough > 0 ? '0' : '2' }}
 							>
 								{option}
 							</label>

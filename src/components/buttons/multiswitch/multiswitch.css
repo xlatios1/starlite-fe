@@ -47,7 +47,7 @@ font-size: 10px;
 .multi-switch-options .slide-container div {
 position: absolute;
 left: 50%;
-z-index: 1;
+/* z-index: 1; # to toggle it back if it is bugging*/ 
 height: 100%;
 width: 50%;
 transition: left 0.1s ease-out;

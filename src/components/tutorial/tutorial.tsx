@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import './tutorial.css'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import { useDispatch } from 'react-redux'
+import { Dialog } from '@mui/material'
 
 export default function TutorialButton({ walkthrough, stepTwo, stepThree }) {
 	const dispatch = useDispatch()
@@ -10,9 +11,9 @@ export default function TutorialButton({ walkthrough, stepTwo, stepThree }) {
 		console.log(walkthrough)
 		if (!walkthrough) {
 			if (stepThree) {
-				dispatch(setWalkthough(3))
+				dispatch(setWalkthough(4))
 			} else if (stepTwo) {
-				dispatch(setWalkthough(2))
+				dispatch(setWalkthough(3))
 			} else {
 				dispatch(setWalkthough(1))
 			}
@@ -23,7 +24,21 @@ export default function TutorialButton({ walkthrough, stepTwo, stepThree }) {
 
 	return (
 		<>
-			{walkthrough > 0 ? <div className="overlay"></div> : <></>}
+			{walkthrough > 0 ? (
+				<div className="overlay">
+					{walkthrough === 6 ? (
+						<div className="outro">
+							<div className="firework"></div>
+							<div className="firework"></div>
+							<div className="firework"></div>
+						</div>
+					) : (
+						<></>
+					)}
+				</div>
+			) : (
+				<></>
+			)}
 			<Button
 				variant="outlined"
 				sx={{
@@ -40,30 +55,59 @@ export default function TutorialButton({ walkthrough, stepTwo, stepThree }) {
 	)
 }
 
-export const helperText = (text: string) => {
+export const helperText = (text: string, dispatch?) => {
 	switch (text) {
+		case 'welcome-intro':
+			return (
+				<Dialog
+					open={true}
+					onClose={() => dispatch(setWalkthough(0))}
+					className="introduction-helper"
+				>
+					<div className="introduction-title">
+						Welcome to Starlite user guide! ✨
+					</div>
+					<div className="introduction-body">
+						Hopefully you will find this guide useful and how to utilise fully
+						on what Starlite has to offer! 😊
+					</div>
+					<div className="introduction-action">
+						<Button
+							variant="contained"
+							onClick={() => dispatch(setWalkthough(2))}
+						>
+							Show Me!
+						</Button>
+					</div>
+				</Dialog>
+			)
 		case 'searchTip':
 			return (
-				<div className="highlight-helper primary" style={{ top: '-92px' }}>
-					1) Type in your course code/name below! Suggestions will be shown
-					below and able to be selected. Hit [Enter] to register search course.
+				<div
+					className="highlight-helper primary"
+					style={{ right: '300px', width: '300px' }}
+				>
+					1) Type in your course code/name here! Suggestions will be shown below
+					and able to be selected. Select by clicking or [Enter] to register
+					search course.
 				</div>
 			)
 		case 'dragNDropTip':
 			return (
-				<>
-					<div className="highlight-helper primary" style={{ top: '-90px' }}>
-						2) Over here you may reposition your courses by drag-n-drop, courses
-						are ranked priority from top to bottom, meaning it will attempt to
-						map the highest priority first!
-					</div>
-					<div className="highlight-helper primary" style={{ bottom: '-70px' }}>
-						3) Once ready, click on [Search].
-						<br />
-						Condition: Only able to search if there are no conflicts so do
-						remove any conflicting courses!
-					</div>
-				</>
+				<div
+					className="highlight-helper primary"
+					style={{ top: '150px', right: '300px', width: '300px' }}
+				>
+					2) Over here you may reposition your courses by drag-n-drop, courses
+					are ranked priority from top to bottom, meaning it will attempt to map
+					the highest priority first!
+					<br />
+					<br />
+					3) Once ready, click on [Search].
+					<br />
+					**Condition: Only able to search if there are no conflicts so do
+					remove any conflicting courses!
+				</div>
 			)
 		case 'searchPreviewTip':
 			return (
@@ -92,20 +136,7 @@ export const helperText = (text: string) => {
 						left: '140px',
 					}}
 				>
-					You may only proceed to [Combinations] after [Search]!
-				</div>
-			)
-		case 'showCourseIndexTip':
-			return (
-				<div
-					className="highlight-helper secondary"
-					style={{
-						top: '200px',
-						left: '565px',
-						width: '150px',
-					}}
-				>
-					{`<- Click anywhere on the timetable under [Combinations] tab to show the course indexes selected here!`}{' '}
+					You may only proceed to [Timetables] after [Search]!
 				</div>
 			)
 		case 'showCombinationNoChangeTip':
@@ -118,9 +149,9 @@ export const helperText = (text: string) => {
 						width: '300px',
 					}}
 				>
-					*Note that the Combinations will not update when removing a course
-					from the searched list, it will only reflect changes when a [Search]
-					is performed.
+					*Note that the Timetables will not update when adding/removing a
+					course from the searched list, it will only reflect changes when a
+					[Search] is performed.
 				</div>
 			)
 		case 'showTimetableToggleTip':
@@ -129,10 +160,10 @@ export const helperText = (text: string) => {
 					className="highlight-helper secondary"
 					style={{
 						top: '-30px',
-						left: '100px',
+						left: '150px',
 					}}
 				>
-					You may toggle to [Timetable Preview] or [Combinations] here!
+					You may toggle between [Fixed Slot] and [Timetables] here!
 				</div>
 			)
 		case 'showExamScheduleTip':
@@ -153,7 +184,7 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper primary"
 					style={{
-						top: '-60px',
+						top: '-80px',
 						left: '-20px',
 						width: '350px',
 						display: 'flex',
@@ -182,7 +213,7 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper secondary"
 					style={{
-						top: '880px',
+						top: '750px',
 						left: '70px',
 						width: '150px',
 					}}
@@ -195,7 +226,7 @@ export const helperText = (text: string) => {
 				<div
 					className="highlight-helper primary"
 					style={{
-						top: '150px',
+						top: '300px',
 						left: '565px',
 						width: '200px',
 					}}
@@ -203,6 +234,66 @@ export const helperText = (text: string) => {
 					5) After setting preferences, the timetable are ranked accordingly to
 					the preferences set!
 				</div>
+			)
+		case 'showPaginationTip':
+			return (
+				<div
+					className="highlight-helper primary"
+					style={{
+						top: '520px',
+						left: '490px',
+						width: '200px',
+					}}
+				>
+					Navigate through all the possible generated timetable to find the one
+					you like! Once you found your liking, save it by clicking on the
+					timetable!
+				</div>
+			)
+		case 'navigate-to-favorites':
+			return (
+				<div
+					className="highlight-helper primary"
+					style={{
+						position: 'fixed',
+						top: '40px',
+						right: '200px',
+						width: '200px',
+					}}
+				>
+					<div> ^ </div>
+					You can find all of your saved favorites here!
+				</div>
+			)
+		case 'welcome-outro':
+			return (
+				<Dialog
+					open={true}
+					onClose={() => dispatch(setWalkthough(0))}
+					className="introduction-helper"
+				>
+					<div className="introduction-title">
+						🎉 You have completed the tutorial! 🎉
+					</div>
+					<div className="introduction-body">
+						Thank you for patiently going through this long winded tutorial,
+						hope you will be able to find your ideal timetable!! 😊
+						<br />
+						<br />
+						<p>
+							If there is something unclear, please reach out to me by filling
+							up the feedback form at [About]!
+						</p>
+					</div>
+					<div className="introduction-action">
+						<Button
+							variant="contained"
+							onClick={() => dispatch(setWalkthough(0))}
+						>
+							Embark your journey!
+						</Button>
+					</div>
+				</Dialog>
 			)
 	}
 }

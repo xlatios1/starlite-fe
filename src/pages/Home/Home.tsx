@@ -15,6 +15,7 @@ import {
 	setTimetableData,
 	setCurrentPage,
 	setActiveTab,
+	resetTimetable,
 } from '@store/timetable/timetableSlice.ts'
 import { RootState } from '@store/store'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
@@ -61,7 +62,7 @@ export default function Home() {
 					dispatch(setActiveTab('timetables'))
 					Notification('success', 'Search successful', 1000)
 					if (walkthrough > 0) {
-						dispatch(setWalkthough(3))
+						dispatch(setWalkthough(4))
 					}
 				}
 			} else {
@@ -82,6 +83,13 @@ export default function Home() {
 		}
 	}, [timetableData])
 
+	useEffect(() => {
+		// Scroll only when there is data
+		if (AllCourses[currentPlan].courses.length === 0) {
+			dispatch(resetTimetable())
+		}
+	}, [AllCourses, currentPlan, dispatch])
+
 	const handleApplyPreference = (preference) => {
 		dispatch(openLoading())
 		setTimeout(async () => {
@@ -89,7 +97,7 @@ export default function Home() {
 			Notification('success', 'Successfully set preferences!', 1000)
 			dispatch(closeLoading())
 			if (walkthrough > 0) {
-				dispatch(setWalkthough(4))
+				dispatch(setWalkthough(5))
 			}
 		}, 1000)
 	}
@@ -100,38 +108,40 @@ export default function Home() {
 
 	return (
 		<div className="homepage">
+			{/* {walkthrough === 7 && helperText('navigate-to-favorites', dispatch)} */}
+			{walkthrough === 1 && helperText('welcome-intro', dispatch)}
+			{walkthrough === 6 && helperText('welcome-outro', dispatch)}
 			<div className="detail-wrapper">
 				{totalPage > 0 ? (
 					<div
 						className={`preference-wrap ${
-							walkthrough > 2 ? ' highlight-element' : ''
+							5 > walkthrough && walkthrough > 3 ? ' highlight-element' : ''
 						}`}
 					>
 						<PreferenceLists
 							courses={AllCourses[currentPlan].courses}
 							handleApplyPreference={handleApplyPreference}
 						></PreferenceLists>
-						{walkthrough === 3 && helperText('showPreferenceTip')}
-						{walkthrough === 3 && helperText('showPreferenceButtonLocationTip')}
+						{walkthrough === 4 && helperText('showPreferenceTip')}
+						{walkthrough === 4 && helperText('showPreferenceButtonLocationTip')}
 					</div>
 				) : (
 					<div className="placeholder"></div>
 				)}
 				<div
 					className={`time-table-body ${
-						walkthrough > 1 ? ' highlight-element ' : ''
+						walkthrough === 3 || walkthrough === 5 ? ' highlight-element ' : ''
 					}`}
 				>
-					{walkthrough === 2 && helperText('searchPreviewTip')}
-					{walkthrough === 2 && helperText('showUnableToToggleTabTip')}
-					{walkthrough === 3 && helperText('showTimetableToggleTip')}
-					{walkthrough === 3 && helperText('showCombinationNoChangeTip')}
-					{walkthrough === 4 && helperText('showAfterPreferenceChangeTip')}
+					{walkthrough === 3 && helperText('searchPreviewTip')}
+					{walkthrough === 3 && helperText('showUnableToToggleTabTip')}
+					{walkthrough === 5 && helperText('showTimetableToggleTip')}
+					{walkthrough === 5 && helperText('showCombinationNoChangeTip')}
+					{walkthrough === 5 && helperText('showAfterPreferenceChangeTip')}
 					<TimetableTab activeTab={activeTab} isDisabled={totalPage > 0} />
 					<div className="time-table-wrapper">
 						{activeTab === 'timetables' ? (
 							<>
-								{walkthrough === 3 && helperText('showCourseIndexTip')}
 								<div className="time-table-container">
 									<TimeTable
 										timetable_data={
@@ -142,9 +152,11 @@ export default function Home() {
 									/>
 								</div>
 								<Paginations
+									walkthrough={walkthrough}
 									total={totalPage}
 									getPaginationPage={getPaginationPage}
 								/>
+								{walkthrough === 5 && helperText('showPaginationTip')}
 							</>
 						) : (
 							<TimeTable
@@ -158,13 +170,13 @@ export default function Home() {
 						)}
 					</div>
 				</div>
+				{walkthrough === 2 && helperText('searchTip')}
+				{walkthrough === 3 && helperText('dragNDropTip')}
 				<div
 					className={`search-wrapper${
-						0 < walkthrough && walkthrough < 3 ? ' highlight-element' : ''
+						1 < walkthrough && walkthrough < 4 ? ' highlight-element' : ''
 					}`}
 				>
-					{walkthrough === 1 && helperText('searchTip')}
-					{walkthrough === 2 && helperText('dragNDropTip')}
 					<SearchBar
 						courseData={AllCourses[currentPlan]}
 						handleSearch={handleSearch}
@@ -187,8 +199,8 @@ export default function Home() {
 				<ScrollButton display={Boolean(timetableData)} />
 				<TutorialButton
 					walkthrough={walkthrough}
-					stepTwo={Boolean(timetablePreview.flat().flat().length === 0)}
-					stepThree={Boolean(timetableData)}
+					stepTwo={AllCourses[currentPlan].courses.length > 0}
+					stepThree={timetableData.length > 0}
 				/>
 			</Box>
 		</div>

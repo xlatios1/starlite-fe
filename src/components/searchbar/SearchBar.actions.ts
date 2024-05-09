@@ -62,11 +62,11 @@ export async function FetchCourseDetails(
 					}
 				})
 				.catch((err) => {
-					Notification(
-						'error',
-						'An unexpected error has occured (search)',
-						3000
-					)
+					// Notification(
+					// 	'error',
+					// 	'An unexpected error has occured (search)',
+					// 	3000
+					// )
 				})
 		}
 	}

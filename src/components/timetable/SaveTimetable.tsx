@@ -2,12 +2,14 @@ import { Box, Button, Dialog, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewFavorite } from '@store/favourite/favouriteSlice.ts'
+import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import Notification from '@components/notification/notification.tsx'
 
 const SaveTimetable = ({ open, setClose, data }) => {
 	const dispatch = useDispatch()
 	const handleSave = () => {
 		dispatch(addNewFavorite({ name: 'testing', ...data }))
+		dispatch(setWalkthough(6))
 		setClose()
 		Notification('success', 'Successfully saved timetable!')
 	}
@@ -39,9 +41,11 @@ const SaveTimetable = ({ open, setClose, data }) => {
 								justifyContent: 'center',
 								alignItems: 'center',
 								textAlign: 'center',
+								flexDirection: 'column',
 							}}
 						>
-							Like this timetable? You can save this to view it later!
+							<p>Like this timetable?</p>
+							<p>You can save this to view it later in [Favourite]!</p>
 						</Box>
 					</Typography>
 				</Box>

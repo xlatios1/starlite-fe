@@ -98,7 +98,7 @@ export default function SearchBar({
 				getCourseDetails
 			)
 			if (walkthrough) {
-				dispatch(setWalkthough(2))
+				dispatch(setWalkthough(3))
 			}
 			dispatch(closeLoading())
 		}, 1000)

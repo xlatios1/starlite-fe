@@ -116,13 +116,13 @@ export default function Signin() {
 					name: 'loginPassword',
 				})}
 				<div className="form-action">
-					<button
+					{/* <button
 						type="button"
 						className="secondary-btn"
 						onClick={() => navigate('/forgot-password')}
 					>
 						Forgot password?
-					</button>
+					</button> */}
 					<button type="submit" className="primary-btn" onClick={handleSubmit}>
 						Login
 					</button>

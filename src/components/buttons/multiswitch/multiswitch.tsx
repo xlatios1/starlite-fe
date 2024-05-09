@@ -44,7 +44,9 @@ export default function MultiSwitch({
 								onClick={() => {
 									handleMultiSwitch(text, option)
 								}}
-								style={{ zIndex: walkthrough > 0 ? '0' : '2' }}
+								style={{
+									zIndex: walkthrough === 0 || walkthrough === 4 ? '2' : '0',
+								}}
 							>
 								{option}
 							</label>

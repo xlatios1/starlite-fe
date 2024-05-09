@@ -1,15 +1,21 @@
 import { Box, Button, Dialog, Grid, Typography } from '@mui/material'
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNewFavorite } from '@store/favourite/favouriteSlice.ts'
 import { setWalkthough } from '@store/walkthrough/walkthroughSlice.ts'
 import Notification from '@components/notification/notification.tsx'
+import { RootState } from '@store/store'
 
 const SaveTimetable = ({ open, setClose, data }) => {
 	const dispatch = useDispatch()
+
+	const walkthrough = useSelector(
+		(state: RootState) => state.walkthrough.walkthrough
+	)
+
 	const handleSave = () => {
 		dispatch(addNewFavorite({ name: 'testing', ...data }))
-		dispatch(setWalkthough(6))
+		if (walkthrough > 0) dispatch(setWalkthough(6))
 		setClose()
 		Notification('success', 'Successfully saved timetable!')
 	}
